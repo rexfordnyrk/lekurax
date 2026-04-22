@@ -1,0 +1,6 @@
+[submodule "frontend/base"]
+	path = frontend/base
+	url = git@github.com:rexfordnyrk/wow-dash.git
+[submodule "authz"]
+	path = authz
+	url = git@github.com:rexfordnyrk/authzkit.git
