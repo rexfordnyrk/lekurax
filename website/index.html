@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pharmaco — cloud pharmacy operations: inventory, prescriptions, claims, compliance, and multi-branch intelligence in one platform."
+    />
+    <title>Pharmaco — Pharmacy operations, elevated</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Noto Sans", "system-ui", "sans-serif"],
+              display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                primary: "#15803D",
+                secondary: "#22C55E",
+                cta: "#0369A1",
+                surface: "#F0FDF4",
+                ink: "#14532D",
+                muted: "#166534",
+              },
+            },
+            animation: {
+              "mesh-shift": "meshShift 18s ease-in-out infinite",
+              marquee: "marquee 32s linear infinite",
+              float: "float 6s ease-in-out infinite",
+              shimmer: "shimmer 2.5s ease-in-out infinite",
+            },
+            keyframes: {
+              meshShift: {
+                "0%, 100%": { opacity: "0.45", transform: "scale(1) translate(0,0)" },
+                "50%": { opacity: "0.65", transform: "scale(1.05) translate(2%, -2%)" },
+              },
+              marquee: {
+                "0%": { transform: "translateX(0)" },
+                "100%": { transform: "translateX(-50%)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-8px)" },
+              },
+              shimmer: {
+                "0%": { backgroundPosition: "200% 0" },
+                "100%": { backgroundPosition: "-200% 0" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+        .motion-safe\:animate-marquee {
+          animation: none !important;
+        }
+        .motion-safe\:animate-mesh-shift {
+          animation: none !important;
+        }
+        .motion-safe\:animate-float {
+          animation: none !important;
+        }
+      }
+
+      .mesh-bg {
+        background:
+          radial-gradient(ellipse 100% 80% at 10% 0%, rgba(34, 197, 94, 0.35), transparent 55%),
+          radial-gradient(ellipse 80% 60% at 90% 10%, rgba(3, 105, 161, 0.22), transparent 50%),
+          radial-gradient(ellipse 60% 50% at 50% 100%, rgba(21, 128, 61, 0.2), transparent 45%),
+          #ecfdf5;
+      }
+
+      .noise::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(167, 243, 208, 0.65);
+        box-shadow: 0 4px 30px rgba(15, 118, 110, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+      }
+
+      .glow-ring {
+        box-shadow:
+          0 0 0 1px rgba(34, 197, 94, 0.15),
+          0 20px 50px -20px rgba(21, 128, 61, 0.35),
+          0 0 80px -30px rgba(3, 105, 161, 0.2);
+      }
+
+      .shine-border {
+        position: relative;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 253, 244, 0.98));
+      }
+      .shine-border::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.5), rgba(3, 105, 161, 0.35), rgba(34, 197, 94, 0.25));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      .tab-active {
+        background: linear-gradient(135deg, #15803d, #0f766e);
+        color: #fff;
+        box-shadow: 0 4px 14px rgba(21, 128, 61, 0.35);
+      }
+
+      .mini-bar {
+        background: linear-gradient(180deg, #22c55e, #15803d);
+        border-radius: 2px 2px 0 0;
+      }
+
+      .marquee-track {
+        display: flex;
+        width: max-content;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .motion-safe\:animate-marquee {
+          animation: marquee 36s linear infinite;
+        }
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+    </style>
+  </head>
+  <body class="mesh-bg noise relative text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a
+        href="#main"
+        class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2"
+        >Skip to content</a
+      >
+
+      <header
+        class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5"
+      >
+        <div
+          class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3"
+        >
+          <a
+            href="#"
+            class="font-display flex items-center gap-2 text-lg font-bold tracking-tight text-brand-ink transition-colors duration-200 hover:text-brand-primary cursor-pointer"
+            aria-label="Pharmaco home"
+          >
+            <span
+              class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white shadow-md"
+              aria-hidden="true"
+              >P</span
+            >
+            <span>Pharm<span class="text-brand-primary">aco</span></span>
+          </a>
+
+          <nav class="hidden items-center gap-7 lg:flex" aria-label="Primary">
+            <a href="#platform" class="text-sm font-semibold text-brand-muted transition-colors duration-200 hover:text-brand-ink cursor-pointer">Platform</a>
+            <a href="#experience" class="text-sm font-semibold text-brand-muted transition-colors duration-200 hover:text-brand-ink cursor-pointer">Experience</a>
+            <a href="#modules" class="text-sm font-semibold text-brand-muted transition-colors duration-200 hover:text-brand-ink cursor-pointer">Modules</a>
+            <a href="product/index.html" class="text-sm font-semibold text-brand-cta transition-colors duration-200 hover:text-sky-900 cursor-pointer">Product</a>
+            <a href="#compliance" class="text-sm font-semibold text-brand-muted transition-colors duration-200 hover:text-brand-ink cursor-pointer">Trust</a>
+            <a href="#pricing" class="text-sm font-semibold text-brand-muted transition-colors duration-200 hover:text-brand-ink cursor-pointer">Plans</a>
+          </nav>
+
+          <div class="hidden items-center gap-2 sm:flex">
+            <a
+              href="#login"
+              class="rounded-xl px-4 py-2 text-sm font-bold text-brand-cta transition-colors duration-200 hover:bg-emerald-100/80 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2"
+              >Log in</a
+            >
+            <a
+              href="#demo"
+              class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-sky-900/15 transition-all duration-200 hover:brightness-110 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2"
+              >Book demo</a
+            >
+          </div>
+
+          <button
+            type="button"
+            id="menu-btn"
+            class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-emerald-200/80 bg-white/80 p-2.5 text-brand-ink transition-colors duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2 lg:hidden"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <span class="sr-only">Menu</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+        <div
+          id="mobile-nav"
+          class="glass-panel mx-auto mt-2 hidden max-w-7xl rounded-2xl px-4 py-4 shadow-lg lg:hidden"
+          role="dialog"
+          aria-label="Mobile navigation"
+        >
+          <div class="flex flex-col gap-1">
+            <a href="#platform" class="rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-muted hover:bg-emerald-50 cursor-pointer">Platform</a>
+            <a href="#experience" class="rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-muted hover:bg-emerald-50 cursor-pointer">Experience</a>
+            <a href="#modules" class="rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-muted hover:bg-emerald-50 cursor-pointer">Modules</a>
+            <a href="product/index.html" class="rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-cta hover:bg-emerald-50 cursor-pointer">Product</a>
+            <a href="#compliance" class="rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-muted hover:bg-emerald-50 cursor-pointer">Trust</a>
+            <a href="#pricing" class="rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-muted hover:bg-emerald-50 cursor-pointer">Plans</a>
+            <a href="#login" class="mt-2 rounded-xl px-3 py-2.5 text-sm font-bold text-brand-cta hover:bg-emerald-50 cursor-pointer">Log in</a>
+            <a href="#demo" class="rounded-xl bg-brand-cta py-3 text-center text-sm font-bold text-white hover:bg-sky-800 cursor-pointer">Book demo</a>
+          </div>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <!-- Hero -->
+        <section class="relative overflow-hidden px-4 pb-16 pt-6 md:px-6 md:pb-24 md:pt-10" aria-labelledby="hero-h">
+          <div
+            class="pointer-events-none absolute -left-32 top-20 h-96 w-96 rounded-full bg-emerald-400/30 blur-3xl motion-safe:animate-mesh-shift"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-sky-400/25 blur-3xl motion-safe:animate-mesh-shift"
+            style="animation-delay: -6s"
+            aria-hidden="true"
+          ></div>
+
+          <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-10">
+            <div>
+              <div
+                class="mb-6 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-emerald-200/80 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-wider text-brand-muted shadow-sm backdrop-blur-sm"
+              >
+                <span class="flex items-center gap-1.5 rounded-lg bg-emerald-100 px-2 py-0.5 text-brand-primary">
+                  <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Cloud-native
+                </span>
+                <span class="hidden sm:inline">·</span>
+                <span>19 integrated modules</span>
+                <span class="hidden sm:inline">·</span>
+                <span>Multi-tenant SaaS</span>
+              </div>
+
+              <h1 id="hero-h" class="font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-brand-ink md:text-5xl lg:text-[3.35rem] xl:text-6xl">
+                The operating layer for
+                <span
+                  class="bg-gradient-to-r from-brand-primary via-teal-600 to-brand-cta bg-clip-text text-transparent"
+                  style="-webkit-background-clip: text"
+                  >modern pharmacies.</span
+                >
+              </h1>
+              <p class="mt-6 max-w-xl text-lg leading-relaxed text-brand-muted md:text-xl">
+                Unify dispensing, inventory, claims, and compliance in one spine—so pharmacists spend time on patients, not on reconciling five different
+                systems.
+              </p>
+
+              <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <a
+                  href="#demo"
+                  class="group inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-primary to-emerald-700 px-7 py-4 text-base font-bold text-white shadow-xl shadow-emerald-900/20 transition-all duration-200 hover:shadow-2xl hover:shadow-emerald-900/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                >
+                  Start a tailored walkthrough
+                  <svg class="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
+                <a
+                  href="#experience"
+                  class="inline-flex cursor-pointer items-center justify-center rounded-2xl border-2 border-emerald-300/80 bg-white/80 px-7 py-4 text-base font-bold text-brand-ink backdrop-blur-sm transition-all duration-200 hover:border-brand-primary hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2"
+                  >See the product surface</a
+                >
+              </div>
+
+              <dl class="mt-12 grid grid-cols-3 gap-3 sm:gap-4">
+                <div class="shine-border rounded-2xl p-4 text-center shadow-sm md:p-5">
+                  <dt class="sr-only">Architecture</dt>
+                  <dd class="font-display text-2xl font-black text-brand-primary md:text-3xl">19</dd>
+                  <dd class="mt-1 text-[10px] font-bold uppercase leading-tight tracking-wide text-brand-muted sm:text-xs">Capabilities</dd>
+                </div>
+                <div class="shine-border rounded-2xl p-4 text-center shadow-sm md:p-5">
+                  <dt class="sr-only">Deployment</dt>
+                  <dd class="font-display text-2xl font-black text-brand-cta md:text-3xl">1</dd>
+                  <dd class="mt-1 text-[10px] font-bold uppercase leading-tight tracking-wide text-brand-muted sm:text-xs">Data model</dd>
+                </div>
+                <div class="shine-border rounded-2xl p-4 text-center shadow-sm md:p-5">
+                  <dt class="sr-only">Scale</dt>
+                  <dd class="font-display text-2xl font-black text-teal-700 md:text-3xl">∞</dd>
+                  <dd class="mt-1 text-[10px] font-bold uppercase leading-tight tracking-wide text-brand-muted sm:text-xs">Branches</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Product preview -->
+            <div class="relative lg:pl-4 motion-safe:animate-float motion-reduce:animate-none" aria-hidden="true">
+              <div class="glow-ring absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-emerald-200/40 via-transparent to-sky-200/40 blur-2xl"></div>
+              <div class="shine-border relative overflow-hidden rounded-3xl shadow-2xl ring-1 ring-emerald-900/10">
+                <div class="flex items-center justify-between border-b border-emerald-100 bg-gradient-to-r from-white to-emerald-50/80 px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-red-400"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+                  </div>
+                  <span class="rounded-lg bg-white px-3 py-1 font-mono text-[10px] font-medium text-slate-500 shadow-sm">console.pharmaco.app</span>
+                  <div class="h-8 w-8 rounded-full bg-gradient-to-br from-brand-primary to-teal-700"></div>
+                </div>
+                <div class="grid gap-0 bg-slate-50/90 md:grid-cols-[minmax(0,1fr)_200px]">
+                  <div class="space-y-3 border-b border-emerald-100 p-4 md:border-b-0 md:border-r">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-bold uppercase tracking-wide text-slate-500">Fill queue</span>
+                      <span class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">4 urgent</span>
+                    </div>
+                    <div class="space-y-2">
+                      <div class="flex items-center justify-between rounded-xl border border-emerald-100 bg-white p-3 shadow-sm">
+                        <div>
+                          <p class="text-xs font-bold text-slate-800">Rx #48291</p>
+                          <p class="text-[10px] text-slate-500">Atorvastatin 20mg · FEFO lot verified</p>
+                        </div>
+                        <span class="rounded-lg bg-emerald-100 px-2 py-1 text-[10px] font-bold text-brand-primary">Ready</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-xl border border-sky-100 bg-white p-3 shadow-sm">
+                        <div>
+                          <p class="text-xs font-bold text-slate-800">Rx #48288</p>
+                          <p class="text-[10px] text-slate-500">PA pending · payer switch</p>
+                        </div>
+                        <span class="rounded-lg bg-sky-100 px-2 py-1 text-[10px] font-bold text-sky-800">Claims</span>
+                      </div>
+                      <div class="flex items-center justify-between rounded-xl border border-amber-100 bg-white p-3 shadow-sm">
+                        <div>
+                          <p class="text-xs font-bold text-slate-800">C-II reconcile</p>
+                          <p class="text-[10px] text-slate-500">Branch 04 perpetual inventory</p>
+                        </div>
+                        <span class="rounded-lg bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-900">Audit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="space-y-3 p-4">
+                    <span class="text-xs font-bold uppercase tracking-wide text-slate-500">Margin pulse</span>
+                    <div class="flex h-28 items-end justify-between gap-1 rounded-xl border border-emerald-100 bg-white p-3 shadow-inner">
+                      <div class="mini-bar h-[35%] w-full max-w-[14px]"></div>
+                      <div class="mini-bar h-[55%] w-full max-w-[14px]"></div>
+                      <div class="mini-bar h-[42%] w-full max-w-[14px]"></div>
+                      <div class="mini-bar h-[78%] w-full max-w-[14px]"></div>
+                      <div class="mini-bar h-[62%] w-full max-w-[14px]"></div>
+                      <div class="mini-bar h-[88%] w-full max-w-[14px]"></div>
+                      <div class="mini-bar h-[48%] w-full max-w-[14px]"></div>
+                    </div>
+                    <div class="rounded-xl bg-gradient-to-r from-brand-primary to-teal-700 p-3 text-white shadow-lg">
+                      <p class="text-[10px] font-bold uppercase opacity-80">Net margin (30d)</p>
+                      <p class="font-display text-2xl font-black">+4.2%</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Marquee -->
+        <section class="border-y border-emerald-200/60 bg-slate-900 py-4 text-white" aria-label="Integration categories">
+          <div class="relative overflow-hidden">
+            <div class="marquee-track motion-safe:animate-marquee">
+              <div class="flex shrink-0 items-center gap-10 px-6 text-sm font-bold uppercase tracking-widest text-emerald-100/90">
+                <span class="whitespace-nowrap">E-prescribing</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+                <span class="whitespace-nowrap">Claims &amp; adjudication</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+                <span class="whitespace-nowrap">Wholesaler EDI</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+                <span class="whitespace-nowrap">PMP reporting</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+                <span class="whitespace-nowrap">FHIR / EHR</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+                <span class="whitespace-nowrap">Delivery fleets</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+                <span class="whitespace-nowrap">Patient messaging</span>
+                <span class="text-emerald-600" aria-hidden="true">◆</span>
+              </div>
+              <div class="flex shrink-0 items-center gap-10 px-6 text-sm font-bold uppercase tracking-widest text-emerald-100/90" aria-hidden="true">
+                <span class="whitespace-nowrap">E-prescribing</span>
+                <span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Claims &amp; adjudication</span>
+                <span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Wholesaler EDI</span>
+                <span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">PMP reporting</span>
+                <span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">FHIR / EHR</span>
+                <span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Delivery fleets</span>
+                <span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Patient messaging</span>
+                <span class="text-emerald-600">◆</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Product documentation hub -->
+        <section id="product-docs" class="border-y border-emerald-200/80 bg-white/70 px-4 py-16 backdrop-blur-sm md:px-6 md:py-20" aria-labelledby="docs-h">
+          <div class="mx-auto max-w-7xl">
+            <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+              <div class="max-w-2xl">
+                <p class="font-display text-sm font-bold uppercase tracking-widest text-brand-cta">Explore the platform</p>
+                <h2 id="docs-h" class="mt-2 font-display text-3xl font-extrabold tracking-tight text-brand-ink md:text-4xl">Every capability you read about—live in Pharmaco today.</h2>
+                <p class="mt-4 text-lg text-brand-muted">
+                  Walk through how each part of the system shows up in a real pharmacy: fewer errors at pickup, calmer inventory weeks, cleaner payer conversations, and branches that finally share one truth.
+                </p>
+              </div>
+              <a
+                href="product/index.html"
+                class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-2xl border-2 border-brand-primary bg-white px-6 py-3 text-sm font-bold text-brand-primary shadow-sm transition-colors duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+              >
+                Explore the platform
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
+              </a>
+            </div>
+            <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <li>
+                <a href="product/foundation.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Foundation</span>
+                  <span class="mt-1 text-sm text-brand-muted">Identity, branches, and the engine room your IT team already deserves</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/supply-chain.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Supply &amp; catalog</span>
+                  <span class="mt-1 text-sm text-brand-muted">What is on the shelf, how you buy it, and how the sticker price stays honest</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/patient-care.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Patients &amp; Rx</span>
+                  <span class="mt-1 text-sm text-brand-muted">The person in front of you—and every prescription moment that touches them</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/commerce.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">POS &amp; claims</span>
+                  <span class="mt-1 text-sm text-brand-muted">Checkout rhythm and payer conversations that finally share one ledger</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/clinical-digital.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Clinical &amp; digital</span>
+                  <span class="mt-1 text-sm text-brand-muted">Shots, consults, apps patients open, and drivers who respect cold chain</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/reporting-analytics.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Reporting</span>
+                  <span class="mt-1 text-sm text-brand-muted">Numbers your GM, PIC, and accountant can agree on before lunch</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/integrations.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Integrations</span>
+                  <span class="mt-1 text-sm text-brand-muted">Hospitals, payers, registries, and the glue code your region already standardized</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/communications-knowledge.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Comms &amp; knowledge</span>
+                  <span class="mt-1 text-sm text-brand-muted">Texts people welcome, files inspectors find, training new hires actually finish</span>
+                </a>
+              </li>
+              <li>
+                <a href="product/quality-compliance.html" class="group flex h-full flex-col rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm transition-all duration-200 hover:border-brand-primary hover:shadow-md cursor-pointer">
+                  <span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand-primary">Quality</span>
+                  <span class="mt-1 text-sm text-brand-muted">When something breaks, you already look like the pharmacy that prepared</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Bento -->
+        <section id="platform" class="px-4 py-20 md:px-6 md:py-28" aria-labelledby="plat-h">
+          <div class="mx-auto max-w-7xl">
+            <div class="max-w-3xl">
+              <p class="font-display text-sm font-bold uppercase tracking-widest text-brand-cta">Platform depth</p>
+              <h2 id="plat-h" class="mt-2 font-display text-3xl font-extrabold tracking-tight text-brand-ink md:text-5xl">Every workflow, one spine.</h2>
+              <p class="mt-5 text-lg text-brand-muted">
+                From security and branch hierarchy to procurement, dispensing, POS, and analytics—implemented in dependency order so nothing ships before its
+                foundation exists.
+              </p>
+            </div>
+
+            <div class="mt-14 grid gap-4 md:grid-cols-6 md:grid-rows-[auto_auto]">
+              <article
+                class="group relative overflow-hidden rounded-3xl border border-emerald-200/80 bg-gradient-to-br from-white to-emerald-50 p-8 shadow-lg transition-shadow duration-300 hover:shadow-xl md:col-span-4 md:row-span-2"
+              >
+                <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-secondary/20 blur-3xl transition-opacity duration-500 group-hover:opacity-80"></div>
+                <div class="relative">
+                  <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-teal-800 text-white shadow-lg">
+                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                    </svg>
+                  </div>
+                  <h3 class="mt-8 font-display text-2xl font-bold text-brand-ink">Clinical guardrails that feel native—not bolted on.</h3>
+                  <p class="mt-4 max-w-lg text-brand-muted">
+                    Interaction checks, allergy conflicts, LASA prompts, and controlled-substance ledgers live inside the same prescription object your
+                    technicians already work from—no context switching to a “safety portal.”
+                  </p>
+                  <ul class="mt-8 grid gap-3 sm:grid-cols-2">
+                    <li class="flex items-start gap-3 rounded-2xl border border-emerald-100 bg-white/80 p-4">
+                      <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                      <span class="text-sm font-semibold text-brand-ink">Lot-level recall readiness</span>
+                    </li>
+                    <li class="flex items-start gap-3 rounded-2xl border border-emerald-100 bg-white/80 p-4">
+                      <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                      <span class="text-sm font-semibold text-brand-ink">FEFO dispensing logic</span>
+                    </li>
+                  </ul>
+                </div>
+              </article>
+
+              <article
+                class="rounded-3xl border border-emerald-200/80 bg-white p-6 shadow-md transition-all duration-300 hover:border-brand-secondary/60 hover:shadow-lg md:col-span-2"
+              >
+                <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-100 text-brand-cta">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                  </svg>
+                </div>
+                <h3 class="mt-4 font-display text-lg font-bold text-brand-ink">Revenue integrity</h3>
+                <p class="mt-2 text-sm leading-relaxed text-brand-muted">Claims lifecycle, reconciliation signals, and POS in one ledger narrative.</p>
+              </article>
+
+              <article
+                class="rounded-3xl border border-emerald-200/80 bg-gradient-to-br from-slate-900 to-emerald-950 p-6 text-white shadow-md transition-all duration-300 hover:shadow-xl md:col-span-2"
+              >
+                <h3 class="font-display text-lg font-bold">Multi-branch truth</h3>
+                <p class="mt-2 text-sm leading-relaxed text-emerald-100/85">Transfers, centralized policies, and branch KPIs without spreadsheet drift.</p>
+                <div class="mt-5 flex flex-wrap gap-2">
+                  <span class="rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide">HQ</span>
+                  <span class="rounded-lg bg-emerald-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-brand-secondary">Hub</span>
+                  <span class="rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide">Store</span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- Experience strip -->
+        <section id="experience" class="relative overflow-hidden bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 px-4 py-20 text-white md:px-6 md:py-28" aria-labelledby="exp-h">
+          <div class="pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.12) 1px, transparent 0); background-size: 32px 32px"></div>
+          <div class="relative mx-auto max-w-7xl">
+            <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+              <div class="max-w-2xl">
+                <p class="font-display text-sm font-bold uppercase tracking-widest text-brand-secondary">Operator experience</p>
+                <h2 id="exp-h" class="mt-2 font-display text-3xl font-extrabold md:text-5xl">Dense power. Quiet interface.</h2>
+                <p class="mt-4 text-lg text-emerald-100/85">
+                  Role-aware workspaces surface what matters at the counter, in the vault, and in finance—without drowning teams in configuration.
+                </p>
+              </div>
+              <a
+                href="#modules"
+                class="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-emerald-400/40 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition-colors duration-200 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+              >
+                Browse module map
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
+              </a>
+            </div>
+
+            <div class="mt-14 grid gap-5 md:grid-cols-3">
+              <div class="rounded-3xl border border-emerald-700/50 bg-emerald-950/40 p-6 backdrop-blur-md">
+                <p class="font-mono text-xs text-brand-secondary">/dispense</p>
+                <p class="mt-3 font-display text-xl font-bold">Queue intelligence</p>
+                <p class="mt-2 text-sm text-emerald-100/75">Triage by urgency, payer state, and cold-chain requirements in one board.</p>
+              </div>
+              <div class="rounded-3xl border border-sky-700/40 bg-sky-950/30 p-6 backdrop-blur-md">
+                <p class="font-mono text-xs text-sky-300">/inventory</p>
+                <p class="mt-3 font-display text-xl font-bold">Expiry radar</p>
+                <p class="mt-2 text-sm text-sky-100/80">FEFO, quarantine, and financial write-off workflows tied to the same lot record.</p>
+              </div>
+              <div class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
+                <p class="font-mono text-xs text-emerald-200/80">/insights</p>
+                <p class="mt-3 font-display text-xl font-bold">Margin attribution</p>
+                <p class="mt-2 text-sm text-emerald-100/75">Slice performance by branch, category, payer, and clinical program.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tabbed modules -->
+        <section id="modules" class="px-4 py-20 md:px-6 md:py-28" aria-labelledby="mod-h">
+          <div class="mx-auto max-w-7xl">
+            <h2 id="mod-h" class="font-display text-3xl font-extrabold text-brand-ink md:text-4xl">Nineteen modules. One roadmap.</h2>
+            <p class="mt-3 max-w-2xl text-lg text-brand-muted">Grouped the way your implementation team thinks about dependencies—not how a brochure thinks about buzzwords.</p>
+            <p class="mt-4 max-w-2xl text-sm font-semibold text-brand-ink">
+              <a href="product/index.html" class="cursor-pointer text-brand-cta underline decoration-brand-cta/30 underline-offset-4 transition-colors hover:decoration-brand-cta">See how each area works in practice</a>
+              —written for owners, PICs, and ops leads, not release notes.
+            </p>
+
+            <div class="mt-10 flex flex-wrap gap-2 rounded-2xl border border-emerald-200 bg-white/80 p-2 shadow-inner" role="tablist" aria-label="Module groups">
+              <button type="button" role="tab" aria-selected="true" aria-controls="panel-0" id="tab-0" class="tab-btn tab-active cursor-pointer rounded-xl px-4 py-2.5 text-sm font-bold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Foundation</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="panel-1" id="tab-1" class="tab-btn cursor-pointer rounded-xl px-4 py-2.5 text-sm font-bold text-brand-muted transition-all duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Supply &amp; catalog</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2" class="tab-btn cursor-pointer rounded-xl px-4 py-2.5 text-sm font-bold text-brand-muted transition-all duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Care &amp; commerce</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="panel-3" id="tab-3" class="tab-btn cursor-pointer rounded-xl px-4 py-2.5 text-sm font-bold text-brand-muted transition-all duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Intelligence &amp; connect</button>
+            </div>
+
+            <div class="mt-6 rounded-3xl border border-emerald-200 bg-white p-6 shadow-xl md:p-10">
+              <div id="panel-0" role="tabpanel" aria-labelledby="tab-0" class="tab-panel grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">User management &amp; security</p><p class="mt-2 text-sm text-brand-muted">MFA, SSO, RBAC, session policy, tamper-aware audit trails.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Organization &amp; branches</p><p class="mt-2 text-sm text-brand-muted">Tenancy, licenses, hours, inter-branch rules, facility areas.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">System administration</p><p class="mt-2 text-sm text-brand-muted">Reference data, feature flags, integration endpoints, environment controls.</p></div>
+              </div>
+              <div id="panel-1" role="tabpanel" aria-labelledby="tab-1" class="tab-panel hidden grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Inventory management</p><p class="mt-2 text-sm text-brand-muted">Stock, batches, transfers, adjustments, controlled perpetual counts.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Supplier &amp; procurement</p><p class="mt-2 text-sm text-brand-muted">RFQs, approvals, contracts, vendor scorecards, payment alignment.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Catalog &amp; pricing</p><p class="mt-2 text-sm text-brand-muted">Monographs, tiers, promotions, branch-aware price lists.</p></div>
+              </div>
+              <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" class="tab-panel hidden grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Customers &amp; patients</p><p class="mt-2 text-sm text-brand-muted">Profiles, adherence signals, communication preferences.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Prescriptions &amp; clinical</p><p class="mt-2 text-sm text-brand-muted">Workflow, documentation, MTM, immunizations, consult records.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">POS, insurance, delivery</p><p class="mt-2 text-sm text-brand-muted">Register, claims desk, logistics, omnichannel fulfillment.</p></div>
+              </div>
+              <div id="panel-3" role="tabpanel" aria-labelledby="tab-3" class="tab-panel hidden grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Reporting &amp; analytics</p><p class="mt-2 text-sm text-brand-muted">Operational, financial, and clinical KPIs with exportable packs.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Integrations &amp; mobile</p><p class="mt-2 text-sm text-brand-muted">E-prescribe, payers, PMP, EHR, patient apps, notifications.</p></div>
+                <div class="rounded-2xl border border-emerald-100 bg-brand-surface/50 p-5"><p class="font-display font-bold text-brand-ink">Documents, training, QA</p><p class="mt-2 text-sm text-brand-muted">Controlled document store, SOPs, competency tracking, QA cycles.</p></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Compliance -->
+        <section id="compliance" class="border-t border-emerald-200/60 bg-white/60 px-4 py-20 backdrop-blur-sm md:px-6 md:py-24" aria-labelledby="comp-h">
+          <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 id="comp-h" class="font-display text-3xl font-extrabold text-brand-ink md:text-4xl">Trust is structural—not a PDF week.</h2>
+              <p class="mt-4 text-lg text-brand-muted">
+                Encryption in transit and at rest, field-level masking, configurable retention, and exportable evidence for inspections. Built for teams who
+                answer to boards and regulators.
+              </p>
+              <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                <div class="flex gap-4 rounded-2xl border border-emerald-100 bg-brand-surface p-5">
+                  <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-brand-primary">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                  </div>
+                  <div>
+                    <p class="font-display font-bold text-brand-ink">HIPAA-aware design</p>
+                    <p class="mt-1 text-sm text-brand-muted">PHI minimization, access logging, and breach-ready audit exports.</p>
+                  </div>
+                </div>
+                <div class="flex gap-4 rounded-2xl border border-emerald-100 bg-brand-surface p-5">
+                  <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-brand-cta">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                  </div>
+                  <div>
+                    <p class="font-display font-bold text-brand-ink">Separation of duties</p>
+                    <p class="mt-1 text-sm text-brand-muted">Maker-checker on high-risk adjustments and financial events.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="shine-border glow-ring relative overflow-hidden rounded-3xl p-8 md:p-10">
+              <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/90 via-white to-sky-50/80"></div>
+              <div class="relative space-y-6">
+                <div class="flex items-center justify-between border-b border-emerald-100 pb-4">
+                  <span class="text-xs font-bold uppercase tracking-wide text-brand-muted">Compliance snapshot</span>
+                  <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-brand-primary">Live</span>
+                </div>
+                <div class="space-y-3 font-mono text-xs text-slate-600">
+                  <div class="flex justify-between"><span>Audit events (24h)</span><span class="font-bold text-brand-ink">12,482</span></div>
+                  <div class="flex justify-between"><span>Masked fields enforced</span><span class="font-bold text-brand-ink">38 roles</span></div>
+                  <div class="flex justify-between"><span>C-II reconciliations</span><span class="font-bold text-emerald-600">Balanced</span></div>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full bg-emerald-100">
+                  <div class="h-full w-[92%] rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary"></div>
+                </div>
+                <p class="text-xs text-brand-muted">Illustrative metrics for marketing preview.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="px-4 py-20 md:px-6 md:py-28" aria-labelledby="price-h">
+          <div class="mx-auto max-w-7xl">
+            <div class="text-center">
+              <h2 id="price-h" class="font-display text-3xl font-extrabold text-brand-ink md:text-5xl">Investment that scales with complexity.</h2>
+              <p class="mx-auto mt-4 max-w-2xl text-lg text-brand-muted">Figures are directional; enterprise packaging bundles integrations, SSO, and regional compliance packs.</p>
+            </div>
+            <div class="mt-14 grid gap-6 lg:grid-cols-3">
+              <div class="flex flex-col rounded-3xl border border-emerald-200/90 bg-white/90 p-8 shadow-lg backdrop-blur-sm">
+                <h3 class="font-display text-xl font-bold">Starter</h3>
+                <p class="mt-2 text-sm text-brand-muted">Single site · core dispensing &amp; inventory</p>
+                <p class="mt-6 font-display text-4xl font-black text-brand-ink">$899<span class="text-lg font-semibold text-brand-muted">/mo</span></p>
+                <ul class="mt-8 flex-1 space-y-3 text-sm font-medium text-brand-muted">
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>Up to 25 seats</li>
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>Standard support</li>
+                </ul>
+                <a href="#demo" class="mt-8 inline-flex cursor-pointer justify-center rounded-2xl border-2 border-emerald-300 py-3.5 text-center text-sm font-bold transition-colors duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Talk to sales</a>
+              </div>
+              <div class="relative flex flex-col rounded-3xl border-2 border-brand-primary bg-gradient-to-b from-white to-emerald-50/90 p-8 shadow-2xl ring-4 ring-brand-primary/10">
+                <span class="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-brand-primary to-teal-700 px-4 py-1 text-xs font-black uppercase tracking-wide text-white shadow-lg">Most chosen</span>
+                <h3 class="font-display text-xl font-bold">Growth</h3>
+                <p class="mt-2 text-sm text-brand-muted">Multi-branch · claims desk · advanced procurement</p>
+                <p class="mt-6 font-display text-4xl font-black text-brand-ink">$2,499<span class="text-lg font-semibold text-brand-muted">/mo</span></p>
+                <ul class="mt-8 flex-1 space-y-3 text-sm font-medium text-brand-muted">
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>Fair-use branches</li>
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>Priority onboarding</li>
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>Integration bundle</li>
+                </ul>
+                <a href="#demo" class="mt-8 inline-flex cursor-pointer justify-center rounded-2xl bg-gradient-to-r from-brand-primary to-emerald-800 py-3.5 text-center text-sm font-bold text-white shadow-lg transition-all duration-200 hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">Book a demo</a>
+              </div>
+              <div class="flex flex-col rounded-3xl border border-emerald-800/40 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 p-8 text-white shadow-xl">
+                <h3 class="font-display text-xl font-bold">Enterprise</h3>
+                <p class="mt-2 text-sm text-emerald-200/80">SSO · private connectivity · dedicated CSM</p>
+                <p class="mt-6 font-display text-4xl font-black">Custom</p>
+                <ul class="mt-8 flex-1 space-y-3 text-sm text-emerald-100/90">
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-secondary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>24/7 options</li>
+                  <li class="flex gap-2"><svg class="h-5 w-5 shrink-0 text-brand-secondary" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>Custom contracts</li>
+                </ul>
+                <a href="#demo" class="mt-8 inline-flex cursor-pointer justify-center rounded-2xl bg-white py-3.5 text-center text-sm font-bold text-slate-900 transition-colors duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950">Contact enterprise</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ accordion -->
+        <section class="px-4 pb-16 md:px-6" aria-labelledby="faq-h">
+          <div class="mx-auto max-w-3xl">
+            <h2 id="faq-h" class="text-center font-display text-3xl font-extrabold text-brand-ink">Answers before the committee meeting.</h2>
+            <div class="mt-10 space-y-3">
+              <details class="group rounded-2xl border border-emerald-200 bg-white/90 shadow-sm open:shadow-md" open>
+                <summary class="cursor-pointer list-none px-6 py-5 font-display font-bold text-brand-ink marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span class="flex items-center justify-between gap-4">
+                    Phased migration from legacy?
+                    <svg class="h-5 w-5 shrink-0 text-brand-muted transition-transform duration-200 group-open:rotate-180 motion-reduce:group-open:rotate-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                  </span>
+                </summary>
+                <p class="border-t border-emerald-50 px-6 pb-5 pt-0 text-sm leading-relaxed text-brand-muted">Yes—stand up security, org, and inventory first; layer dispensing, POS, and claims as branches are ready. Same data model throughout.</p>
+              </details>
+              <details class="group rounded-2xl border border-emerald-200 bg-white/90 shadow-sm open:shadow-md">
+                <summary class="cursor-pointer list-none px-6 py-5 font-display font-bold text-brand-ink marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span class="flex items-center justify-between gap-4">
+                    Hospital outpatient vs. retail?
+                    <svg class="h-5 w-5 shrink-0 text-brand-muted transition-transform duration-200 group-open:rotate-180 motion-reduce:group-open:rotate-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                  </span>
+                </summary>
+                <p class="border-t border-emerald-50 px-6 pb-5 pt-0 text-sm leading-relaxed text-brand-muted">Site templates carry licensing fields, workflow defaults, and billing rules so each context gets the right controls without a forked product.</p>
+              </details>
+              <details class="group rounded-2xl border border-emerald-200 bg-white/90 shadow-sm open:shadow-md">
+                <summary class="cursor-pointer list-none px-6 py-5 font-display font-bold text-brand-ink marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span class="flex items-center justify-between gap-4">
+                    Regional regulatory variance?
+                    <svg class="h-5 w-5 shrink-0 text-brand-muted transition-transform duration-200 group-open:rotate-180 motion-reduce:group-open:rotate-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                  </span>
+                </summary>
+                <p class="border-t border-emerald-50 px-6 pb-5 pt-0 text-sm leading-relaxed text-brand-muted">Policy packs configure controlled substance rules, reporting cadence, and retention—so you adapt jurisdiction without custom code per country.</p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <!-- Demo -->
+        <section id="demo" class="relative overflow-hidden bg-gradient-to-br from-brand-cta via-sky-800 to-emerald-900 px-4 py-20 text-white md:px-6 md:py-24" aria-labelledby="demo-h">
+          <div class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true"></div>
+          <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 id="demo-h" class="font-display text-3xl font-extrabold md:text-5xl">Put the platform in front of your toughest skeptics.</h2>
+              <p class="mt-5 text-lg text-sky-100/90">We’ll tailor the session to dispensing, inventory, payer ops, or compliance—whichever blockers matter most.</p>
+            </div>
+            <form class="rounded-3xl bg-white p-8 text-brand-ink shadow-2xl" action="#" method="post">
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <label for="org" class="text-sm font-bold text-brand-ink">Organization</label>
+                  <input id="org" name="org" type="text" autocomplete="organization" class="mt-1.5 h-10 w-full rounded-xl border border-emerald-200 px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2" placeholder="Lakeside Pharmacy Group" />
+                </div>
+                <div>
+                  <label for="nm" class="text-sm font-bold text-brand-ink">Name</label>
+                  <input id="nm" name="nm" type="text" autocomplete="name" class="mt-1.5 h-10 w-full rounded-xl border border-emerald-200 px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2" />
+                </div>
+                <div>
+                  <label for="em" class="text-sm font-bold text-brand-ink">Work email</label>
+                  <input id="em" name="em" type="email" autocomplete="email" class="mt-1.5 h-10 w-full rounded-xl border border-emerald-200 px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2" />
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="loc" class="text-sm font-bold text-brand-ink">Footprint</label>
+                  <select id="loc" name="loc" class="mt-1.5 h-10 w-full cursor-pointer rounded-xl border border-emerald-200 bg-white px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">
+                    <option>1 location</option>
+                    <option>2–10</option>
+                    <option>11–50</option>
+                    <option>50+</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="msg" class="text-sm font-bold text-brand-ink">Focus for the call</label>
+                  <textarea id="msg" name="msg" rows="3" class="mt-1.5 w-full rounded-xl border border-emerald-200 px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2" placeholder="e.g. central fill, specialty claims, PMP automation…"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="mt-6 w-full cursor-pointer rounded-2xl bg-gradient-to-r from-brand-primary to-emerald-800 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">Request demo</button>
+              <p class="mt-3 text-center text-xs text-brand-muted">Static preview—connect to your CRM or API when you deploy.</p>
+            </form>
+          </div>
+        </section>
+
+        <section id="login" class="border-t border-white/10 bg-slate-950 px-4 py-12 text-center md:px-6" aria-labelledby="login-h">
+          <h2 id="login-h" class="font-display text-lg font-bold text-white">Existing customer?</h2>
+          <p class="mx-auto mt-2 max-w-md text-sm text-slate-400">Replace with your tenant console URL.</p>
+          <a href="#" class="mt-5 inline-flex cursor-pointer rounded-2xl bg-white px-8 py-2.5 text-sm font-bold text-slate-900 transition-colors duration-200 hover:bg-emerald-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">Open console</a>
+        </section>
+      </main>
+
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-14 backdrop-blur-md md:px-6" role="contentinfo">
+        <div class="mx-auto flex max-w-7xl flex-col justify-between gap-10 md:flex-row">
+          <div>
+            <p class="font-display flex items-center gap-2 text-xl font-black text-brand-ink">
+              <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-800 text-sm text-white">P</span>
+              Pharmaco
+            </p>
+            <p class="mt-3 max-w-sm text-sm font-medium text-brand-muted">Cloud pharmacy operations: inventory, care workflows, revenue, and compliance in one spine.</p>
+          </div>
+          <div class="flex flex-wrap gap-12 text-sm font-semibold">
+            <div>
+              <p class="text-xs font-black uppercase tracking-widest text-brand-cta">Product</p>
+              <ul class="mt-4 space-y-2 text-brand-muted">
+                <li><a href="product/index.html" class="cursor-pointer hover:text-brand-primary">Platform tour</a></li>
+                <li><a href="#platform" class="cursor-pointer hover:text-brand-primary">Platform</a></li>
+                <li><a href="#modules" class="cursor-pointer hover:text-brand-primary">Modules</a></li>
+                <li><a href="#pricing" class="cursor-pointer hover:text-brand-primary">Plans</a></li>
+              </ul>
+            </div>
+            <div>
+              <p class="text-xs font-black uppercase tracking-widest text-brand-cta">Company</p>
+              <ul class="mt-4 space-y-2 text-brand-muted">
+                <li><a href="#demo" class="cursor-pointer hover:text-brand-primary">Demo</a></li>
+                <li><a href="#login" class="cursor-pointer hover:text-brand-primary">Log in</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <p class="mx-auto mt-12 max-w-7xl border-t border-emerald-100 pt-8 text-center text-xs font-medium text-brand-muted">
+          © <span id="y"></span> Pharmaco. Rich marketing preview; wire forms and URLs for production.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      document.getElementById("y").textContent = new Date().getFullYear();
+      var menuBtn = document.getElementById("menu-btn");
+      var mobileNav = document.getElementById("mobile-nav");
+      if (menuBtn && mobileNav) {
+        menuBtn.addEventListener("click", function () {
+          mobileNav.classList.toggle("hidden");
+          menuBtn.setAttribute("aria-expanded", !mobileNav.classList.contains("hidden") ? "true" : "false");
+        });
+        mobileNav.querySelectorAll("a").forEach(function (a) {
+          a.addEventListener("click", function () {
+            mobileNav.classList.add("hidden");
+            menuBtn.setAttribute("aria-expanded", "false");
+          });
+        });
+      }
+
+      var tabs = document.querySelectorAll(".tab-btn");
+      var panels = document.querySelectorAll(".tab-panel");
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener("click", function () {
+          tabs.forEach(function (t, j) {
+            var on = j === i;
+            t.setAttribute("aria-selected", on ? "true" : "false");
+            t.classList.toggle("tab-active", on);
+            t.classList.toggle("text-brand-muted", !on);
+          });
+          panels.forEach(function (p, j) {
+            p.classList.toggle("hidden", j !== i);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

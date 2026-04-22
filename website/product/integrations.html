@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Healthcare integrations in Pharmaco—e-prescribing, payers, registries, and APIs." />
+    <title>Connections &amp; healthcare grid — Pharmaco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex"><a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a><a href="index.html" class="text-brand-cta cursor-pointer">Platform tour</a></nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg hover:brightness-110 cursor-pointer">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="px-4 pb-10 pt-8 md:px-6" aria-labelledby="ih">
+          <nav class="text-sm text-brand-muted"><a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a><span class="mx-2">/</span><span class="text-brand-ink">Connections</span></nav>
+          <h1 id="ih" class="mt-6 max-w-4xl font-display text-4xl font-extrabold leading-tight text-brand-ink md:text-5xl">
+            Your pharmacy sits
+            <span class="bg-gradient-to-r from-brand-cta to-brand-primary bg-clip-text text-transparent" style="-webkit-background-clip: text">inside a network—</span>
+            not beside it.
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg text-brand-muted">Prescribers, payers, monitoring programs, labs, accounting, and the custom tools your region already standardized on: Pharmaco speaks their languages so your counter staff does not have to become human middleware.</p>
+        </section>
+
+        <section class="relative mx-auto max-w-5xl px-4 pb-16 md:px-6" aria-label="Network">
+          <div class="relative mx-auto aspect-[16/10] max-h-[420px] overflow-hidden rounded-3xl border border-emerald-200 bg-gradient-to-br from-white via-emerald-50 to-sky-50 shadow-xl">
+            <div class="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-teal-800 font-display text-xl font-black text-white shadow-lg">Rx</div>
+            <div class="absolute left-[12%] top-[20%] rounded-xl border border-emerald-200 bg-white/90 px-3 py-2 text-xs font-bold text-brand-ink shadow">Clinic EMR</div>
+            <div class="absolute right-[10%] top-[18%] rounded-xl border border-sky-200 bg-white/90 px-3 py-2 text-xs font-bold text-brand-ink shadow">Payer switch</div>
+            <div class="absolute bottom-[22%] left-[8%] rounded-xl border border-emerald-200 bg-white/90 px-3 py-2 text-xs font-bold text-brand-ink shadow">Monitoring</div>
+            <div class="absolute bottom-[20%] right-[12%] rounded-xl border border-emerald-200 bg-white/90 px-3 py-2 text-xs font-bold text-brand-ink shadow">Accounting</div>
+            <div class="absolute left-[18%] bottom-[38%] h-0.5 w-[25%] origin-right rotate-12 bg-gradient-to-r from-brand-primary/40 to-transparent" aria-hidden="true"></div>
+            <div class="absolute right-[18%] bottom-[40%] h-0.5 w-[22%] origin-left -rotate-6 bg-gradient-to-l from-brand-cta/40 to-transparent" aria-hidden="true"></div>
+            <p class="absolute bottom-3 left-0 right-0 text-center text-[10px] font-medium text-brand-muted">Stylized map—not a data diagram</p>
+          </div>
+        </section>
+
+        <section class="bg-slate-900 px-4 py-14 text-white md:px-6" aria-labelledby="why">
+          <h2 id="why" class="mx-auto max-w-3xl text-center font-display text-2xl font-bold md:text-3xl">Why integrations are a patient experience</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-center text-sm text-emerald-100/90">When e-prescribing lands cleanly, a mother does not wait an extra hour with a feverish toddler. When adjudication returns fast, a senior learns their copay at pickup—not three days later in the mail.</p>
+        </section>
+
+        <section class="px-4 py-12 md:px-6">
+          <details class="mx-auto max-w-3xl rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+            <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none [&::-webkit-details-marker]:hidden">Capability snapshot</summary>
+            <p class="mt-4 text-sm text-brand-muted">E-prescribing and status back to prescribers, payer telecommunication standards, PMP query and submission, drug knowledge and formulary services, accounting exports, lab interfaces, payment gateways, regulatory portals, REST APIs, webhooks, developer-facing documentation, and resilient sync for branches or brief offline moments.</p>
+          </details>
+        </section>
+
+        <section class="px-4 pb-12 md:px-6">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="reporting-analytics.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg> Insight &amp; dashboards</a>
+            <a href="communications-knowledge.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2">Messages &amp; learning <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg></a>
+          </div>
+        </section>
+      </main>
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>

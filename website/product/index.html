@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tour Pharmaco: security, inventory, patient care, claims, clinical services, analytics, and more—how each part helps real pharmacies." />
+    <title>Platform tour — Pharmaco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Noto Sans", "system-ui", "sans-serif"],
+              display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                primary: "#15803D",
+                secondary: "#22C55E",
+                cta: "#0369A1",
+                surface: "#F0FDF4",
+                ink: "#14532D",
+                muted: "#166534",
+              },
+            },
+            animation: { "mesh-shift": "meshShift 18s ease-in-out infinite", marquee: "marquee 32s linear infinite", float: "float 6s ease-in-out infinite" },
+            keyframes: {
+              meshShift: {
+                "0%, 100%": { opacity: "0.45", transform: "scale(1) translate(0,0)" },
+                "50%": { opacity: "0.65", transform: "scale(1.05) translate(2%, -2%)" },
+              },
+              marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
+              float: { "0%, 100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-8px)" } },
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a
+        href="#main"
+        class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2"
+        >Skip to content</a
+      >
+
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold tracking-tight text-brand-ink transition-colors hover:text-brand-primary cursor-pointer" aria-label="Pharmaco home">
+            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white shadow-md">P</span>
+            <span>Pharm<span class="text-brand-primary">aco</span></span>
+          </a>
+          <nav class="hidden items-center gap-6 text-sm font-semibold md:flex" aria-label="Site">
+            <a href="../index.html" class="text-brand-muted transition-colors hover:text-brand-ink cursor-pointer">Home</a>
+            <span class="text-brand-ink">Platform tour</span>
+          </nav>
+          <a
+            href="../index.html#demo"
+            class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-sky-900/15 transition-all hover:brightness-110 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2"
+            >Book demo</a
+          >
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="relative overflow-hidden px-4 pb-12 pt-6 md:px-6 md:pb-20 md:pt-10" aria-labelledby="tour-h">
+          <div class="pointer-events-none absolute -left-32 top-24 h-80 w-80 rounded-full bg-emerald-400/30 blur-3xl motion-safe:animate-mesh-shift" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-sky-400/25 blur-3xl motion-safe:animate-mesh-shift" style="animation-delay: -6s" aria-hidden="true"></div>
+          <div class="relative mx-auto max-w-5xl text-center">
+            <p class="font-display text-sm font-bold uppercase tracking-widest text-brand-cta">Shipped &amp; running</p>
+            <h1 id="tour-h" class="mt-4 font-display text-4xl font-extrabold leading-tight tracking-tight text-brand-ink md:text-5xl lg:text-6xl">
+              One platform.
+              <span class="bg-gradient-to-r from-brand-primary via-teal-600 to-brand-cta bg-clip-text text-transparent" style="-webkit-background-clip: text">Every corner of the pharmacy.</span>
+            </h1>
+            <p class="mx-auto mt-6 max-w-2xl text-lg text-brand-muted md:text-xl">
+              Pharmaco is not a slide deck of future ideas—it is the system your teams log into for dispensing, stock, payer work, patient outreach, and the quiet work of staying compliant. Below, each tour stops on a different kind of day you already recognize.
+            </p>
+          </div>
+        </section>
+
+        <section class="border-y border-emerald-200/60 bg-slate-900 py-4 text-white" aria-hidden="true">
+          <div class="relative overflow-hidden">
+            <div class="marquee-track motion-safe:animate-marquee">
+              <div class="flex shrink-0 items-center gap-10 px-6 text-sm font-bold uppercase tracking-widest text-emerald-100/90">
+                <span class="whitespace-nowrap">Safer handoffs</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Fewer stockouts</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Cleaner claims</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Calmer audits</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Patients who feel remembered</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Branches that match</span><span class="text-emerald-600">◆</span>
+              </div>
+              <div class="flex shrink-0 items-center gap-10 px-6 text-sm font-bold uppercase tracking-widest text-emerald-100/90" aria-hidden="true">
+                <span class="whitespace-nowrap">Safer handoffs</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Fewer stockouts</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Cleaner claims</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Calmer audits</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Patients who feel remembered</span><span class="text-emerald-600">◆</span>
+                <span class="whitespace-nowrap">Branches that match</span><span class="text-emerald-600">◆</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="px-4 py-16 md:px-6 md:py-24" aria-labelledby="areas-h">
+          <div class="mx-auto max-w-7xl">
+            <h2 id="areas-h" class="text-center font-display text-3xl font-extrabold text-brand-ink md:text-4xl">Pick the moment you want less friction</h2>
+            <p class="mx-auto mt-4 max-w-2xl text-center text-lg text-brand-muted">Each tour is written as if you are already live—because on Pharmaco, you are.</p>
+
+            <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              <a href="foundation.html" class="impact-card group relative flex min-h-[220px] flex-col overflow-hidden rounded-3xl border border-emerald-200/90 bg-gradient-to-br from-white to-emerald-50/90 p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand-secondary/25 blur-2xl transition-opacity group-hover:opacity-90" aria-hidden="true"></div>
+                <div class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-teal-800 text-white shadow-md">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                </div>
+                <h3 class="relative mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">Trust, doors, and backbone</h3>
+                <p class="relative mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Who can walk up to which counter, how HQ sees every branch without chaos, and the knobs your IT team uses when nothing dramatic is happening—but everything has to stay on.</p>
+                <span class="relative mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="supply-chain.html" class="impact-card group relative flex min-h-[220px] flex-col overflow-hidden rounded-3xl border border-emerald-200/90 bg-white p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-brand-primary">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" /></svg>
+                </div>
+                <h3 class="relative mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">Shelves that tell the truth</h3>
+                <p class="relative mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Expiry you catch before it hurts, transfers that do not turn into phone tag, and buying that is not a guessing game when wholesalers change their terms again.</p>
+                <span class="relative mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="patient-care.html" class="impact-card group relative flex min-h-[220px] flex-col overflow-hidden rounded-3xl border border-emerald-200/90 bg-gradient-to-br from-white via-emerald-50/50 to-sky-50/40 p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-brand-cta">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg>
+                </div>
+                <h3 class="relative mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">The person, not just the Rx number</h3>
+                <p class="relative mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Allergies that follow someone between branches, refills that do not ambush the tech, and clinical checks that read like guardrails instead of pop-up storms.</p>
+                <span class="relative mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="commerce.html" class="impact-card group relative flex min-h-[220px] flex-col overflow-hidden rounded-3xl border border-emerald-200/90 bg-slate-900 p-8 text-white shadow-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-brand-secondary">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-white">The line at the register—and the payer on the other end</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-emerald-100/85">Split payments without sweat, returns that do not wreck your counts, and a claims desk that can explain why a rejection happened before the patient taps the glass again.</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-secondary">Open tour <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="clinical-digital.html" class="impact-card group flex min-h-[220px] flex-col rounded-3xl border border-emerald-200/90 bg-white p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-brand-primary">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">Care beyond the vial—on screens and doorsteps</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Jabs that stay cold, MTM that pays for itself in time saved, apps patients actually use, and drivers who do not leave someone guessing where their insulin is.</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="reporting-analytics.html" class="impact-card group flex min-h-[220px] flex-col rounded-3xl border border-emerald-200/90 bg-gradient-to-br from-white to-emerald-50 p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-cta to-sky-800 text-white shadow-md">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">Numbers you can act on Tuesday morning</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Margin stories that tie back to inventory, wait times that tie back to staffing, and the export your accountant was going to ask for anyway—already shaped for humans.</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="integrations.html" class="impact-card group flex min-h-[220px] flex-col rounded-3xl border border-emerald-200/90 bg-white p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-brand-primary">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">Plugs into the world you already bought into</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-brand-muted">E-prescribing, payers, monitoring programs, accounting, labs—without your staff becoming human copy machines between systems.</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="communications-knowledge.html" class="impact-card group flex min-h-[220px] flex-col rounded-3xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50 to-white p-8 shadow-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-brand-primary shadow ring-1 ring-emerald-200">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75v-.7V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">Ping, paper, and people who stay sharp</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Reminders that feel helpful, documents that survive inspections, and training that proves itself when a new hire covers Saturday alone.</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+
+              <a href="quality-compliance.html" class="impact-card group flex min-h-[220px] flex-col rounded-3xl border-2 border-brand-primary/40 bg-white p-8 shadow-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary text-white shadow-lg">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink group-hover:text-brand-primary">When regulators lean in, you lean back—prepared</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-brand-muted">Errors become learning loops, fridges prove they stayed cold, and audits feel like showing your work—not inventing it Friday at five.</p>
+                <span class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-brand-cta">Open tour <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="border-t border-emerald-200/80 bg-white/80 px-4 py-14 backdrop-blur-sm md:px-6" aria-labelledby="cta-h">
+          <div class="mx-auto max-w-3xl text-center">
+            <h2 id="cta-h" class="font-display text-2xl font-extrabold text-brand-ink md:text-3xl">Ready to watch it with your own workflows?</h2>
+            <p class="mt-4 text-brand-muted">We will mirror your rush hours, your payer mix, and your branch quirks—not a canned script.</p>
+            <a
+              href="../index.html#demo"
+              class="mt-8 inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-primary to-emerald-800 px-8 py-4 text-base font-bold text-white shadow-xl transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+            >
+              Book a tailored walkthrough
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-sm text-brand-muted md:px-6">
+        <a href="../index.html" class="cursor-pointer font-semibold text-brand-cta hover:underline">Back to marketing home</a>
+      </footer>
+    </div>
+  </body>
+</html>

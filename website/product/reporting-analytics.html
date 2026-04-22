@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Analytics and reporting in Pharmaco—clear performance for pharmacy leaders." />
+    <title>Insight &amp; dashboards — Pharmaco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex"><a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a><a href="index.html" class="text-brand-cta cursor-pointer">Platform tour</a></nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg hover:brightness-110 cursor-pointer">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="px-4 pb-12 pt-8 md:px-6" aria-labelledby="rh">
+          <nav class="text-sm text-brand-muted"><a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a><span class="mx-2">/</span><span class="text-brand-ink">Insight &amp; dashboards</span></nav>
+          <h1 id="rh" class="mt-6 max-w-4xl font-display text-4xl font-extrabold text-brand-ink md:text-5xl lg:text-6xl">
+            Turn “I think we’re fine” into
+            <span class="bg-gradient-to-r from-brand-cta via-teal-600 to-brand-primary bg-clip-text text-transparent" style="-webkit-background-clip: text">“here is the chart.”</span>
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg text-brand-muted">Every sale, adjustment, intervention, and payer response already lives in Pharmaco—so leadership sees one story: where margin hides, where patients wait, and where your best people spend their minutes.</p>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-4 pb-8 md:px-6" aria-label="Illustrative metrics">
+          <p class="text-center text-xs font-semibold uppercase tracking-widest text-brand-muted">Illustrative tiles—your live dashboards reflect your real data</p>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow-md">
+              <p class="text-xs font-bold uppercase text-brand-muted">Wait narrative</p>
+              <p class="mt-2 font-display text-3xl font-black text-brand-primary">−18%</p>
+              <p class="mt-1 text-xs text-brand-muted">average pickup time after staffing tweak</p>
+            </div>
+            <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow-md">
+              <p class="text-xs font-bold uppercase text-brand-muted">Expiry story</p>
+              <p class="mt-2 font-display text-3xl font-black text-teal-700">$12k</p>
+              <p class="mt-1 text-xs text-brand-muted">waste avoided quarter-to-date (example)</p>
+            </div>
+            <div class="rounded-2xl border border-sky-200 bg-sky-50/80 p-6 shadow-md">
+              <p class="text-xs font-bold uppercase text-brand-muted">Payer clarity</p>
+              <p class="mt-2 font-display text-3xl font-black text-brand-cta">4.1d</p>
+              <p class="mt-1 text-xs text-brand-muted">avg days-to-pay by top plan (example)</p>
+            </div>
+            <div class="rounded-2xl border border-emerald-200 bg-gradient-to-br from-slate-900 to-emerald-900 p-6 text-white shadow-md">
+              <p class="text-xs font-bold uppercase text-emerald-200/80">Safety signal</p>
+              <p class="mt-2 font-display text-3xl font-black text-brand-secondary">↓</p>
+              <p class="mt-1 text-xs text-emerald-100/80">critical overrides reviewed same day (example)</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="px-4 py-14 md:px-6" aria-labelledby="modes">
+          <div class="mx-auto max-w-5xl">
+            <h2 id="modes" class="text-center font-display text-2xl font-bold text-brand-ink md:text-3xl">Built for three kinds of Mondays</h2>
+            <div class="mt-10 grid gap-6 md:grid-cols-3">
+              <div class="rounded-2xl border border-emerald-100 bg-white/90 p-6 text-center shadow-sm">
+                <h3 class="font-display font-bold text-brand-ink">Store manager</h3>
+                <p class="mt-2 text-sm text-brand-muted">Hourly sales rhythm, return spikes, cashier variance—without exporting five spreadsheets.</p>
+              </div>
+              <div class="rounded-2xl border border-emerald-100 bg-white/90 p-6 text-center shadow-sm">
+                <h3 class="font-display font-bold text-brand-ink">Clinical lead</h3>
+                <p class="mt-2 text-sm text-brand-muted">Interventions, immunizations, adherence cohorts—tied to services you can explain to payers.</p>
+              </div>
+              <div class="rounded-2xl border border-emerald-100 bg-white/90 p-6 text-center shadow-sm">
+                <h3 class="font-display font-bold text-brand-ink">Finance partner</h3>
+                <p class="mt-2 text-sm text-brand-muted">Margin by category, AR aging, inventory valuation—language your accountant already speaks.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="border-t border-emerald-200/80 bg-white/75 px-4 py-12 backdrop-blur-sm md:px-6">
+          <details class="mx-auto max-w-3xl rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+            <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none [&::-webkit-details-marker]:hidden">Capability snapshot</summary>
+            <p class="mt-4 text-sm text-brand-muted">Operational, financial, inventory, customer, clinical quality, and regulatory report families—plus builder tools, scheduled distribution, exports, and executive dashboards with drill-down when something looks off.</p>
+          </details>
+        </section>
+
+        <section class="px-4 pb-12 md:px-6">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="clinical-digital.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg> Clinical &amp; digital</a>
+            <a href="integrations.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2">Connections &amp; APIs <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg></a>
+          </div>
+        </section>
+      </main>
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>

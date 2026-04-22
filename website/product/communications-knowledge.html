@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Notifications, documents, and training in Pharmaco—fewer dropped balls for pharmacy teams." />
+    <title>Messages, files &amp; learning — Pharmaco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex"><a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a><a href="index.html" class="text-brand-cta cursor-pointer">Platform tour</a></nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg hover:brightness-110 cursor-pointer">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="px-4 pb-12 pt-8 md:px-6" aria-labelledby="ckh">
+          <nav class="text-sm text-brand-muted"><a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a><span class="mx-2">/</span><span class="text-brand-ink">Messages &amp; learning</span></nav>
+          <h1 id="ckh" class="mt-6 max-w-4xl font-display text-4xl font-extrabold text-brand-ink md:text-5xl">
+            The small things that become
+            <span class="bg-gradient-to-r from-brand-primary to-brand-cta bg-clip-text text-transparent" style="-webkit-background-clip: text">big liabilities when missed.</span>
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg text-brand-muted">The right text at the right time. The policy everyone actually acknowledged. The new hire who nails controlled-inventory steps on week two because the training met them where they work—not in a three-ring binder from 2014.</p>
+        </section>
+
+        <section class="mx-auto max-w-6xl px-4 pb-16 md:px-6" aria-label="Flow">
+          <div class="grid gap-8 lg:grid-cols-2 lg:items-center">
+            <div class="space-y-6">
+              <div class="flex gap-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-brand-primary font-display font-black">1</div>
+                <div>
+                  <h2 class="font-display text-lg font-bold text-brand-ink">Patient hears you clearly</h2>
+                  <p class="mt-1 text-sm text-brand-muted">Rx ready, refill timing, delivery ETAs—channels and quiet hours respected so trust grows instead of notification fatigue.</p>
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-brand-cta font-display font-black">2</div>
+                <div>
+                  <h2 class="font-display text-lg font-bold text-brand-ink">Paper stops hiding in drawers</h2>
+                  <p class="mt-1 text-sm text-brand-muted">Licenses, SOPs, contracts, and Rx images live in a governed library—searchable, versioned, permissioned—so inspections feel like retrieval, not archaeology.</p>
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 font-display font-black">3</div>
+                <div>
+                  <h2 class="font-display text-lg font-bold text-brand-ink">Skills compound instead of resetting</h2>
+                  <p class="mt-1 text-sm text-brand-muted">Learning paths, competency tracking, and CE discipline mean coverage shifts stop feeling like roulette for clinical quality.</p>
+                </div>
+              </div>
+            </div>
+            <div class="shine-border glow-ring relative rounded-3xl p-8 shadow-xl">
+              <div class="relative rounded-2xl border border-emerald-100 bg-white/90 p-6">
+                <p class="font-mono text-xs text-brand-muted">Inbox preview</p>
+                <p class="mt-4 font-display text-sm font-bold text-brand-ink">“Your metformin is ready for pickup. Drive-thru lane 2.”</p>
+                <p class="mt-3 text-xs text-brand-muted">Template + patient name + branch tone—sent at the moment status flips, not when someone remembers to click send.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="px-4 py-12 md:px-6">
+          <details class="mx-auto max-w-3xl rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+            <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none [&::-webkit-details-marker]:hidden">Capability snapshot</summary>
+            <p class="mt-4 text-sm text-brand-muted">Operational and security alerts, patient and prescriber messaging with templates and personalization, multi-channel delivery tracking, centralized documents with OCR and retention, training catalogs with assessments, certification tracking, knowledge base, and analytics on communication and learning effectiveness.</p>
+          </details>
+        </section>
+
+        <section class="px-4 pb-12 md:px-6">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="integrations.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg> Connections</a>
+            <a href="quality-compliance.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2">Safety &amp; readiness <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg></a>
+          </div>
+        </section>
+      </main>
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>

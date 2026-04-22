@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="POS and insurance in Pharmaco—smoother checkout, clearer claims, healthier cash for pharmacies." />
+    <title>Register &amp; payers — Pharmaco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex"><a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a><a href="index.html" class="text-brand-cta cursor-pointer">Platform tour</a></nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg hover:brightness-110 cursor-pointer">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="px-4 pb-12 pt-8 md:px-6" aria-labelledby="hc">
+          <nav class="text-sm text-brand-muted"><a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a><span class="mx-2">/</span><span class="text-brand-ink">Register &amp; payers</span></nav>
+          <h1 id="hc" class="mt-6 max-w-4xl font-display text-4xl font-extrabold leading-tight text-brand-ink md:text-5xl">
+            The line moves—and the
+            <span class="bg-gradient-to-r from-brand-cta to-brand-primary bg-clip-text text-transparent" style="-webkit-background-clip: text">money story adds up.</span>
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg text-brand-muted">Checkout, returns, and cash discipline stay married to the same transaction spine your payer team uses for eligibility, submission, rejections, and reconciliation. Fewer “we showed one number to the patient and another to finance” weeks.</p>
+        </section>
+
+        <section class="mx-auto grid max-w-7xl gap-6 px-4 pb-16 md:grid-cols-2 md:px-6" aria-label="Split story">
+          <div class="rounded-3xl border border-emerald-200 bg-white p-8 shadow-xl">
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-brand-primary">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+            </div>
+            <h2 class="mt-5 font-display text-2xl font-bold text-brand-ink">At the register</h2>
+            <p class="mt-3 text-sm leading-relaxed text-brand-muted">Prescription-linked sales pull the right items and prices. Split payments feel normal, not heroic. Returns and controlled-substance rules stop guesswork. Shift reconciliation gives your manager a clean story before they drive home.</p>
+          </div>
+          <div class="rounded-3xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-8 shadow-xl">
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-100 text-brand-cta">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18h19.5M2.25 6h19.5m-16.5 6h13.5" /></svg>
+            </div>
+            <h2 class="mt-5 font-display text-2xl font-bold text-brand-ink">Behind the payer curtain</h2>
+            <p class="mt-3 text-sm leading-relaxed text-brand-muted">Eligibility before promises. Prior auth tracked like a task—not a sticky. Rejections get plain language and next steps. Reimbursement aging stops being a surprise in month-end close.</p>
+          </div>
+        </section>
+
+        <section class="bg-gradient-to-r from-brand-primary to-teal-800 px-4 py-12 text-center text-white md:px-6" aria-labelledby="impact">
+          <h2 id="impact" class="font-display text-2xl font-bold md:text-3xl">What your CFO feels</h2>
+          <p class="mx-auto mt-3 max-w-2xl text-sm text-emerald-100 md:text-base">Fewer write-offs from pricing drift. Faster answers when a plan changes its mind mid-quarter. A counter that does not fight the claims desk for the same patient’s truth.</p>
+        </section>
+
+        <section class="px-4 py-14 md:px-6">
+          <div class="mx-auto max-w-3xl">
+            <details class="rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+              <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none [&::-webkit-details-marker]:hidden">Capability snapshot</summary>
+              <p class="mt-4 text-sm text-brand-muted">Modern POS flows, gateway-ready payments, receipt choice, cash audits, sales analytics, payer database with formularies, electronic claims and batching, reversal discipline, PA lifecycle, underpayment detection, and payer performance views your leadership can actually use in meetings.</p>
+            </details>
+          </div>
+        </section>
+
+        <section class="px-4 pb-12 md:px-6">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="patient-care.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg> Patients &amp; prescriptions</a>
+            <a href="clinical-digital.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2">Clinical &amp; digital <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg></a>
+          </div>
+        </section>
+      </main>
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>

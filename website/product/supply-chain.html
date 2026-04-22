@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Inventory, buying, and pricing in Pharmaco—less waste, fewer stockouts, clearer margins for pharmacies." />
+    <title>Shelves, buying &amp; price tags — Pharmaco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+            animation: { "mesh-shift": "meshShift 18s ease-in-out infinite" },
+            keyframes: { meshShift: { "0%,100%": { opacity: "0.45" }, "50%": { opacity: "0.65" } } },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex"><a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a><a href="index.html" class="text-brand-cta cursor-pointer">Platform tour</a></nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg hover:brightness-110 cursor-pointer">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="relative isolate overflow-hidden px-4 pb-12 pt-8 md:px-6 md:pb-16" aria-labelledby="hs">
+          <div class="pointer-events-none absolute right-0 top-40 h-96 w-96 rounded-full bg-emerald-300/20 blur-3xl motion-safe:animate-mesh-shift" aria-hidden="true"></div>
+          <div class="relative mx-auto max-w-5xl">
+            <nav class="text-sm text-brand-muted"><a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a><span class="mx-2">/</span><span class="text-brand-ink">Shelves &amp; buying</span></nav>
+            <h1 id="hs" class="mt-6 font-display text-4xl font-extrabold leading-tight text-brand-ink md:text-5xl lg:text-6xl">
+              Stop paying tuition to
+              <span class="bg-gradient-to-r from-brand-primary to-teal-600 bg-clip-text text-transparent" style="-webkit-background-clip: text">expired boxes.</span>
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg text-brand-muted md:text-xl">
+              Pharmaco tracks what sits on your shelf the way a good PIC thinks about it: which lot goes out first, what is about to bleed margin, and what your buyer should negotiate <em class="font-semibold not-italic text-brand-ink">before</em> the wholesaler rep walks through the door.
+            </p>
+          </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-4 pb-16 md:px-6" aria-labelledby="week">
+          <h2 id="week" class="font-display text-2xl font-bold text-brand-ink md:text-3xl">A week in inventory, without the drama</h2>
+          <div class="mt-8 grid gap-4 md:grid-cols-5">
+            <div class="rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm md:col-span-2">
+              <p class="font-mono text-xs font-bold uppercase text-brand-cta">Tuesday</p>
+              <p class="mt-2 font-display text-lg font-bold text-brand-ink">Near-expiry surfaces early</p>
+              <p class="mt-2 text-sm text-brand-muted">Alerts respect how many days <em>you</em> need—not a generic 30-day panic. FEFO is the default story, not a spreadsheet column nobody updates.</p>
+            </div>
+            <div class="rounded-2xl border border-emerald-200 bg-brand-surface/80 p-5 shadow-sm md:col-span-2">
+              <p class="font-mono text-xs font-bold uppercase text-brand-cta">Thursday</p>
+              <p class="mt-2 font-display text-lg font-bold text-brand-ink">A sister store borrows stock</p>
+              <p class="mt-2 text-sm text-brand-muted">Transfers carry approvals and history so nobody plays telephone about “who signed for that tote.” Controlled lines stay in their own lane with the rigor regulators expect.</p>
+            </div>
+            <div class="flex flex-col justify-center rounded-2xl bg-gradient-to-b from-brand-primary to-teal-800 p-6 text-center text-white shadow-xl md:col-span-1">
+              <p class="font-display text-3xl font-black">Fewer</p>
+              <p class="text-sm font-semibold text-emerald-100">surprise write-offs</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-slate-900 px-4 py-16 text-white md:px-6 md:py-20" aria-labelledby="buy">
+          <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 id="buy" class="font-display text-3xl font-extrabold md:text-4xl">Buying stops being a personality contest</h2>
+              <p class="mt-4 text-emerald-100/90">RFQs, contract renewals, and vendor scorecards turn “I always order from them” into “here is how they actually perform on price, dates, and quality incidents.” Your team still makes the call—Pharmaco just keeps receipts.</p>
+            </div>
+            <div class="rounded-3xl border border-emerald-700/50 bg-emerald-950/50 p-8 backdrop-blur-sm">
+              <ul class="space-y-4 text-sm text-emerald-100/90">
+                <li class="flex gap-3"><span class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-xs font-bold text-slate-900">1</span><span>Reorder math respects lead time and safety stock—not vibes.</span></li>
+                <li class="flex gap-3"><span class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-xs font-bold text-slate-900">2</span><span>Receiving ties lot and expiry to the same record the tech will scan at pickup.</span></li>
+                <li class="flex gap-3"><span class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-xs font-bold text-slate-900">3</span><span>Pricing flows from policy to label to register—no secret parallel spreadsheet.</span></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="px-4 py-16 md:px-6" aria-label="Detail">
+          <div class="mx-auto max-w-3xl">
+            <details class="group rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+              <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none marker:content-none [&::-webkit-details-marker]:hidden">
+                <span class="flex items-center justify-between gap-4">Capability snapshot <svg class="h-5 w-5 text-brand-muted transition-transform group-open:rotate-180 motion-reduce:group-open:rotate-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
+              </summary>
+              <div class="mt-6 space-y-3 border-t border-emerald-100 pt-6 text-sm text-brand-muted">
+                <p>Rich product data (identifiers, cold chain flags, images), valuation methods that match your accountant’s language, PO automation and partial receipts, adjustment workflows with reasons, procurement beyond basic POs, and price lists that version cleanly when contracts change.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="px-4 pb-12 md:px-6">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="foundation.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg> Trust &amp; backbone</a>
+            <a href="patient-care.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2">Patients &amp; prescriptions <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></a>
+          </div>
+        </section>
+      </main>
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>

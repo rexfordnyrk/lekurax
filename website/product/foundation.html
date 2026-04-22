@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="How Pharmaco handles access, branches, and platform operations—trust without friction for pharmacies." />
+    <title>Trust, branches &amp; backbone — Pharmaco</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+            animation: { "mesh-shift": "meshShift 18s ease-in-out infinite" },
+            keyframes: {
+              meshShift: {
+                "0%, 100%": { opacity: "0.45", transform: "scale(1) translate(0,0)" },
+                "50%": { opacity: "0.65", transform: "scale(1.05) translate(2%, -2%)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold text-brand-ink hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white shadow-md">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex">
+            <a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a>
+            <a href="index.html" class="text-brand-cta hover:text-sky-900 cursor-pointer">Platform tour</a>
+          </nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg transition-all hover:brightness-110 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="relative overflow-hidden px-4 pb-14 pt-8 md:px-6 md:pb-20" aria-labelledby="hero-f">
+          <div class="pointer-events-none absolute -left-24 top-32 h-72 w-72 rounded-full bg-emerald-400/25 blur-3xl motion-safe:animate-mesh-shift" aria-hidden="true"></div>
+          <div class="relative mx-auto max-w-5xl">
+            <nav class="text-sm font-medium text-brand-muted" aria-label="Breadcrumb">
+              <a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a>
+              <span class="mx-2 text-emerald-300">/</span>
+              <span class="text-brand-ink">Trust &amp; backbone</span>
+            </nav>
+            <h1 id="hero-f" class="mt-6 font-display text-4xl font-extrabold leading-tight tracking-tight text-brand-ink md:text-5xl lg:text-6xl">
+              The quiet layer that makes
+              <span class="bg-gradient-to-r from-brand-primary to-brand-cta bg-clip-text text-transparent" style="-webkit-background-clip: text">everything else believable.</span>
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg text-brand-muted md:text-xl">
+              Before a single label prints, your people need to know: <em class="text-brand-ink not-italic font-semibold">who is allowed to see what</em>, which store they are standing in, and that someone could reconstruct the day if a board—or a worried family—asks hard questions.
+            </p>
+          </div>
+        </section>
+
+        <section class="relative overflow-hidden bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-900 px-4 py-16 text-white md:px-6 md:py-24" aria-labelledby="scene">
+          <div class="pointer-events-none absolute inset-0 opacity-25" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 28px 28px" aria-hidden="true"></div>
+          <div class="relative mx-auto max-w-5xl">
+            <p id="scene" class="font-display text-sm font-bold uppercase tracking-widest text-brand-secondary">Picture this</p>
+            <h2 class="mt-3 font-display text-3xl font-extrabold md:text-4xl">Monday, 8:12 a.m., three branches open at once.</h2>
+            <p class="mt-5 max-w-2xl text-lg text-emerald-100/90">
+              A floater pharmacist logs in from downtown. A relief tech covers the suburban store. Your district manager pulls a report without calling anyone for a password reset. Nobody shares credentials “just for today”—because the system already knows how to say yes, no, or “ask a supervisor.”
+            </p>
+            <div class="mt-10 grid gap-4 sm:grid-cols-3">
+              <div class="rounded-2xl border border-emerald-700/50 bg-emerald-950/40 p-5 backdrop-blur-sm">
+                <p class="font-display text-4xl font-black text-brand-secondary">Zero</p>
+                <p class="mt-2 text-sm text-emerald-100/80">shared sticky-notes with passwords under the keyboard</p>
+              </div>
+              <div class="rounded-2xl border border-emerald-700/50 bg-emerald-950/40 p-5 backdrop-blur-sm">
+                <p class="font-display text-4xl font-black text-white">One</p>
+                <p class="mt-2 text-sm text-emerald-100/80">map of branches, hours, and licenses that stays current</p>
+              </div>
+              <div class="rounded-2xl border border-emerald-700/50 bg-emerald-950/40 p-5 backdrop-blur-sm">
+                <p class="font-display text-4xl font-black text-sky-300">Full</p>
+                <p class="mt-2 text-sm text-emerald-100/80">story of who touched controlled inventory and when</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="px-4 py-16 md:px-6 md:py-24" aria-labelledby="pillars">
+          <div class="mx-auto max-w-7xl">
+            <h2 id="pillars" class="text-center font-display text-3xl font-extrabold text-brand-ink md:text-4xl">What actually changes on the floor</h2>
+            <div class="mt-12 grid gap-6 lg:grid-cols-3">
+              <article class="shine-border glow-ring relative overflow-hidden rounded-3xl p-8 shadow-lg">
+                <div class="relative">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-brand-primary">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                  </div>
+                  <h3 class="mt-6 font-display text-xl font-bold text-brand-ink">People see only what their job requires</h3>
+                  <p class="mt-3 text-sm leading-relaxed text-brand-muted">Cashiers are not tripping over clinical notes. Floaters are not guessing which keys unlock pricing overrides. MFA and single sign-on mean fewer sticky situations when someone covers a shift at a store they rarely visit.</p>
+                </div>
+              </article>
+              <article class="rounded-3xl border border-emerald-200 bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-brand-cta">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12.75m0 0H21m-21 3.75H12m12 0h-3.75m-15 0v11.25c0 .621.504 1.125 1.125 1.125h.75M3 21h1.125M12 21h1.125m0-18.75v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V17.25m17.25 0v1.5c0 .621-.504 1.125-1.125 1.125H3.375M9.75 8.625c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125v8.25m-9-3.75h18" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink">Branches stay themselves—without drifting apart</h3>
+                <p class="mt-3 text-sm leading-relaxed text-brand-muted">Hours, holidays, cold rooms, and delivery zones stay accurate per site. Transfers and pricing rules respect whether you run tight central control or give each manager room to breathe.</p>
+              </article>
+              <article class="rounded-3xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50/80 p-8 shadow-lg">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.6.9.417.334.72.864.793 1.419l.12 1.2c.09.9-.57 1.68-1.47 1.68H7.194c-.9 0-1.56-.78-1.47-1.68l.12-1.2a2.25 2.25 0 0 1 .793-1.419c.287-.214.537-.526.6-.9l.213-1.28Z" /></svg>
+                </div>
+                <h3 class="mt-6 font-display text-xl font-bold text-brand-ink">Your IT and ops leads get grown-up tools</h3>
+                <p class="mt-3 text-sm leading-relaxed text-brand-muted">Backups, integrations, feature rollouts, and performance signals live in one place—so “we think the system was slow Tuesday” becomes a thread with evidence, not a vibe.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="border-t border-emerald-200/80 bg-white/75 px-4 py-14 backdrop-blur-sm md:px-6" aria-label="Deeper detail">
+          <div class="mx-auto max-w-3xl">
+            <details class="group rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm open:shadow-md">
+              <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none marker:content-none [&::-webkit-details-marker]:hidden">
+                <span class="flex items-center justify-between gap-4">
+                  For teams who want the full checklist
+                  <svg class="h-5 w-5 shrink-0 text-brand-muted transition-transform group-open:rotate-180 motion-reduce:group-open:rotate-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                </span>
+              </summary>
+              <div class="mt-6 space-y-4 border-t border-emerald-100 pt-6 text-sm text-brand-muted">
+                <p><strong class="text-brand-ink">Access &amp; identity:</strong> MFA, SSO for enterprises, granular roles, session discipline, password policies that nudge people toward safer habits—not surprise lockouts on the busiest day.</p>
+                <p><strong class="text-brand-ink">Audit &amp; privacy:</strong> Who touched high-risk actions, tamper-aware trails, masking for sensitive fields, encryption in motion and at rest—so HIPAA conversations feel grounded in product behavior, not promises.</p>
+                <p><strong class="text-brand-ink">Organization:</strong> Multi-site hierarchy, branch licenses and geodata for delivery, inter-store transfer rules, shared or independent pricing, facility areas from fridges to vaults.</p>
+                <p><strong class="text-brand-ink">Platform operations:</strong> Feature flags, integration endpoints, health monitoring, backups, controlled impersonation for support, and the boring-but-critical hygiene that keeps pharmacies open.</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="px-4 py-12 md:px-6" aria-label="Continue">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="index.html" class="inline-flex cursor-pointer items-center gap-2 text-brand-cta hover:underline"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg> All tours</a>
+            <a href="supply-chain.html" class="inline-flex cursor-pointer items-center gap-2 text-brand-cta hover:underline">Shelves &amp; buying <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted md:px-6">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>

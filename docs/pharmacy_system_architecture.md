@@ -6,7 +6,7 @@
 
 The pharmaceutical retail industry plays a critical role in healthcare delivery, serving as the final touchpoint between healthcare providers and patients. In many markets, pharmacies operate in diverse configurations—from small independent community pharmacies to large multi-branch chains, and from standalone retail operations to facilities integrated with hospitals and clinics. Despite this diversity, the industry faces common challenges that impact operational efficiency, patient safety, regulatory compliance, and business profitability.
 
-Traditional pharmacy operations have historically relied on manual processes, fragmented systems, or legacy software that addresses only specific aspects of pharmacy management. As healthcare becomes increasingly digitized and patient expectations evolve, pharmacies are under pressure to modernize their operations while maintaining the highest standards of pharmaceutical care and regulatory compliance.
+Traditional pharmacy operations have historically relied on manual processes, fragmented systems, or legacy software that addresses only specific aspects of pharmacy management. As healthcare becomes increasingly digitized and patient expectations evolve, pharmacies are under pressure to modernize their operations while maintaining the highest standards of pharmaceutical care and regulatory compliance. The name will be Lekurax
 
 ### Current State of Pharmacy Operations
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Quality and compliance in Pharmaco—calmer audits, safer learning loops for pharmacies." />
+    <title>Safety &amp; readiness — Pharmaco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..800;1,300..800&family=Noto+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Noto Sans", "system-ui", "sans-serif"], display: ["Figtree", "Noto Sans", "system-ui", "sans-serif"] },
+            colors: { brand: { primary: "#15803D", secondary: "#22C55E", cta: "#0369A1", surface: "#F0FDF4", ink: "#14532D", muted: "#166534" } },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/product.css" />
+  </head>
+  <body class="mesh-bg noise relative font-sans text-brand-ink antialiased">
+    <div class="relative z-[2]">
+      <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cta focus-visible:ring-offset-2">Skip to content</a>
+      <header class="fixed left-3 right-3 top-3 z-50 md:left-5 md:right-5 md:top-5">
+        <div class="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 shadow-sm md:rounded-3xl md:px-5 md:py-3">
+          <a href="../index.html" class="font-display flex items-center gap-2 text-lg font-bold hover:text-brand-primary cursor-pointer"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-teal-700 text-sm font-extrabold text-white">P</span><span>Pharm<span class="text-brand-primary">aco</span></span></a>
+          <nav class="hidden gap-5 text-sm font-semibold text-brand-muted md:flex"><a href="../index.html" class="hover:text-brand-ink cursor-pointer">Home</a><a href="index.html" class="text-brand-cta cursor-pointer">Platform tour</a></nav>
+          <a href="../index.html#demo" class="rounded-xl bg-gradient-to-r from-brand-cta to-sky-700 px-4 py-2 text-sm font-bold text-white shadow-lg hover:brightness-110 cursor-pointer">Book demo</a>
+        </div>
+      </header>
+
+      <main id="main" class="pt-24 md:pt-28">
+        <section class="px-4 pb-12 pt-8 md:px-6" aria-labelledby="qh">
+          <nav class="text-sm text-brand-muted"><a href="index.html" class="text-brand-cta hover:underline cursor-pointer">Platform tour</a><span class="mx-2">/</span><span class="text-brand-ink">Safety &amp; readiness</span></nav>
+          <h1 id="qh" class="mt-6 max-w-4xl font-display text-4xl font-extrabold leading-tight text-brand-ink md:text-5xl lg:text-6xl">
+            Compliance is not a folder.
+            <span class="block bg-gradient-to-r from-brand-primary to-teal-700 bg-clip-text text-transparent" style="-webkit-background-clip: text">It is a reflex.</span>
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg text-brand-muted">When something goes wrong—and in healthcare, something eventually will—Pharmaco helps you show the work: what happened, who responded, how you prevented a repeat, and how the fridge behaved the whole time.</p>
+        </section>
+
+        <section class="mx-auto grid max-w-7xl gap-6 px-4 pb-16 md:grid-cols-2 md:px-6" aria-label="Loops">
+          <div class="rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-8 shadow-lg">
+            <h2 class="font-display text-xl font-bold text-brand-ink">Near-misses become upgrades</h2>
+            <p class="mt-3 text-sm text-brand-muted">Capture, classify, and learn without blame theater. Root-cause templates keep investigations consistent so your team spends energy on fixes—not on formatting Word docs the night before a survey.</p>
+          </div>
+          <div class="rounded-3xl border border-emerald-200 bg-white p-8 shadow-lg">
+            <h2 class="font-display text-xl font-bold text-brand-ink">Auditors see a living system</h2>
+            <p class="mt-3 text-sm text-brand-muted">Checklists, findings, and closure tracking live beside the work itself. Temperature logs, dispensing checks, and equipment maintenance stop being scavenger hunts across three apps.</p>
+          </div>
+        </section>
+
+        <section class="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 px-4 py-16 text-white md:px-6" aria-labelledby="calm">
+          <div class="mx-auto max-w-3xl text-center">
+            <h2 id="calm" class="font-display text-2xl font-bold md:text-3xl">The feeling you want on inspection day</h2>
+            <p class="mt-4 text-emerald-100/90">Calm shoulders. Answers at hand. A story that matches the data—because the data was never an afterthought.</p>
+          </div>
+        </section>
+
+        <section class="px-4 py-12 md:px-6">
+          <details class="mx-auto max-w-3xl rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+            <summary class="cursor-pointer font-display text-lg font-bold text-brand-ink list-none [&::-webkit-details-marker]:hidden">Capability snapshot</summary>
+            <p class="mt-4 text-sm text-brand-muted">Medication error and incident programs, CAPA tracking, dispensing verification aids, environmental monitoring hooks, regulatory obligation tracking, internal audit lifecycle, risk registers, and quality KPI dashboards that leadership can scan weekly—not only when something catches fire.</p>
+          </details>
+        </section>
+
+        <section class="px-4 pb-12 md:px-6">
+          <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-4 border-t border-emerald-200 pt-10 text-sm font-bold">
+            <a href="communications-knowledge.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2"><svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg> Messages &amp; learning</a>
+            <a href="foundation.html" class="text-brand-cta hover:underline cursor-pointer inline-flex items-center gap-2">Trust &amp; backbone <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"></svg></a>
+          </div>
+        </section>
+      </main>
+      <footer class="border-t border-emerald-200/80 bg-white/90 px-4 py-8 text-center text-xs text-brand-muted">Pharmaco — platform tour</footer>
+    </div>
+  </body>
+</html>
