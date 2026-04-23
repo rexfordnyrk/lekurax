@@ -6,6 +6,7 @@ import (
 
 	"go.uber.org/zap"
 	"lekurax/internal/auth"
+	"lekurax/internal/authzkit"
 	"lekurax/internal/config"
 	"lekurax/internal/server"
 )
@@ -47,7 +48,7 @@ func run() int {
 		return 1
 	}
 
-	s := server.New(verifier)
+	s := server.New(verifier, authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey))
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {
 		log.Error("server failed", zap.Error(err))

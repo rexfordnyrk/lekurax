@@ -18,11 +18,12 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"lekurax/internal/auth"
+	"lekurax/internal/authzkit"
 )
 
 func TestNew_HealthLiveReturnsOK(t *testing.T) {
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier)
+	s := New(verifier, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -46,7 +47,7 @@ func TestNew_LogsRequests(t *testing.T) {
 	}()
 
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier)
+	s := New(verifier, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -60,7 +61,7 @@ func TestNew_BranchPingReturnsResolvedBranchAndTenant(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	privateKey, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier)
+	s := New(verifier, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	tenantID := uuid.New()
 	claimBranchID := uuid.New()
@@ -70,6 +71,7 @@ func TestNew_BranchPingReturnsResolvedBranchAndTenant(t *testing.T) {
 		"user_id":    uuid.NewString(),
 		"tenant_id":  tenantID.String(),
 		"branch_id":  claimBranchID.String(),
+		"roles":      []string{"tenant_admin"},
 		"session_id": "session-123",
 	})
 
