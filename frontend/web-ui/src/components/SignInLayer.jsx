@@ -2,7 +2,17 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SignInLayer = () => {
+const SignInLayer = ({
+  tenantId = "",
+  identifier = "",
+  password = "",
+  onTenantIdChange,
+  onIdentifierChange,
+  onPasswordChange,
+  onSubmit,
+  error = "",
+  submitting = false,
+}) => {
   return (
     <section className='auth bg-base d-flex flex-wrap'>
       <div className='auth-left d-lg-block d-none'>
@@ -21,15 +31,41 @@ const SignInLayer = () => {
               Welcome back! please enter your detail
             </p>
           </div>
-          <form action='#'>
+          {error ? (
+            <div
+              className='alert alert-danger radius-12 mb-16 py-12 px-16 text-sm'
+              role='alert'
+            >
+              {error}
+            </div>
+          ) : null}
+          <form onSubmit={onSubmit}>
+            <div className='icon-field mb-16'>
+              <span className='icon top-50 translate-middle-y'>
+                <Icon icon='mdi:identifier' />
+              </span>
+              <input
+                type='text'
+                className='form-control h-56-px bg-neutral-50 radius-12'
+                placeholder='Tenant ID'
+                value={tenantId}
+                onChange={(e) => onTenantIdChange?.(e.target.value)}
+                autoComplete='organization'
+                required
+              />
+            </div>
             <div className='icon-field mb-16'>
               <span className='icon top-50 translate-middle-y'>
                 <Icon icon='mage:email' />
               </span>
               <input
-                type='email'
+                type='text'
                 className='form-control h-56-px bg-neutral-50 radius-12'
-                placeholder='Email'
+                placeholder='Email or phone'
+                value={identifier}
+                onChange={(e) => onIdentifierChange?.(e.target.value)}
+                autoComplete='username'
+                required
               />
             </div>
             <div className='position-relative mb-20'>
@@ -42,6 +78,10 @@ const SignInLayer = () => {
                   className='form-control h-56-px bg-neutral-50 radius-12'
                   id='your-password'
                   placeholder='Password'
+                  value={password}
+                  onChange={(e) => onPasswordChange?.(e.target.value)}
+                  autoComplete='current-password'
+                  required
                 />
               </div>
               <span
@@ -62,7 +102,7 @@ const SignInLayer = () => {
                     Remember me{" "}
                   </label>
                 </div>
-                <Link to='#' className='text-primary-600 fw-medium'>
+                <Link to='/forgot-password' className='text-primary-600 fw-medium'>
                   Forgot Password?
                 </Link>
               </div>
@@ -70,10 +110,15 @@ const SignInLayer = () => {
             <button
               type='submit'
               className='btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32'
+              disabled={submitting}
             >
-              {" "}
-              Sign In
+              {submitting ? "Signing in…" : "Sign In"}
             </button>
+            <div className='mt-16 text-center'>
+              <Link to='/sign-in/otp' className='text-primary-600 fw-medium text-sm'>
+                Sign in with phone code
+              </Link>
+            </div>
             <div className='mt-32 center-border-horizontal text-center'>
               <span className='bg-base z-1 px-4'>Or sign in with</span>
             </div>

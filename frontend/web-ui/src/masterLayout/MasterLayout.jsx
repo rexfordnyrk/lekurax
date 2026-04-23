@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import ThemeToggleButton from "../helper/ThemeToggleButton";
+import { useBranch } from "../branch/BranchContext";
 
 const MasterLayout = ({ children }) => {
   let [sidebarActive, seSidebarActive] = useState(false);
   let [mobileMenu, setMobileMenu] = useState(false);
   const location = useLocation(); // Hook to get the current route
+  const {
+    activeBranchId,
+    setActiveBranchId,
+    branchSwitchGeneration,
+    accessibleBranches,
+  } = useBranch();
+  const activeBranch = accessibleBranches.find((b) => b.id === activeBranchId);
+  const activeBranchLabel = activeBranch?.name ?? "Branch";
 
   useEffect(() => {
     const handleDropdownClick = (event) => {
@@ -1326,6 +1335,48 @@ const MasterLayout = ({ children }) => {
               <div className='d-flex flex-wrap align-items-center gap-3'>
                 {/* ThemeToggleButton */}
                 <ThemeToggleButton />
+                {accessibleBranches.length > 0 ? (
+                  <div className='dropdown'>
+                    <button
+                      className='d-inline-flex align-items-center gap-2 px-12 py-8 radius-8 border border-neutral-200 bg-base text-secondary-light'
+                      type='button'
+                      data-bs-toggle='dropdown'
+                      aria-expanded='false'
+                    >
+                      <Icon
+                        icon='mdi:source-branch'
+                        className='text-lg text-primary-600 flex-shrink-0'
+                      />
+                      <span className='text-sm fw-semibold text-primary-light text-truncate' style={{ maxWidth: "12rem" }}>
+                        {activeBranchLabel}
+                      </span>
+                      <Icon
+                        icon='solar:alt-arrow-down-linear'
+                        className='text-lg flex-shrink-0'
+                      />
+                    </button>
+                    <ul className='dropdown-menu dropdown-menu-end p-8 border border-neutral-200'>
+                      <li className='px-8 py-4 mb-4'>
+                        <span className='text-xs text-secondary-light fw-medium text-uppercase'>
+                          Switch branch
+                        </span>
+                      </li>
+                      {accessibleBranches.map((b) => (
+                        <li key={b.id}>
+                          <button
+                            type='button'
+                            className={`dropdown-item py-8 px-12 radius-4 text-start w-100 border-0 bg-transparent ${
+                              b.id === activeBranchId ? "bg-primary-50 text-primary-600" : ""
+                            }`}
+                            onClick={() => setActiveBranchId(b.id)}
+                          >
+                            <span className='fw-medium'>{b.name}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
                 <div className='dropdown d-none d-sm-inline-block'>
                   <button
                     className='has-indicator w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center'
@@ -1955,7 +2006,9 @@ const MasterLayout = ({ children }) => {
         </div>
 
         {/* dashboard-main-body */}
-        <div className='dashboard-main-body'>{children}</div>
+        <div className='dashboard-main-body' key={branchSwitchGeneration}>
+          {children}
+        </div>
 
         {/* Footer section */}
         <footer className='d-footer'>
