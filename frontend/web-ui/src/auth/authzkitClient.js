@@ -6,6 +6,8 @@ export const authzkit = new AuthzKitClient({
   baseUrl: AUTHZ_BASE_URL,
   tokenStore,
   onAuthFailure: () => {
-    window.location.href = "/sign-in";
+    if (!window.location.pathname.startsWith("/sign-in")) {
+      window.location.href = "/sign-in";
+    }
   },
 });
