@@ -22,7 +22,7 @@ func main() {
 func run() int {
 	log, err := newProductionLogger()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Errorf("init logger: %w", err))
+		fmt.Fprintf(os.Stderr, "init logger: %v\n", err)
 		return 1
 	}
 	defer func() {
@@ -52,7 +52,7 @@ func run() int {
 
 	gdb, err := db.Open(cfg.DB.DSN)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Errorf("open db: %w", err))
+		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
 

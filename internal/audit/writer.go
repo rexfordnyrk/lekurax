@@ -3,6 +3,7 @@ package audit
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -34,6 +35,9 @@ func New(db *gorm.DB) *Writer {
 }
 
 func (w *Writer) Write(ctx context.Context, entry Entry) error {
+	if w.db == nil {
+		return fmt.Errorf("audit writer disabled: db is nil")
+	}
 	if entry.ID == uuid.Nil {
 		entry.ID = uuid.New()
 	}
