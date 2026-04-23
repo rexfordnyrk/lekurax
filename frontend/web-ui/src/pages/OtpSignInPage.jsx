@@ -35,8 +35,20 @@ const OtpSignInPage = () => {
     setSubmitting(true);
     try {
       await authzkit.auth.verifyOtp({ phone, code, tenant_id: tenantId });
-      await refreshMe();
-      navigate("/");
+      try {
+        await refreshMe();
+        navigate("/");
+      } catch (err) {
+        // Avoid leaving the app in a half-authenticated state (token present, no profile loaded).
+        if (authzkit.isAuthenticated) {
+          try {
+            await authzkit.auth.logout();
+          } catch {
+            // ignore logout failures; we'll still show a generic error
+          }
+        }
+        setError(userFacingAuthError(err));
+      }
     } catch (err) {
       setError(userFacingAuthError(err));
     } finally {

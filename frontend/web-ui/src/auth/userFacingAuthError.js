@@ -27,8 +27,5 @@ export function userFacingAuthError(err) {
   if (err instanceof AuthzKitNetworkError) {
     return "Network error. Check your connection and try again.";
   }
-  if (err instanceof Error && err.message) {
-    return err.message;
-  }
   return "Something went wrong. Please try again.";
 }
