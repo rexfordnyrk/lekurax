@@ -100,6 +100,16 @@ import BlankPagePage from "./pages/BlankPagePage";
 import { AuthProvider } from "./auth/AuthContext";
 import RequireAuth from "./auth/RequireAuth";
 import { BranchProvider } from "./branch/BranchContext";
+import ProductsLekuraxPage from "./lekurax/ProductsPage";
+import StockPage from "./lekurax/StockPage";
+import PatientsPage from "./lekurax/PatientsPage";
+import PatientDetailPage from "./lekurax/PatientDetailPage";
+import PrescriptionsPage from "./lekurax/PrescriptionsPage";
+import PosPage from "./lekurax/PosPage";
+import SalesPage from "./lekurax/SalesPage";
+import TaxRulesPage from "./lekurax/TaxRulesPage";
+import BranchesPage from "./lekurax/BranchesPage";
+import BranchUsersPage from "./lekurax/BranchUsersPage";
 
 function App() {
   return (
@@ -235,6 +245,97 @@ function App() {
         <Route exact path='/wallet' element={<WalletPage />} />
         <Route exact path='/widgets' element={<WidgetsPage />} />
         <Route exact path='/wizard' element={<WizardPage />} />
+
+        <Route
+          exact
+          path='/lekurax/branches'
+          element={
+            <RequireAuth>
+              <BranchesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/branches/:branchId/users'
+          element={
+            <RequireAuth>
+              <BranchUsersPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/products'
+          element={
+            <RequireAuth>
+              <ProductsLekuraxPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/stock'
+          element={
+            <RequireAuth>
+              <StockPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/patients'
+          element={
+            <RequireAuth>
+              <PatientsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/patients/:id'
+          element={
+            <RequireAuth>
+              <PatientDetailPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/prescriptions'
+          element={
+            <RequireAuth>
+              <PrescriptionsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/pos'
+          element={
+            <RequireAuth>
+              <PosPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/sales'
+          element={
+            <RequireAuth>
+              <SalesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/tax-rules'
+          element={
+            <RequireAuth>
+              <TaxRulesPage />
+            </RequireAuth>
+          }
+        />
 
           <Route exact path='*' element={<ErrorPage />} />
           </Routes>

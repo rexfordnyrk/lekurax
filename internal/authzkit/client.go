@@ -40,7 +40,8 @@ func (c *Client) get(ctx context.Context, path string, q url.Values, out any) er
 		return fmt.Errorf("new request: %w", err)
 	}
 
-	req.Header.Set("Authorization", "Bearer "+c.apiKey)
+	// AuthzKit server authenticates service-to-service calls via X-Service-Key (see auth_middleware.go).
+	req.Header.Set("X-Service-Key", c.apiKey)
 	req.Header.Set("Accept", "application/json")
 
 	res, err := c.httpClient.Do(req)
@@ -53,7 +54,9 @@ func (c *Client) get(ctx context.Context, path string, q url.Values, out any) er
 		return fmt.Errorf("authzkit http %d", res.StatusCode)
 	}
 
-	if err := json.NewDecoder(res.Body).Decode(out); err != nil {
+	dec := json.NewDecoder(res.Body)
+	dec.UseNumber()
+	if err := dec.Decode(out); err != nil {
 		return fmt.Errorf("decode response: %w", err)
 	}
 

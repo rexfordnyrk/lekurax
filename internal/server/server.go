@@ -24,7 +24,7 @@ type Server struct {
 func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) *Server {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
-	r.Use(exposeDependencies(authVerifier, auditWriter, authzClient))
+	r.Use(ExposeDependencies(authVerifier, auditWriter, authzClient))
 	r.GET("/health/live", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"status": "ok"}) })
 	r.GET("/api/v1/branches/:branch_id/ping",
 		auth.RequireAuth(authVerifier),
@@ -40,7 +40,8 @@ func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *au
 	return &Server{Engine: r}
 }
 
-func exposeDependencies(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) gin.HandlerFunc {
+// ExposeDependencies attaches shared services to the Gin context for downstream handlers.
+func ExposeDependencies(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if authVerifier != nil {
 			c.Set(authVerifierContextKey, authVerifier)
@@ -91,7 +92,7 @@ func isTenantAdmin(principal *auth.Principal) bool {
 	}
 
 	for _, role := range principal.Roles {
-		if role == "tenant_admin" {
+		if role == "tenant-admin" || role == "tenant_admin" {
 			return true
 		}
 	}

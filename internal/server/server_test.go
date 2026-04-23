@@ -72,7 +72,7 @@ func TestNew_BranchPingReturnsResolvedBranchAndTenant(t *testing.T) {
 		"user_id":    uuid.NewString(),
 		"tenant_id":  tenantID.String(),
 		"branch_id":  claimBranchID.String(),
-		"roles":      []string{"tenant_admin"},
+		"roles":      []string{"tenant-admin"},
 		"session_id": "session-123",
 	})
 

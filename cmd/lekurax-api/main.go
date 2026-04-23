@@ -10,6 +10,7 @@ import (
 	"lekurax/internal/authzkit"
 	"lekurax/internal/config"
 	"lekurax/internal/db"
+	"lekurax/internal/httpserver"
 	"lekurax/internal/server"
 )
 
@@ -56,11 +57,10 @@ func run() int {
 		return 1
 	}
 
-	s := server.New(
-		verifier,
-		audit.New(gdb),
-		authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey),
-	)
+	aw := audit.New(gdb)
+	az := authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey)
+	s := server.New(verifier, aw, az)
+	httpserver.RegisterRoutes(s.Engine, gdb, verifier, aw, az)
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {
 		log.Error("server failed", zap.Error(err))
