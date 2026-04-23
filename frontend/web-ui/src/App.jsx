@@ -99,13 +99,15 @@ import MaintenancePage from "./pages/MaintenancePage";
 import BlankPagePage from "./pages/BlankPagePage";
 import { AuthProvider } from "./auth/AuthContext";
 import RequireAuth from "./auth/RequireAuth";
+import { BranchProvider } from "./branch/BranchContext";
 
 function App() {
   return (
     <BrowserRouter>
       <RouteScrollToTop />
       <AuthProvider>
-        <Routes>
+        <BranchProvider>
+          <Routes>
           <Route
             exact
             path='/'
@@ -235,7 +237,8 @@ function App() {
         <Route exact path='/wizard' element={<WizardPage />} />
 
           <Route exact path='*' element={<ErrorPage />} />
-        </Routes>
+          </Routes>
+        </BranchProvider>
       </AuthProvider>
     </BrowserRouter>
   );
