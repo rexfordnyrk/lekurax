@@ -23,13 +23,13 @@ func TestClientUserHasBranch_UsesServiceKeyAndV1Prefix(t *testing.T) {
 		require.Equal(t, http.MethodGet, r.Method)
 		require.Equal(t, "/v1/branches/"+branchID.String()+"/users", r.URL.Path)
 		require.Equal(t, userID.String(), r.URL.Query().Get("user_id"))
-		require.Equal(t, "test-service-key", r.Header.Get("X-Service-Key"))
+		require.Equal(t, "Bearer test-service-key", r.Header.Get("Authorization"))
 		require.Equal(t, "application/json", r.Header.Get("Accept"))
 
 		w.Header().Set("Content-Type", "application/json")
 		require.NoError(t, json.NewEncoder(w).Encode(map[string]any{
 			"success": true,
-			"data": []map[string]string{
+			"items": []map[string]string{
 				{"id": userID.String()},
 			},
 		}))
@@ -57,7 +57,7 @@ func TestRequireBranchMembership_Returns403WhenUserNotInBranch(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		require.NoError(t, json.NewEncoder(w).Encode(map[string]any{
 			"success": true,
-			"data":    []map[string]string{},
+			"items":   []map[string]string{},
 		}))
 	}))
 	defer server.Close()

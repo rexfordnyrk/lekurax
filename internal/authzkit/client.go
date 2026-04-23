@@ -40,7 +40,7 @@ func (c *Client) get(ctx context.Context, path string, q url.Values, out any) er
 		return fmt.Errorf("new request: %w", err)
 	}
 
-	req.Header.Set("X-Service-Key", c.apiKey)
+	req.Header.Set("Authorization", "Bearer "+c.apiKey)
 	req.Header.Set("Accept", "application/json")
 
 	res, err := c.httpClient.Do(req)
