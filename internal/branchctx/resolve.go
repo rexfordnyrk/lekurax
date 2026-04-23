@@ -11,8 +11,10 @@ import (
 )
 
 const (
-	ContextKey   = "branch_id"
-	headerBranch = "X-Branch-Id"
+	PathParamKey  = "branch_id"
+	QueryParamKey = "branch_id"
+	ContextKey    = "branch_id"
+	HeaderName    = "X-Branch-Id"
 )
 
 type Result struct {
@@ -22,15 +24,15 @@ type Result struct {
 }
 
 func Resolve(c *gin.Context) (Result, error) {
-	if raw := strings.TrimSpace(c.Param(ContextKey)); raw != "" {
+	if raw := strings.TrimSpace(c.Param(PathParamKey)); raw != "" {
 		return parseResult(raw, "path")
 	}
 
-	if raw := strings.TrimSpace(c.Query(ContextKey)); raw != "" {
+	if raw := strings.TrimSpace(c.Query(QueryParamKey)); raw != "" {
 		return parseResult(raw, "query")
 	}
 
-	if raw := strings.TrimSpace(c.GetHeader(headerBranch)); raw != "" {
+	if raw := strings.TrimSpace(c.GetHeader(HeaderName)); raw != "" {
 		return parseResult(raw, "header")
 	}
 

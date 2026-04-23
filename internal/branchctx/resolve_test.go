@@ -96,17 +96,17 @@ func newBranchContextTestContext(t *testing.T, pathValue, queryValue, headerValu
 
 	target := "/"
 	if queryValue != "" {
-		target += "?branch_id=" + queryValue
+		target += "?" + QueryParamKey + "=" + queryValue
 	}
 
 	req := httptest.NewRequest(http.MethodGet, target, nil)
 	if headerValue != "" {
-		req.Header.Set("X-Branch-Id", headerValue)
+		req.Header.Set(HeaderName, headerValue)
 	}
 	c.Request = req
 
 	if pathValue != "" {
-		c.Params = gin.Params{{Key: "branch_id", Value: pathValue}}
+		c.Params = gin.Params{{Key: PathParamKey, Value: pathValue}}
 	}
 
 	if claimID != nil {

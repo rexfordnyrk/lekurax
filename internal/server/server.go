@@ -19,11 +19,6 @@ func New(verifier *auth.Verifier) *Server {
 	r.GET("/health/live", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"status": "ok"}) })
 	r.GET("/api/v1/branches/:branch_id/ping", auth.RequireAuth(verifier), branchctx.RequireBranchContext(), func(c *gin.Context) {
 		principal := auth.GetPrincipal(c)
-		if principal == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
-			return
-		}
-
 		c.JSON(http.StatusOK, gin.H{
 			"branch_id": c.GetString(branchctx.ContextKey),
 			"tenant_id": principal.TenantID.String(),

@@ -29,6 +29,39 @@ func TestRequireBranchContext_InvalidBranchIDReturns400(t *testing.T) {
 	require.Equal(t, map[string]string{"error": "INVALID_BRANCH_ID"}, decodeErrorBody(t, w))
 }
 
+func TestRequireBranchContext_InvalidQueryBranchIDReturns400(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	r := gin.New()
+	r.GET("/branches", RequireBranchContext(), func(c *gin.Context) {
+		t.Fatal("handler should not run")
+	})
+
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/branches?"+QueryParamKey+"=not-a-uuid", nil)
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, map[string]string{"error": "INVALID_BRANCH_ID"}, decodeErrorBody(t, w))
+}
+
+func TestRequireBranchContext_InvalidHeaderBranchIDReturns400(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	r := gin.New()
+	r.GET("/branches", RequireBranchContext(), func(c *gin.Context) {
+		t.Fatal("handler should not run")
+	})
+
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/branches", nil)
+	req.Header.Set(HeaderName, "not-a-uuid")
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, map[string]string{"error": "INVALID_BRANCH_ID"}, decodeErrorBody(t, w))
+}
+
 func TestRequireBranchContext_MissingBranchIDReturns400(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
@@ -52,7 +85,7 @@ func TestRequireBranchContext_SetsResolvedBranchIDOnContext(t *testing.T) {
 
 	r := gin.New()
 	r.GET("/branches", setPrincipalForBranchContextTest(&claimID), RequireBranchContext(), func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"branch_id": c.GetString("branch_id")})
+		c.JSON(http.StatusOK, gin.H{"branch_id": c.GetString(ContextKey)})
 	})
 
 	w := httptest.NewRecorder()

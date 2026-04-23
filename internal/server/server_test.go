@@ -21,7 +21,8 @@ import (
 )
 
 func TestNew_HealthLiveReturnsOK(t *testing.T) {
-	s := New(nil)
+	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
+	s := New(verifier)
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -44,7 +45,8 @@ func TestNew_LogsRequests(t *testing.T) {
 		gin.DefaultWriter = originalWriter
 	}()
 
-	s := New(nil)
+	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
+	s := New(verifier)
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
