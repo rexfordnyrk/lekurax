@@ -55,8 +55,11 @@ func (v *Verifier) VerifyAccessToken(tokenString string) (*Principal, error) {
 		}
 		return v.pubKey, nil
 	}, jwt.WithIssuer(v.issuer))
-	if err != nil || token == nil || !token.Valid {
+	if err != nil {
 		return nil, fmt.Errorf("token invalid: %w", err)
+	}
+	if token == nil || !token.Valid {
+		return nil, fmt.Errorf("token invalid")
 	}
 
 	userID, err := uuid.Parse(claims.UserID)
@@ -72,9 +75,10 @@ func (v *Verifier) VerifyAccessToken(tokenString string) (*Principal, error) {
 	var branchID *uuid.UUID
 	if claims.BranchID != nil && *claims.BranchID != "" {
 		parsed, err := uuid.Parse(*claims.BranchID)
-		if err == nil {
-			branchID = &parsed
+		if err != nil {
+			return nil, fmt.Errorf("invalid branch_id")
 		}
+		branchID = &parsed
 	}
 
 	return &Principal{

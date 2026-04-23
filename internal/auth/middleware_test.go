@@ -19,9 +19,10 @@ import (
 
 func TestRequireAuth_MissingBearer_Returns401(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	_, verifier := newRS256VerifierForTest(t, "https://issuer.example")
 
 	r := gin.New()
-	r.GET("/x", RequireAuth(&Verifier{}), func(c *gin.Context) {
+	r.GET("/x", RequireAuth(verifier), func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
 
@@ -34,15 +35,43 @@ func TestRequireAuth_MissingBearer_Returns401(t *testing.T) {
 
 func TestRequireAuth_InvalidBearerToken_Returns401(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	_, verifier := newRS256VerifierForTest(t, "https://issuer.example")
 
 	r := gin.New()
-	r.GET("/x", RequireAuth(&Verifier{}), func(c *gin.Context) {
+	r.GET("/x", RequireAuth(verifier), func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/x", nil)
 	req.Header.Set("Authorization", "Bearer not-a-valid-token")
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestRequireAuth_InvalidBranchIDClaim_Returns401(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	privateKey, verifier := newRS256VerifierForTest(t, "https://issuer.example")
+	userID := uuid.New()
+	tenantID := uuid.New()
+
+	r := gin.New()
+	r.GET("/x", RequireAuth(verifier), func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
+
+	token := signAccessTokenForTest(t, privateKey, "https://issuer.example", map[string]any{
+		"user_id":    userID.String(),
+		"tenant_id":  tenantID.String(),
+		"branch_id":  "not-a-uuid",
+		"session_id": "session-123",
+	})
+
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/x", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
 	r.ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusUnauthorized, w.Code)
@@ -118,7 +147,12 @@ func newRS256VerifierForTest(t *testing.T, issuer string) (*rsa.PrivateKey, *Ver
 func signAccessTokenForTest(t *testing.T, privateKey *rsa.PrivateKey, issuer string, claims map[string]any) string {
 	t.Helper()
 
-	now := time.Now().UTC()
+	return signAccessTokenForTestAtTime(t, privateKey, issuer, time.Now().UTC(), claims)
+}
+
+func signAccessTokenForTestAtTime(t *testing.T, privateKey *rsa.PrivateKey, issuer string, now time.Time, claims map[string]any) string {
+	t.Helper()
+
 	mapClaims := jwt.MapClaims{
 		"iss": issuer,
 		"sub": "user",
