@@ -177,7 +177,7 @@ const Metrics = () => {
                                             className="remove-tooltip-title rounded-tooltip-value"
                                         >
                                             {/* pass the color value */}
-                                            {createChartTen("#487fff")}
+                                            {createChartTen("#15803d")}
                                         </div>
                                     </div>
                                     <p className="text-sm mb-0">
@@ -282,7 +282,7 @@ const Metrics = () => {
                                             className="remove-tooltip-title rounded-tooltip-value"
                                         >
                                             {/* pass the color value */}
-                                            {createChartTen("#8252e9")}
+                                            {createChartTen("#0369a1")}
                                         </div>
                                     </div>
                                     <p className="text-sm mb-0">
@@ -455,7 +455,7 @@ const Metrics = () => {
                                             className="remove-tooltip-title rounded-tooltip-value"
                                         >
                                             {/* pass the color value */}
-                                            {createChatEleven("#5F80FF")}
+                                            {createChatEleven("#0369a1")}
                                         </div>
                                     </div>
                                 </div>
@@ -485,7 +485,7 @@ const Metrics = () => {
                                             className="remove-tooltip-title rounded-tooltip-value"
                                         >
                                             {/* pass the color value */}
-                                            {createChatEleven("#C817F8")}
+                                            {createChatEleven("#166534")}
                                         </div>
                                     </div>
                                 </div>
@@ -515,7 +515,7 @@ const Metrics = () => {
                                             className="remove-tooltip-title rounded-tooltip-value"
                                         >
                                             {/* pass the color value */}
-                                            {createChatEleven("#2171EA")}
+                                            {createChatEleven("#15803d")}
                                         </div>
                                     </div>
                                 </div>

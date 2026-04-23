@@ -59,7 +59,7 @@ const UnitCountThree = () => {
                                 className="remove-tooltip-title rounded-tooltip-value"
                             >
                                 {/* Pass the color value here */}
-                                {createChartThree('#5F80FF')}
+                                {createChartThree('#0369a1')}
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@ const UnitCountThree = () => {
                                 className="remove-tooltip-title rounded-tooltip-value"
                             >
                                 {/* Pass the color value here */}
-                                {createChartThree('#C817F8')}
+                                {createChartThree('#166534')}
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@ const UnitCountThree = () => {
                                 className="remove-tooltip-title rounded-tooltip-value"
                             >
                                 {/* Pass the color value here */}
-                                {createChartThree('#2171EA')}
+                                {createChartThree('#15803d')}
                             </div>
                         </div>
                     </div>

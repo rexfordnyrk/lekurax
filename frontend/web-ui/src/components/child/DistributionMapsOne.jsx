@@ -38,11 +38,11 @@ const DistributionMapsOne = () => {
                     attribute: "fill",
 
                     scale: {
-                        "US": '#487FFF ',
-                        "SA": '#FF9F29',
-                        "AU": '#45B369',
-                        "CN": '#F86624',
-                        "GB": '#487FFF',
+                        "US": '#15803d',
+                        "SA": '#22c55e',
+                        "AU": '#4ade80',
+                        "CN": '#0369a1',
+                        "GB": '#166534',
                     },
                     values: {
                         // But when dealing with regions's series you should specify the region key.

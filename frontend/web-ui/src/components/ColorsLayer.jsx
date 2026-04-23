@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const ColorsLayer = () => {
     const handleColorCopy = (color) => {
         navigator.clipboard.writeText(color)
-        toast.success('🦄 Copied!', {
+        toast.success('Copied', {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -196,7 +196,7 @@ const ColorsLayer = () => {
                         <div className="mb-32">
                             <h6 className="text-md mb-24">Primary Color</h6>
                             <div className="d-flex flex-wrap">
-                                <div onClick={() => handleColorCopy("#E4F1FF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-50 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#ECFDF5")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-50 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block">
                                             50
@@ -205,11 +205,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block"
                                             data-clipboard-text="bg-primary-50"
                                         >
-                                            #E4F1FF
+                                            #ECFDF5
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#BFDCFF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-100 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#D1FAE5")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-100 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block">
                                             100
@@ -218,11 +218,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block"
                                             data-clipboard-text="bg-primary-100"
                                         >
-                                            #BFDCFF
+                                            #D1FAE5
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#95C7FF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-200 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#BBF7D0")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-200 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block">
                                             200
@@ -231,11 +231,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block"
                                             data-clipboard-text="bg-primary-200"
                                         >
-                                            #95C7FF
+                                            #BBF7D0
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#6BB1FF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-300 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#86EFAC")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-300 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block">
                                             300
@@ -244,24 +244,24 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block"
                                             data-clipboard-text="bg-primary-300"
                                         >
-                                            #6BB1FF
+                                            #86EFAC
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#519FFF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-400 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#4ADE80")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-400 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
-                                        <span className="fw-medium text-lg text-primary-light d-bloc">
+                                        <span className="fw-medium text-lg text-primary-light d-block">
                                             400
                                         </span>
                                         <span
                                             className="fw-medium text-md text-primary-light d-block"
                                             data-clipboard-text="bg-primary-400"
                                         >
-                                            #519FFF
+                                            #4ADE80
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#458EFF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-500 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#22C55E")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-500 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block text-base">
                                             500
@@ -270,11 +270,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block text-base"
                                             data-clipboard-text="bg-primary-500"
                                         >
-                                            #458EFF
+                                            #22C55E
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#487FFF")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-600 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#15803d")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-600 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block text-base">
                                             600
@@ -283,11 +283,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block text-base"
                                             data-clipboard-text="bg-primary-600"
                                         >
-                                            #487FFF
+                                            #15803d
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#486CEA")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-700 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#166534")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-700 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block text-base">
                                             700
@@ -296,11 +296,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block text-base"
                                             data-clipboard-text="bg-primary-700"
                                         >
-                                            #486CEA
+                                            #166534
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#4759D6")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-800 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#14532D")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-800 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block text-base">
                                             800
@@ -309,11 +309,11 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block text-base"
                                             data-clipboard-text="bg-primary-800"
                                         >
-                                            #4759D6
+                                            #14532D
                                         </span>
                                     </div>
                                 </div>
-                                <div onClick={() => handleColorCopy("#4536B6")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-900 position-relative p-28 flex-grow-1">
+                                <div onClick={() => handleColorCopy("#052E16")} className="color-box h-190-px cursor-pointer min-w-120-px bg-primary-900 position-relative p-28 flex-grow-1">
                                     <div className="position-absolute start-50 translate-middle-x bottom-0 text-center mb-28">
                                         <span className="fw-medium text-lg text-primary-light d-block text-base">
                                             900
@@ -322,7 +322,7 @@ const ColorsLayer = () => {
                                             className="fw-medium text-md text-primary-light d-block text-base"
                                             data-clipboard-text="bg-primary-900"
                                         >
-                                            #4536B6
+                                            #052E16
                                         </span>
                                     </div>
                                 </div>

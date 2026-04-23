@@ -13,7 +13,7 @@ const TaskCard = ({ task, index, onEdit, onDelete, onDuplicate }) => {
                     {...provided.dragHandleProps}
                     style={{
                         userSelect: 'none',
-                        background: snapshot.isDragging ? '#f0f0f0' : '#ffffff',
+                        background: snapshot.isDragging ? '#ecfdf5' : '#ffffff',
                         ...provided.draggableProps.style,
                     }}
                 >

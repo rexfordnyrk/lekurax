@@ -39,11 +39,11 @@ const SalesByCountries = () => {
             attribute: "fill",
 
             scale: {
-              US: "#487FFF ",
-              SA: "#487FFF",
-              AU: "#487FFF",
-              CN: "#487FFF",
-              GB: "#487FFF",
+              US: "#15803d",
+              SA: "#22c55e",
+              AU: "#0369a1",
+              CN: "#166534",
+              GB: "#4ade80",
             },
             values: {
               // But when dealing with regions's series you should specify the region key.

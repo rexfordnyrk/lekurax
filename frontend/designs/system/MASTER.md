@@ -85,4 +85,8 @@ Do **not** edit `public/assets/css/style.css` for theme; override via loaded ord
 
 ## 9. Exceptions log
 
-Document here any **intentional** hard-coded colors left in JSX after sweeps (file + reason). Empty after completion unless noted.
+| Location | Reason |
+|----------|--------|
+| `TableDataLayer.jsx`, `InvoiceListLayer.jsx`, `DefaultTable.jsx`, `BorderedTables.jsx` | Strings like `#526534` are **fake invoice IDs**, not CSS colors. |
+| `Invoice*Layer.jsx` `:#653214` style strings | Product SKU / reference formatting, not palette. |
+| Neutral swatches in `ColorsLayer.jsx` | Demo of neutral scale; primary swatches updated to Lekurax green ladder. |

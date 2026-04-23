@@ -120,7 +120,7 @@ const UnitCountFive = () => {
                                     className="apexcharts-tooltip-style-1"
                                 >
                                     {/* Pass the color value */}
-                                    {createChartSix('#45B369', '#487fff')}
+                                    {createChartSix('#45B369', '#15803d')}
                                 </div>
                             </div>
                         </div>

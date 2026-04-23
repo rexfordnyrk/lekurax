@@ -21,7 +21,7 @@ const RecentOrdersTwo = () => {
                     </div>
                     <div id="recent-orders" className="mt-28" >
                         {/* Pass the color value & height here */}
-                        {createChartTwo("#487fff", 360)}
+                        {createChartTwo("#15803d", 360)}
                     </div>
                 </div>
             </div>

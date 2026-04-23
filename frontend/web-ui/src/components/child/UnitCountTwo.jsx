@@ -34,7 +34,7 @@ const UnitCountTwo = () => {
                                     className="remove-tooltip-title rounded-tooltip-value"
                                 >
                                     {/* Pass the color value here */}
-                                    {createChart('#487fff')}
+                                    {createChart('#15803d')}
 
                                 </div>
 
@@ -72,7 +72,7 @@ const UnitCountTwo = () => {
                                     className="remove-tooltip-title rounded-tooltip-value"
                                 >
                                     {/* Pass the color value here */}
-                                    {createChart('#45b369')}
+                                    {createChart('#22c55e')}
                                 </div>
                             </div>
                             <p className="text-sm mb-0">
@@ -141,7 +141,7 @@ const UnitCountTwo = () => {
                                     className="remove-tooltip-title rounded-tooltip-value"
                                 >
                                     {/* Pass the color value here */}
-                                    {createChart('#8252e9')}
+                                    {createChart('#0369a1')}
                                 </div>
                             </div>
                             <p className="text-sm mb-0">
@@ -174,7 +174,7 @@ const UnitCountTwo = () => {
                                     className="remove-tooltip-title rounded-tooltip-value"
                                 >
                                     {/* Pass the color value here */}
-                                    {createChart('#de3ace')}
+                                    {createChart('#166534')}
                                 </div>
                             </div>
                             <p className="text-sm mb-0">
@@ -210,7 +210,7 @@ const UnitCountTwo = () => {
                                     className="remove-tooltip-title rounded-tooltip-value"
                                 >
                                     {/* Pass the color value here */}
-                                    {createChart('#00b8f2')}
+                                    {createChart('#0369a1')}
                                 </div>
                             </div>
                             <p className="text-sm mb-0">

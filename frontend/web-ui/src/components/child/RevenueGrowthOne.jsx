@@ -25,7 +25,7 @@ const RevenueGrowthOne = () => {
                     </div>
                     <div id="revenue-chart" className="mt-28" >
                         {/* Pass the color value & height here */}
-                        {createChartTwo("#487fff", 162)}
+                        {createChartTwo("#15803d", 162)}
                     </div>
                 </div>
             </div>

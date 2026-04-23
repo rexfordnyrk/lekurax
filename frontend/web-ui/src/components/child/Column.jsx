@@ -36,7 +36,7 @@ const Column = ({
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                                 style={{
-                                    background: snapshot.isDraggingOver ? '#e3f2fd' : 'inherit',
+                                    background: snapshot.isDraggingOver ? 'rgba(21, 128, 61, 0.12)' : 'inherit',
                                     minHeight: '100px',
                                 }}
                             >
