@@ -96,23 +96,34 @@ import ComingSoonPage from "./pages/ComingSoonPage";
 import AccessDeniedPage from "./pages/AccessDeniedPage";
 import MaintenancePage from "./pages/MaintenancePage";
 import BlankPagePage from "./pages/BlankPagePage";
+import { AuthProvider } from "./auth/AuthContext";
+import RequireAuth from "./auth/RequireAuth";
 
 function App() {
   return (
     <BrowserRouter>
       <RouteScrollToTop />
-      <Routes>
-        <Route exact path='/' element={<HomePageOne />} />
-        <Route exact path='/index-2' element={<HomePageTwo />} />
-        <Route exact path='/index-3' element={<HomePageThree />} />
-        <Route exact path='/index-4' element={<HomePageFour />} />
-        <Route exact path='/index-5' element={<HomePageFive />} />
-        <Route exact path='/index-6' element={<HomePageSix />} />
-        <Route exact path='/index-7' element={<HomePageSeven />} />
-        <Route exact path='/index-8' element={<HomePageEight />} />
-        <Route exact path='/index-9' element={<HomePageNine />} />
-        <Route exact path='/index-10' element={<HomePageTen />} />
-        <Route exact path='/index-11' element={<HomePageEleven />} />
+      <AuthProvider>
+        <Routes>
+          <Route
+            exact
+            path='/'
+            element={
+              <RequireAuth>
+                <HomePageOne />
+              </RequireAuth>
+            }
+          />
+          <Route exact path='/index-2' element={<HomePageTwo />} />
+          <Route exact path='/index-3' element={<HomePageThree />} />
+          <Route exact path='/index-4' element={<HomePageFour />} />
+          <Route exact path='/index-5' element={<HomePageFive />} />
+          <Route exact path='/index-6' element={<HomePageSix />} />
+          <Route exact path='/index-7' element={<HomePageSeven />} />
+          <Route exact path='/index-8' element={<HomePageEight />} />
+          <Route exact path='/index-9' element={<HomePageNine />} />
+          <Route exact path='/index-10' element={<HomePageTen />} />
+          <Route exact path='/index-11' element={<HomePageEleven />} />
 
         {/* SL */}
         <Route exact path='/add-user' element={<AddUserPage />} />
@@ -221,8 +232,9 @@ function App() {
         <Route exact path='/widgets' element={<WidgetsPage />} />
         <Route exact path='/wizard' element={<WizardPage />} />
 
-        <Route exact path='*' element={<ErrorPage />} />
-      </Routes>
+          <Route exact path='*' element={<ErrorPage />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
