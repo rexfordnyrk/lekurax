@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"go.uber.org/zap"
+	"lekurax/internal/auth"
 	"lekurax/internal/config"
 	"lekurax/internal/server"
 )
@@ -31,7 +32,22 @@ func run() int {
 		return 1
 	}
 
-	s := server.New()
+	if cfg.Authz.JWTIssuer == "" {
+		fmt.Fprintln(os.Stderr, "authz.jwt_issuer is required")
+		return 1
+	}
+	if cfg.Authz.RS256PublicKey == "" {
+		fmt.Fprintln(os.Stderr, "authz.rs256_public_key_pem is required")
+		return 1
+	}
+
+	verifier, err := auth.NewRS256Verifier(cfg.Authz.RS256PublicKey, cfg.Authz.JWTIssuer)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, fmt.Errorf("init auth verifier: %w", err))
+		return 1
+	}
+
+	s := server.New(verifier)
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {
 		log.Error("server failed", zap.Error(err))
