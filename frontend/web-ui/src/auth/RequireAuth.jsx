@@ -6,7 +6,7 @@ export default function RequireAuth({ children }) {
   const { bootstrapping, isAuthenticated } = useAuth();
 
   if (bootstrapping) {
-    return null;
+    return <div style={{ padding: 16 }}>Loading…</div>;
   }
 
   if (!isAuthenticated) {

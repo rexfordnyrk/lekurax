@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { authzkit } from "./authzkitClient";
 
 const AuthContext = createContext(null);
@@ -41,23 +41,21 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const value = useMemo(
-    () => ({
-      bootstrapping,
-      me,
-      isAuthenticated: authzkit.isAuthenticated,
-      async refreshMe() {
-        const result = await authzkit.users.getMe();
-        setMe(result);
-        return result;
-      },
-      async logout() {
-        await authzkit.auth.logout();
-        setMe(null);
-      },
-    }),
-    [bootstrapping, me]
-  );
+  const value = {
+    bootstrapping,
+    me,
+    // Read directly from the SDK so it stays current on re-render.
+    isAuthenticated: authzkit.isAuthenticated,
+    async refreshMe() {
+      const result = await authzkit.users.getMe();
+      setMe(result);
+      return result;
+    },
+    async logout() {
+      await authzkit.auth.logout();
+      setMe(null);
+    },
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
