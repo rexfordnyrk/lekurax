@@ -46,13 +46,13 @@ func run() int {
 
 	verifier, err := auth.NewRS256Verifier(cfg.Authz.RS256PublicKey, cfg.Authz.JWTIssuer)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Errorf("init auth verifier: %w", err))
+		fmt.Fprintf(os.Stderr, "init auth verifier: %v\n", err)
 		return 1
 	}
 
 	gdb, err := db.Open(cfg.DB.DSN)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintf(os.Stderr, "open db: %v\n", err)
 		return 1
 	}
 
