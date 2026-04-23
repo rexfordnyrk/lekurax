@@ -13,17 +13,35 @@
 ## Plan File Index (implement in this order)
 
 ### Foundation (must be completed before MVP modules)
+
 - `docs/superpowers/plans/2026-04-23-lekurax-mvp-backend-foundation.md`
 - `docs/superpowers/plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md`
 
 ### MVP Modules (backend first, then frontend in the same order)
-- `docs/superpowers/plans/2026-04-23-lekurax-mvp-m1-org-branch.md`
-- `docs/superpowers/plans/2026-04-23-lekurax-mvp-m2-inventory.md`
-- `docs/superpowers/plans/2026-04-23-lekurax-mvp-m3-pricing-tax.md`
-- `docs/superpowers/plans/2026-04-23-lekurax-mvp-m4-patient.md`
-- `docs/superpowers/plans/2026-04-23-lekurax-mvp-m5-prescription.md`
-- `docs/superpowers/plans/2026-04-23-lekurax-mvp-m6-pos.md`
+
+- M1 Org & Branch
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m1-org-branch-backend.md`
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m1-org-branch-frontend.md`
+- M2 Inventory
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m2-inventory-backend.md`
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m2-inventory-frontend.md`
+- M3 Pricing & Tax
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m3-pricing-tax-backend.md`
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m3-pricing-tax-frontend.md`
+- M4 Patient
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m4-patient-backend.md`
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m4-patient-frontend.md`
+- M5 Prescription
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m5-prescription-backend.md`
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m5-prescription-frontend.md`
+- M6 POS
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m6-pos-backend.md`
+  - `docs/superpowers/plans/2026-04-23-lekurax-mvp-m6-pos-frontend.md`
+
+### Post‑MVP Extensions (backend first, then frontend)
+
+- `docs/superpowers/plans/2026-04-23-lekurax-post-mvp.md`
 
 ### Tracking
-- Update statuses in `docs/superpowers/ROADMAP.md` as each unit completes (backend + frontend).
 
+- Update statuses in `docs/superpowers/ROADMAP.md` as each unit completes (backend + frontend).
