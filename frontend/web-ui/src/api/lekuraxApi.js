@@ -2,7 +2,13 @@ import { authzkit } from "../auth/authzkitClient";
 import { getActiveBranchId } from "../branch/branchStorage";
 
 function baseUrl() {
-  return import.meta.env.VITE_LEKURAX_API_BASE_URL ?? "";
+  const raw = import.meta.env.VITE_LEKURAX_API_BASE_URL;
+  if (!raw) {
+    throw new Error(
+      "[config] VITE_LEKURAX_API_BASE_URL is not set. Add it to frontend/web-ui/.env.local (see .env.example).",
+    );
+  }
+  return raw;
 }
 
 /**
@@ -31,5 +37,12 @@ export async function lekuraxFetch(path, options = {}) {
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}`);
   }
-  return res.json();
+  if (res.status === 204) {
+    return null;
+  }
+  const contentType = res.headers.get("content-type") ?? "";
+  if (contentType.includes("application/json")) {
+    return res.json();
+  }
+  return res.text();
 }

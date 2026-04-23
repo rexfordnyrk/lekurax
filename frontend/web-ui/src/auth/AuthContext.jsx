@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authzkit } from "./authzkitClient";
+import { clearActiveBranchId } from "../branch/branchStorage";
 
 const AuthContext = createContext(null);
 
@@ -53,6 +54,7 @@ export function AuthProvider({ children }) {
     },
     async logout() {
       await authzkit.auth.logout();
+      clearActiveBranchId();
       setMe(null);
     },
   };

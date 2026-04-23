@@ -8,6 +8,7 @@ import React, {
 import { useAuth } from "../auth/AuthContext";
 import {
   getActiveBranchId as readStored,
+  clearActiveBranchId as clearStored,
   setActiveBranchId as writeStored,
 } from "./branchStorage";
 
@@ -22,6 +23,7 @@ export function BranchProvider({ children }) {
   useEffect(() => {
     const list = accessibleBranches ?? [];
     if (!list.length) {
+      clearStored();
       setActiveBranchIdState(null);
       return;
     }
@@ -42,7 +44,7 @@ export function BranchProvider({ children }) {
         return;
       }
       const list = accessibleBranches ?? [];
-      if (list.length && !list.some((b) => b.id === id)) {
+      if (!list.length || !list.some((b) => b.id === id)) {
         return;
       }
       if (id === activeBranchId) {
