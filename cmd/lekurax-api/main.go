@@ -9,20 +9,33 @@ import (
 	"lekurax/internal/server"
 )
 
+var newProductionLogger = zap.NewProduction
+
 func main() {
-	log, _ := zap.NewProduction()
-	defer log.Sync()
+	os.Exit(run())
+}
+
+func run() int {
+	log, err := newProductionLogger()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, fmt.Errorf("init logger: %w", err))
+		return 1
+	}
+	defer func() {
+		_ = log.Sync()
+	}()
 
 	cfg, err := config.Load()
 	if err != nil {
-		_ = log.Sync()
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return 1
 	}
 
 	s := server.New()
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {
-		log.Fatal("server failed", zap.Error(err))
+		log.Error("server failed", zap.Error(err))
+		return 1
 	}
+	return 0
 }

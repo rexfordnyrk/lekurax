@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -29,7 +30,12 @@ func Load() (*Config, error) {
 	v.SetDefault("security.require_branch_context", true)
 	v.SetDefault("security.request_timeout", "15s")
 
-	_ = v.ReadInConfig()
+	if err := v.ReadInConfig(); err != nil {
+		var configFileNotFound viper.ConfigFileNotFoundError
+		if !errors.As(err, &configFileNotFound) {
+			return nil, fmt.Errorf("read config: %w", err)
+		}
+	}
 
 	var cfg Config
 	if err := v.Unmarshal(&cfg); err != nil {

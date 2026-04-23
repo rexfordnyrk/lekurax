@@ -1,16 +1,24 @@
 package config
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
-func TestLoad_RequiresMandatoryValues(t *testing.T) {
+func setRequiredEnv(t *testing.T) {
+	t.Helper()
+	t.Setenv("LEKURAX_DB_DSN", "postgres://user:pass@localhost:5432/lekurax?sslmode=disable")
+	t.Setenv("LEKURAX_AUTHZ_BASE_URL", "https://authz.example.com")
+	t.Setenv("LEKURAX_AUTHZ_SERVICE_API_KEY", "secret")
+}
+
+func TestLoad_RequiresDBDSN(t *testing.T) {
+	setRequiredEnv(t)
 	t.Setenv("LEKURAX_DB_DSN", "")
-	t.Setenv("LEKURAX_AUTHZ_BASE_URL", "")
-	t.Setenv("LEKURAX_AUTHZ_SERVICE_API_KEY", "")
 
 	cfg, err := Load()
 
@@ -18,10 +26,42 @@ func TestLoad_RequiresMandatoryValues(t *testing.T) {
 	require.EqualError(t, err, "db.dsn is required")
 }
 
+func TestLoad_RequiresAuthzBaseURL(t *testing.T) {
+	setRequiredEnv(t)
+	t.Setenv("LEKURAX_AUTHZ_BASE_URL", "")
+
+	cfg, err := Load()
+
+	require.Nil(t, cfg)
+	require.EqualError(t, err, "authz.base_url is required")
+}
+
+func TestLoad_RequiresAuthzServiceAPIKey(t *testing.T) {
+	setRequiredEnv(t)
+	t.Setenv("LEKURAX_AUTHZ_SERVICE_API_KEY", "")
+
+	cfg, err := Load()
+
+	require.Nil(t, cfg)
+	require.EqualError(t, err, "authz.service_api_key is required")
+}
+
+func TestLoad_ReturnsMalformedConfigError(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Chdir(tmpDir)
+
+	err := os.WriteFile(filepath.Join(tmpDir, "config.yaml"), []byte("http: ["), 0o644)
+	require.NoError(t, err)
+
+	cfg, loadErr := Load()
+
+	require.Nil(t, cfg)
+	require.Error(t, loadErr)
+	require.ErrorContains(t, loadErr, "read config:")
+}
+
 func TestLoad_UsesEnvAndDefaults(t *testing.T) {
-	t.Setenv("LEKURAX_DB_DSN", "postgres://user:pass@localhost:5432/lekurax?sslmode=disable")
-	t.Setenv("LEKURAX_AUTHZ_BASE_URL", "https://authz.example.com")
-	t.Setenv("LEKURAX_AUTHZ_SERVICE_API_KEY", "secret")
+	setRequiredEnv(t)
 
 	cfg, err := Load()
 
