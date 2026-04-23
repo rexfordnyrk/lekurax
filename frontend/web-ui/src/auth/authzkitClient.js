@@ -6,8 +6,14 @@ export const authzkit = new AuthzKitClient({
   baseUrl: AUTHZ_BASE_URL,
   tokenStore,
   onAuthFailure: () => {
-    if (!window.location.pathname.startsWith("/sign-in")) {
-      window.location.href = "/sign-in";
+    const path = window.location.pathname;
+    if (
+      path.startsWith("/sign-in") ||
+      path === "/forgot-password" ||
+      path === "/sign-up"
+    ) {
+      return;
     }
+    window.location.href = "/sign-in";
   },
 });

@@ -56,6 +56,7 @@ import ProgressPage from "./pages/ProgressPage";
 import RadioPage from "./pages/RadioPage";
 import RoleAccessPage from "./pages/RoleAccessPage";
 import SignInPage from "./pages/SignInPage";
+import OtpSignInPage from "./pages/OtpSignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import StarRatingPage from "./pages/StarRatingPage";
 import StarredPage from "./pages/StarredPage";
@@ -203,6 +204,7 @@ function App() {
         <Route exact path='/radio' element={<RadioPage />} />
         <Route exact path='/role-access' element={<RoleAccessPage />} />
         <Route exact path='/sign-in' element={<SignInPage />} />
+        <Route exact path='/sign-in/otp' element={<OtpSignInPage />} />
         <Route exact path='/sign-up' element={<SignUpPage />} />
         <Route exact path='/star-rating' element={<StarRatingPage />} />
         <Route exact path='/starred' element={<StarredPage />} />
