@@ -5,22 +5,30 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"lekurax/internal/audit"
 	"lekurax/internal/auth"
 	"lekurax/internal/authzkit"
 	"lekurax/internal/branchctx"
+)
+
+const (
+	authVerifierContextKey = "auth_verifier"
+	auditWriterContextKey  = "audit_writer"
+	authzClientContextKey  = "authz_client"
 )
 
 type Server struct {
 	Engine *gin.Engine
 }
 
-func New(verifier *auth.Verifier, client *authzkit.Client) *Server {
+func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) *Server {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
+	r.Use(exposeDependencies(authVerifier, auditWriter, authzClient))
 	r.GET("/health/live", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"status": "ok"}) })
 	r.GET("/api/v1/branches/:branch_id/ping",
-		auth.RequireAuth(verifier),
-		authzkit.RequireBranchMembership(client, isTenantAdmin),
+		auth.RequireAuth(authVerifier),
+		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		func(c *gin.Context) {
 			principal := auth.GetPrincipal(c)
 			c.JSON(http.StatusOK, gin.H{
@@ -30,6 +38,51 @@ func New(verifier *auth.Verifier, client *authzkit.Client) *Server {
 		},
 	)
 	return &Server{Engine: r}
+}
+
+func exposeDependencies(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if authVerifier != nil {
+			c.Set(authVerifierContextKey, authVerifier)
+		}
+		if auditWriter != nil {
+			c.Set(auditWriterContextKey, auditWriter)
+		}
+		if authzClient != nil {
+			c.Set(authzClientContextKey, authzClient)
+		}
+		c.Next()
+	}
+}
+
+func GetAuthVerifier(c *gin.Context) *auth.Verifier {
+	value, ok := c.Get(authVerifierContextKey)
+	if !ok {
+		return nil
+	}
+
+	verifier, _ := value.(*auth.Verifier)
+	return verifier
+}
+
+func GetAuditWriter(c *gin.Context) *audit.Writer {
+	value, ok := c.Get(auditWriterContextKey)
+	if !ok {
+		return nil
+	}
+
+	writer, _ := value.(*audit.Writer)
+	return writer
+}
+
+func GetAuthzClient(c *gin.Context) *authzkit.Client {
+	value, ok := c.Get(authzClientContextKey)
+	if !ok {
+		return nil
+	}
+
+	client, _ := value.(*authzkit.Client)
+	return client
 }
 
 func isTenantAdmin(principal *auth.Principal) bool {

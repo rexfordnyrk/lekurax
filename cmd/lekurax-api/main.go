@@ -5,9 +5,11 @@ import (
 	"os"
 
 	"go.uber.org/zap"
+	"lekurax/internal/audit"
 	"lekurax/internal/auth"
 	"lekurax/internal/authzkit"
 	"lekurax/internal/config"
+	"lekurax/internal/db"
 	"lekurax/internal/server"
 )
 
@@ -48,7 +50,17 @@ func run() int {
 		return 1
 	}
 
-	s := server.New(verifier, authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey))
+	gdb, err := db.Open(cfg.DB.DSN)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, fmt.Errorf("open db: %w", err))
+		return 1
+	}
+
+	s := server.New(
+		verifier,
+		audit.New(gdb),
+		authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey),
+	)
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {
 		log.Error("server failed", zap.Error(err))

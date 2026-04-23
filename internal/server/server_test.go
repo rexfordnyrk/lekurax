@@ -17,13 +17,14 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
+	"lekurax/internal/audit"
 	"lekurax/internal/auth"
 	"lekurax/internal/authzkit"
 )
 
 func TestNew_HealthLiveReturnsOK(t *testing.T) {
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier, authzkit.New("http://127.0.0.1:1", "test-service-key"))
+	s := New(verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -47,7 +48,7 @@ func TestNew_LogsRequests(t *testing.T) {
 	}()
 
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier, authzkit.New("http://127.0.0.1:1", "test-service-key"))
+	s := New(verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -61,7 +62,7 @@ func TestNew_BranchPingReturnsResolvedBranchAndTenant(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	privateKey, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier, authzkit.New("http://127.0.0.1:1", "test-service-key"))
+	s := New(verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	tenantID := uuid.New()
 	claimBranchID := uuid.New()
@@ -86,6 +87,28 @@ func TestNew_BranchPingReturnsResolvedBranchAndTenant(t *testing.T) {
 	require.NoError(t, json.Unmarshal(w.Body.Bytes(), &body))
 	require.Equal(t, pathBranchID.String(), body["branch_id"])
 	require.Equal(t, tenantID.String(), body["tenant_id"])
+}
+
+func TestNew_ExposesDependenciesViaGinContext(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
+	auditWriter := audit.New(nil)
+	authzClient := authzkit.New("http://127.0.0.1:1", "test-service-key")
+	s := New(verifier, auditWriter, authzClient)
+
+	s.Engine.GET("/dependencies", func(c *gin.Context) {
+		require.Same(t, verifier, GetAuthVerifier(c))
+		require.Same(t, auditWriter, GetAuditWriter(c))
+		require.Same(t, authzClient, GetAuthzClient(c))
+		c.Status(http.StatusNoContent)
+	})
+
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/dependencies", nil)
+	s.Engine.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusNoContent, w.Code)
 }
 
 func newRS256VerifierForServerTest(t *testing.T, issuer string) (*rsa.PrivateKey, *auth.Verifier) {
