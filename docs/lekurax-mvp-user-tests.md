@@ -178,6 +178,94 @@ Automated smoke often uses **tenant-admin**, which may bypass strict branch memb
 
 ---
 
+## 13. E1 — Insurance providers, plans, coverages, and claims (manual adjudication)
+
+### 13.1 Insurance providers (admin)
+
+**Human (API)** — requires perms:
+- `claims.providers.view` (list)
+- `claims.providers.manage` (create)
+
+1. List providers:
+   - `GET /api/v1/insurance/providers`
+   - **Expected**: `200` with `{ "items": [] }` (or non-empty if already created).
+2. Create provider:
+   - `POST /api/v1/insurance/providers` with JSON: `{ "name": "Acme Insurance", "payer_id": "ACME-001" }`
+   - **Expected**: `201` and returned provider row (uuid `id`, correct `tenant_id`, `name`).
+3. List again:
+   - **Expected**: `items` includes the new provider.
+
+### 13.2 Insurance plans (admin)
+
+**Human (API)** — requires perms:
+- `claims.plans.view` (list)
+- `claims.plans.manage` (create)
+
+1. Create a plan under the provider you created above:
+   - `POST /api/v1/insurance/providers/{providerId}/plans` with JSON: `{ "name": "Acme Silver" }`
+   - **Expected**: `201` with returned plan row (`provider_id` = providerId).
+2. List plans:
+   - `GET /api/v1/insurance/plans`
+   - **Expected**: `200` with `{ "items": [...] }` including the plan.
+
+### 13.3 Patient coverages
+
+**Human (UI)** (preferred): after the E1 UI work lands, use the patient detail page coverage section.
+
+**Human (API)** — requires perms:
+- `claims.coverage.view` (list)
+- `claims.coverage.manage` (create)
+
+Pre-req: create a patient via the existing UI (§6) and note its `{patientId}`.
+
+1. List coverages:
+   - `GET /api/v1/patients/{patientId}/coverages`
+   - **Expected**: `200` with `{ "items": [] }` initially.
+2. Add coverage:
+   - `POST /api/v1/patients/{patientId}/coverages` with JSON:
+     - `{ "plan_id": "{planId}", "member_id": "MEM-123", "is_primary": true }`
+   - **Expected**: `201` and returned coverage row.
+3. List again:
+   - **Expected**: `items` includes the row you created.
+
+### 13.4 Claims lifecycle (manual adjudication)
+
+**Human (API)** — requires branch membership + branch context + perms:
+- `claims.create` (create draft from sale)
+- `claims.list` / `claims.view`
+- `claims.submit`
+- `claims.adjudicate`
+- `claims.mark_paid`
+
+Pre-req:
+- Select a branch (§2) and complete a sale (§8). Capture:
+  - `{branchId}` (UUID)
+  - `{saleId}` (UUID) from the Sales history API (`GET /api/v1/branches/{branchId}/sales`) or DB.
+- Ensure your branch context matches the path param:
+  - If you set `X-Branch-Id`, it must equal `{branchId}` used in the URL.
+
+1. Create claim draft from sale:
+   - `POST /api/v1/branches/{branchId}/claims` with JSON: `{ "sale_id": "{saleId}", "plan_id": "{planId}" }`
+   - **Expected**: `201` with claim row, `status = "draft"`.
+2. Submit:
+   - `POST /api/v1/branches/{branchId}/claims/{claimId}/submit`
+   - **Expected**: `200` with updated claim, `status = "submitted"`, `submitted_at` set.
+3. Adjudicate (approve):
+   - `POST /api/v1/branches/{branchId}/claims/{claimId}/adjudicate` with JSON: `{ "status": "approved", "approved_amount_cents": 12345 }`
+   - **Expected**: `200`, `status = "approved"`, `adjudicated_at` set, `approved_amount_cents` set.
+4. Mark paid:
+   - `POST /api/v1/branches/{branchId}/claims/{claimId}/mark-paid`
+   - **Expected**: `200`, `status = "paid"`, `paid_at` set.
+
+**Human (API)** — rejection path
+5. Create another draft and submit it, then reject:
+   - `POST .../adjudicate` with JSON: `{ "status": "rejected", "rejection_reason": "Missing prior auth" }`
+   - **Expected**: `200`, `status = "rejected"`, `rejection_reason` set.
+6. Attempt to mark-paid a rejected claim:
+   - **Expected**: `409 INVALID_STATE`.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.*` names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
