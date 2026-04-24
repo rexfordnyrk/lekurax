@@ -9,6 +9,9 @@ dist/
 **/.vite/
 *.local
 
+# Local-only runtime config (smoke / dev); do not commit secrets
+/config.yaml
+
 # Logs / env
 npm-debug.log*
 yarn-debug.log*

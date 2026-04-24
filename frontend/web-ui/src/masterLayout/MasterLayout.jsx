@@ -270,6 +270,106 @@ const MasterLayout = ({ children }) => {
               </ul>
             </li>
 
+            <li className='dropdown'>
+              <Link to='#'>
+                <Icon
+                  icon='healthicons:pharmacy-outline'
+                  className='menu-icon'
+                />
+                <span>Lekurax</span>
+              </Link>
+              <ul className='sidebar-submenu'>
+                <li>
+                  <NavLink
+                    to='/lekurax/branches'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-primary-600 w-auto' />
+                    Branches
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/products'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-success-main w-auto' />
+                    Products
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/stock'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-warning-main w-auto' />
+                    Stock
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/tax-rules'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-info-main w-auto' />
+                    Tax rules
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/patients'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-danger-main w-auto' />
+                    Patients
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/prescriptions'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-purple w-auto' />
+                    Prescriptions
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/pos'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-secondary w-auto' />
+                    POS
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/sales'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-secondary w-auto' />
+                    Sales history
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+
             <li className='sidebar-menu-group-title'>Application</li>
             <li>
               <NavLink

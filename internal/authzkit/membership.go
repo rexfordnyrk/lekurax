@@ -8,9 +8,10 @@ import (
 )
 
 type listBranchUsersResponse struct {
-	Items []struct {
+	Success bool `json:"success"`
+	Data    []struct {
 		ID string `json:"id"`
-	} `json:"items"`
+	} `json:"data"`
 }
 
 func (c *Client) UserHasBranch(ctx context.Context, branchID, userID uuid.UUID) (bool, error) {
@@ -22,7 +23,7 @@ func (c *Client) UserHasBranch(ctx context.Context, branchID, userID uuid.UUID) 
 		return false, err
 	}
 
-	for _, item := range out.Items {
+	for _, item := range out.Data {
 		if item.ID == userID.String() {
 			return true, nil
 		}

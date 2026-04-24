@@ -16,72 +16,72 @@ Legend:
 
 ### Foundation
 
-- [ ] **F0 Platform runtime** (backend) — config, migrations, health checks  
+- [x] **F0 Platform runtime** (backend) — config, migrations, health checks  
   - Plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-backend-foundation.md`](./plans/2026-04-23-lekurax-mvp-backend-foundation.md)
-  - Backend: ⬜
+  - Backend: ✅
   - Frontend: n/a
 
-- [ ] **F1 Tenancy + tenant config contract** (backend + frontend bootstrap UX)  
+- [x] **F1 Tenancy + tenant config contract** (backend + frontend bootstrap UX)  
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-backend-foundation.md`](./plans/2026-04-23-lekurax-mvp-backend-foundation.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md`](./plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 
-- [ ] **F2 AuthN/AuthZ integration contract** (backend middleware + frontend SDK integration)  
+- [x] **F2 AuthN/AuthZ integration contract** (backend middleware + frontend SDK integration)  
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-backend-foundation.md`](./plans/2026-04-23-lekurax-mvp-backend-foundation.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md`](./plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 
-- [ ] **F3 Branch context + multi-branch assignment** (authz gap fix + UI selector)  
+- [x] **F3 Branch context + multi-branch assignment** (authz gap fix + UI selector)  
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-backend-foundation.md`](./plans/2026-04-23-lekurax-mvp-backend-foundation.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md`](./plans/2026-04-23-lekurax-mvp-frontend-auth-foundation.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 
 ### MVP Business Slice
 
-- [ ] **M1 Organization & Branch management (minimal complete)**  
+- [x] **M1 Organization & Branch management (minimal complete)**  
   CRUD + permissions + audit + branch/user assignment
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m1-org-branch-backend.md`](./plans/2026-04-23-lekurax-mvp-m1-org-branch-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m1-org-branch-frontend.md`](./plans/2026-04-23-lekurax-mvp-m1-org-branch-frontend.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅ (AuthzKit branch APIs + permissions; Lekurax consumes)
+  - Frontend: ✅ (`/lekurax/branches` list + create via AuthzKit; `/lekurax/branches/:id/users` assign/unassign; branch selector in layout)
 
-- [ ] **M2 Inventory (minimal complete)**  
+- [x] **M2 Inventory (minimal complete)**  
   Product master + stock (batch/expiry) + adjustments + audit
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m2-inventory-backend.md`](./plans/2026-04-23-lekurax-mvp-m2-inventory-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m2-inventory-frontend.md`](./plans/2026-04-23-lekurax-mvp-m2-inventory-frontend.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅ (products; stock receive/adjust/on-hand; near-expiry panel)
 
-- [ ] **M3 Pricing & Tax (minimal complete)**  
+- [x] **M3 Pricing & Tax (minimal complete)**  
   Base pricing + tax rules sufficient for POS totals
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m3-pricing-tax-backend.md`](./plans/2026-04-23-lekurax-mvp-m3-pricing-tax-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m3-pricing-tax-frontend.md`](./plans/2026-04-23-lekurax-mvp-m3-pricing-tax-frontend.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 
-- [ ] **M4 Customer/Patient (minimal complete)**  
+- [x] **M4 Customer/Patient (minimal complete)**  
   Patient identity + allergies
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m4-patient-backend.md`](./plans/2026-04-23-lekurax-mvp-m4-patient-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m4-patient-frontend.md`](./plans/2026-04-23-lekurax-mvp-m4-patient-frontend.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅ (list + filter + create; `/lekurax/patients/:id` profile PATCH + allergies)
 
-- [ ] **M5 Prescription (minimal complete)**  
+- [x] **M5 Prescription (minimal complete)**  
   Manual entry + dispense + stock decrement + audit (+ hooks for clinical checks)
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m5-prescription-backend.md`](./plans/2026-04-23-lekurax-mvp-m5-prescription-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m5-prescription-frontend.md`](./plans/2026-04-23-lekurax-mvp-m5-prescription-frontend.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 
-- [ ] **M6 POS (minimal complete)**  
+- [x] **M6 POS (minimal complete)**  
   OTC + prescription-linked checkout + receipt record + audit
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m6-pos-backend.md`](./plans/2026-04-23-lekurax-mvp-m6-pos-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-mvp-m6-pos-frontend.md`](./plans/2026-04-23-lekurax-mvp-m6-pos-frontend.md)
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅ (quote + checkout + success feedback; sales history page)
 
 ---
 
@@ -168,4 +168,3 @@ Each extension below is tracked as a unit with backend+frontend deliverables. Th
   - a **backend plan** section/file
   - a **frontend plan** section/file (only for the parts that need UI changes)
   - verification steps (tests + UAT checklist)
-
