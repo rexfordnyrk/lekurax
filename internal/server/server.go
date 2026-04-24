@@ -14,6 +14,7 @@ import (
 	documentshttp "lekurax/internal/docs/http"
 	notifyhttp "lekurax/internal/notify/http"
 	procurementhttp "lekurax/internal/procurement/http"
+	qualityhttp "lekurax/internal/quality/http"
 	reportshttp "lekurax/internal/reports/http"
 	traininghttp "lekurax/internal/training/http"
 )
@@ -61,6 +62,7 @@ func New(db *gorm.DB, authVerifier *auth.Verifier, auditWriter *audit.Writer, au
 	notifyhttp.RegisterNotificationRoutes(v1, db, authVerifier)
 	documentshttp.RegisterDocumentRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	traininghttp.RegisterCourseRoutes(v1, db, authVerifier, auditWriter, authzClient)
+	qualityhttp.RegisterIncidentRoutes(v1, db, authVerifier, auditWriter, authzClient)
 
 	return &Server{Engine: r}
 }
