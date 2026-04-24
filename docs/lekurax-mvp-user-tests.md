@@ -305,6 +305,38 @@ Pre-req:
 
 ---
 
+## 15. E1 — Insurance UI (providers, plans, coverages, claims)
+
+### 15.1 Providers + plans admin
+
+**Human (UI)** — `/lekurax/insurance/providers` and `/lekurax/insurance/plans`
+
+1. Open **Insurance / Providers**; confirm you can create a provider and see it in the table.
+2. Open **Insurance / Plans**; select a provider and create a plan; confirm it appears in the list.
+
+### 15.2 Patient coverages
+
+**Human (UI)** — `/lekurax/patients/:id`
+
+1. Open a patient detail page.
+2. In **Insurance coverage**, select a plan, set member ID, mark as Primary if desired, and submit.
+3. Confirm the **Coverages** table updates with the new row and the count badge increments.
+
+### 15.3 Claims queue + claim detail actions
+
+**Human (UI)** — `/lekurax/claims` and `/lekurax/claims/:id` (branch selected)
+
+Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim-create flow later).
+
+1. Open **Insurance / Claims**; confirm the list loads and supports searching/filtering by status.
+2. Open a claim; on **draft** claims, click **Submit** and confirm status updates.
+3. On **submitted** claims, adjudicate:
+   - approve with amount (cents), or reject with reason
+   - confirm status updates.
+4. On **approved** claims, click **Mark paid**; confirm status updates to `paid`.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.*` names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
