@@ -65,7 +65,7 @@ func run() int {
 
 	aw := audit.New(gdb)
 	az := authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey)
-	s := server.New(verifier, aw, az)
+	s := server.New(gdb, verifier, aw, az)
 	httpserver.RegisterRoutes(s.Engine, gdb, verifier, aw, az)
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {

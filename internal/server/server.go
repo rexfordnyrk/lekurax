@@ -2,8 +2,6 @@ package server
 
 import (
 	"net/http"
-	"reflect"
-	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -25,7 +23,7 @@ type Server struct {
 	Engine *gin.Engine
 }
 
-func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) *Server {
+func New(db *gorm.DB, authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) *Server {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 	r.Use(allowAllCORS())
@@ -46,45 +44,10 @@ func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *au
 		},
 	)
 
-	// Claims/insurance routes need DB access, but we intentionally keep server.New's signature unchanged.
-	claimsDB := dbFromAuditWriter(auditWriter)
-	claimshttp.RegisterProviderRoutes(v1, claimsDB, authVerifier, auditWriter, authzClient)
-	claimshttp.RegisterPlanRoutes(v1, claimsDB, authVerifier, auditWriter, authzClient)
+	claimshttp.RegisterProviderRoutes(v1, db, authVerifier, auditWriter, authzClient)
+	claimshttp.RegisterPlanRoutes(v1, db, authVerifier, auditWriter, authzClient)
 
 	return &Server{Engine: r}
-}
-
-// dbFromAuditWriter extracts the underlying *gorm.DB from audit.Writer without changing constructor signatures.
-// audit.Writer intentionally keeps its DB private; this is a narrow compatibility bridge for server-level routes.
-func dbFromAuditWriter(w *audit.Writer) *gorm.DB {
-	if w == nil {
-		return nil
-	}
-
-	rv := reflect.ValueOf(w)
-	if rv.Kind() != reflect.Ptr || rv.IsNil() {
-		return nil
-	}
-	ev := rv.Elem()
-	if ev.Kind() != reflect.Struct {
-		return nil
-	}
-
-	f := ev.FieldByName("db")
-	if !f.IsValid() {
-		return nil
-	}
-	if f.Kind() != reflect.Ptr {
-		return nil
-	}
-
-	// Reading an unexported field requires unsafe; reflect won't allow Interface().
-	// f is a *gorm.DB field value; f.Pointer() gives the underlying pointer value.
-	ptr := unsafe.Pointer(f.Pointer())
-	if ptr == nil {
-		return nil
-	}
-	return (*gorm.DB)(ptr)
 }
 
 // allowAllCORS reflects the request Origin and allows typical API headers (insecure; dev / MVP).

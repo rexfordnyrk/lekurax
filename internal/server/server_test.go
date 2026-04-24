@@ -17,6 +17,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
+	"gorm.io/gorm"
+
 	"lekurax/internal/audit"
 	"lekurax/internal/auth"
 	"lekurax/internal/authzkit"
@@ -24,7 +26,7 @@ import (
 
 func TestNew_HealthLiveReturnsOK(t *testing.T) {
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
+	s := New((*gorm.DB)(nil), verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -48,7 +50,7 @@ func TestNew_LogsRequests(t *testing.T) {
 	}()
 
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
+	s := New((*gorm.DB)(nil), verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/health/live", nil)
@@ -62,7 +64,7 @@ func TestNew_BranchPingReturnsResolvedBranchAndTenant(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	privateKey, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
-	s := New(verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
+	s := New((*gorm.DB)(nil), verifier, nil, authzkit.New("http://127.0.0.1:1", "test-service-key"))
 
 	tenantID := uuid.New()
 	claimBranchID := uuid.New()
@@ -95,7 +97,7 @@ func TestNew_ExposesDependenciesViaGinContext(t *testing.T) {
 	_, verifier := newRS256VerifierForServerTest(t, "https://issuer.example")
 	auditWriter := audit.New(nil)
 	authzClient := authzkit.New("http://127.0.0.1:1", "test-service-key")
-	s := New(verifier, auditWriter, authzClient)
+	s := New((*gorm.DB)(nil), verifier, auditWriter, authzClient)
 
 	s.Engine.GET("/dependencies", func(c *gin.Context) {
 		require.Same(t, verifier, GetAuthVerifier(c))
