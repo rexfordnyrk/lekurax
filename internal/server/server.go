@@ -2,13 +2,17 @@ package server
 
 import (
 	"net/http"
+	"reflect"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 
 	"lekurax/internal/audit"
 	"lekurax/internal/auth"
 	"lekurax/internal/authzkit"
 	"lekurax/internal/branchctx"
+	claimshttp "lekurax/internal/claims/http"
 )
 
 const (
@@ -27,7 +31,10 @@ func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *au
 	r.Use(allowAllCORS())
 	r.Use(ExposeDependencies(authVerifier, auditWriter, authzClient))
 	r.GET("/health/live", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"status": "ok"}) })
-	r.GET("/api/v1/branches/:branch_id/ping",
+
+	v1 := r.Group("/api/v1")
+
+	v1.GET("/branches/:branch_id/ping",
 		auth.RequireAuth(authVerifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		func(c *gin.Context) {
@@ -38,7 +45,46 @@ func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *au
 			})
 		},
 	)
+
+	// Claims/insurance routes need DB access, but we intentionally keep server.New's signature unchanged.
+	claimsDB := dbFromAuditWriter(auditWriter)
+	claimshttp.RegisterProviderRoutes(v1, claimsDB, authVerifier, auditWriter, authzClient)
+	claimshttp.RegisterPlanRoutes(v1, claimsDB, authVerifier, auditWriter, authzClient)
+
 	return &Server{Engine: r}
+}
+
+// dbFromAuditWriter extracts the underlying *gorm.DB from audit.Writer without changing constructor signatures.
+// audit.Writer intentionally keeps its DB private; this is a narrow compatibility bridge for server-level routes.
+func dbFromAuditWriter(w *audit.Writer) *gorm.DB {
+	if w == nil {
+		return nil
+	}
+
+	rv := reflect.ValueOf(w)
+	if rv.Kind() != reflect.Ptr || rv.IsNil() {
+		return nil
+	}
+	ev := rv.Elem()
+	if ev.Kind() != reflect.Struct {
+		return nil
+	}
+
+	f := ev.FieldByName("db")
+	if !f.IsValid() {
+		return nil
+	}
+	if f.Kind() != reflect.Ptr {
+		return nil
+	}
+
+	// Reading an unexported field requires unsafe; reflect won't allow Interface().
+	// f is a *gorm.DB field value; f.Pointer() gives the underlying pointer value.
+	ptr := unsafe.Pointer(f.Pointer())
+	if ptr == nil {
+		return nil
+	}
+	return (*gorm.DB)(ptr)
 }
 
 // allowAllCORS reflects the request Origin and allows typical API headers (insecure; dev / MVP).
