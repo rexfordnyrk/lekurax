@@ -1,7 +1,7 @@
 # Lekurax — MVP-to-Production Roadmap (Backend + Frontend)
 
 **Date:** 2026-04-24  
-**Last updated:** 2026-04-24 (E7 Quality Assurance & Compliance)  
+**Last updated:** 2026-04-24 (E8 Integrations & Interop)  
 **Spec:** `docs/superpowers/specs/2026-04-23-lekurax-mvp-design.md`
 
 This roadmap tracks **what is implemented vs pending** for both **backend** and **frontend** using the same unit structure for MVP and post‑MVP extensions.
@@ -155,8 +155,8 @@ Incident/error reporting, CAPA, audits, risk registry.
 FHIR/HL7, PDMP/PMP, drug DBs, accounting export, payment gateways.
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e8-integrations-backend.md](./plans/2026-04-23-lekurax-e8-integrations-backend.md)`  
   - Frontend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e8-integrations-frontend.md](./plans/2026-04-23-lekurax-e8-integrations-frontend.md)`
-  - Backend: ⬜
-  - Frontend: ⬜ (only where end-user workflows require)
+  - Backend: ✅
+  - Frontend: ✅
 - **E9 Mobile & Online Services (Module 14)**  
 Patient portal, refills, booking.
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e9-portal-backend.md](./plans/2026-04-23-lekurax-e9-portal-backend.md)`  

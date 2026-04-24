@@ -473,6 +473,32 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 21. E8 — Webhook integrations (outbound)
+
+### 21.1 Configure webhook + events
+
+**Human (UI)** — `/lekurax/integrations/webhooks`
+
+1. Open **Lekurax → Integrations → Webhooks**.
+2. Create a webhook with a valid URL (e.g. `http://127.0.0.1:9999/webhook`) and keep it **Enabled**.
+3. Subscribe it to at least one event key (e.g. `sale.created`) and save.
+4. Confirm the webhook appears in the list with the subscribed events shown.
+
+### 21.2 Verify signature header on delivery (manual receiver)
+
+**Human (setup + API/UI)** — requires a local webhook receiver.
+
+1. Run a simple local receiver that prints headers and body (any tool is fine).
+2. Trigger a supported event:
+  - **sale.created**: complete a sale in POS
+  - **rx.dispensed**: dispense a prescription
+  - **claim.submitted**: submit a claim
+3. Confirm the receiver gets a POST JSON payload with fields:
+  - `event_key`, `occurred_at`, `tenant_id`, `data`
+4. Confirm the request includes header `X-Lekurax-Signature: sha256=...` and that the signature verifies as HMAC-SHA256 of the raw request body using the webhook secret.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
