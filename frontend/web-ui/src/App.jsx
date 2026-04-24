@@ -115,6 +115,8 @@ import RequisitionsPage from "./pages/RequisitionsPage";
 import RequisitionDetailPage from "./pages/RequisitionDetailPage";
 import InsuranceProvidersPage from "./pages/InsuranceProvidersPage";
 import InsurancePlansPage from "./pages/InsurancePlansPage";
+import ClaimsPage from "./pages/ClaimsPage";
+import ClaimDetailPage from "./pages/ClaimDetailPage";
 
 function App() {
   return (
@@ -395,6 +397,25 @@ function App() {
           element={
             <RequireAuth>
               <InsurancePlansPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/claims'
+          element={
+            <RequireAuth>
+              <ClaimsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/claims/:id'
+          element={
+            <RequireAuth>
+              <ClaimDetailPage />
             </RequireAuth>
           }
         />
