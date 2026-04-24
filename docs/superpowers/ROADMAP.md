@@ -125,14 +125,14 @@ Each extension below is tracked as a unit with backend+frontend deliverables. Th
   Eligibility, claim submission, rejection handling, reconciliation.
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-e1-insurance-claims-backend.md`](./plans/2026-04-23-lekurax-e1-insurance-claims-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-e1-insurance-claims-frontend.md`](./plans/2026-04-23-lekurax-e1-insurance-claims-frontend.md)
-  - Backend: ⬜
+  - Backend: ✅
   - Frontend: ⬜
 
 - [ ] **E2 Procurement advanced workflows (Module 4)**  
   Requisitions, RFQ, contracts, approvals (beyond MVP inventory purchasing basics).
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-e2-procurement-backend.md`](./plans/2026-04-23-lekurax-e2-procurement-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-e2-procurement-frontend.md`](./plans/2026-04-23-lekurax-e2-procurement-frontend.md)
-  - Backend: ⬜
+  - Backend: ⏳
   - Frontend: ⬜
 
 - [ ] **E3 Reporting & Analytics (Module 11)**  
