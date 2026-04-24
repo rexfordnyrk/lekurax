@@ -113,6 +113,8 @@ import BranchUsersPage from "./lekurax/BranchUsersPage";
 import SuppliersPage from "./pages/SuppliersPage";
 import RequisitionsPage from "./pages/RequisitionsPage";
 import RequisitionDetailPage from "./pages/RequisitionDetailPage";
+import InsuranceProvidersPage from "./pages/InsuranceProvidersPage";
+import InsurancePlansPage from "./pages/InsurancePlansPage";
 
 function App() {
   return (
@@ -374,6 +376,25 @@ function App() {
           element={
             <RequireAuth>
               <RequisitionDetailPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/insurance/providers'
+          element={
+            <RequireAuth>
+              <InsuranceProvidersPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/insurance/plans'
+          element={
+            <RequireAuth>
+              <InsurancePlansPage />
             </RequireAuth>
           }
         />
