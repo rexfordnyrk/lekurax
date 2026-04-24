@@ -124,6 +124,8 @@ import NotificationsInboxPage from "./pages/NotificationsInboxPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import TrainingCoursesPage from "./pages/TrainingCoursesPage";
 import TrainingCourseDetailPage from "./pages/TrainingCourseDetailPage";
+import IncidentsPage from "./pages/IncidentsPage";
+import IncidentDetailPage from "./pages/IncidentDetailPage";
 
 function App() {
   return (
@@ -489,6 +491,25 @@ function App() {
           element={
             <RequireAuth>
               <TrainingCourseDetailPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/incidents'
+          element={
+            <RequireAuth>
+              <IncidentsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/incidents/:id'
+          element={
+            <RequireAuth>
+              <IncidentDetailPage />
             </RequireAuth>
           }
         />
