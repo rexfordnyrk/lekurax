@@ -72,6 +72,39 @@ func TestVerifyAccessToken_WrongSignature_ReturnsError(t *testing.T) {
 	require.Contains(t, err.Error(), "token invalid")
 }
 
+func TestVerifyAccessToken_HS256_ValidToken(t *testing.T) {
+	secret := "0123456789abcdef0123456789abcdef" // 32 chars
+	issuer := "https://issuer.example"
+	verifier, err := NewHS256Verifier(secret, issuer)
+	require.NoError(t, err)
+
+	now := time.Now().UTC()
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"iss":        issuer,
+		"sub":        "user",
+		"iat":        now.Unix(),
+		"nbf":        now.Unix(),
+		"exp":        now.Add(time.Hour).Unix(),
+		"user_id":    uuid.NewString(),
+		"tenant_id":  uuid.NewString(),
+		"session_id": "session-hs256",
+		"roles":      []string{"tenant-admin"},
+	})
+	signed, err := token.SignedString([]byte(secret))
+	require.NoError(t, err)
+
+	principal, verifyErr := verifier.VerifyAccessToken(signed)
+	require.NoError(t, verifyErr)
+	require.NotNil(t, principal)
+	require.Equal(t, "session-hs256", principal.SessionID)
+}
+
+func TestVerifyAccessToken_HS256_KeyTooShort_ReturnsError(t *testing.T) {
+	_, err := NewHS256Verifier("short", "issuer")
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "32")
+}
+
 func TestVerifyAccessToken_UnexpectedAlgorithm_DoesNotIncludeNilError(t *testing.T) {
 	_, verifier := newRS256VerifierForTest(t, "https://issuer.example")
 

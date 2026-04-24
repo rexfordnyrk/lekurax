@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"go.uber.org/zap"
 	"lekurax/internal/audit"
@@ -40,12 +41,17 @@ func run() int {
 		fmt.Fprintln(os.Stderr, "authz.jwt_issuer is required")
 		return 1
 	}
-	if cfg.Authz.RS256PublicKey == "" {
-		fmt.Fprintln(os.Stderr, "authz.rs256_public_key_pem is required")
-		return 1
-	}
 
-	verifier, err := auth.NewRS256Verifier(cfg.Authz.RS256PublicKey, cfg.Authz.JWTIssuer)
+	alg := strings.TrimSpace(strings.ToUpper(cfg.Authz.JWTAlgorithm))
+	if alg == "" {
+		alg = "RS256"
+	}
+	verifier, err := auth.NewVerifier(auth.VerifierOptions{
+		Issuer:            cfg.Authz.JWTIssuer,
+		Algorithm:         alg,
+		RS256PublicKeyPEM: cfg.Authz.RS256PublicKey,
+		HS256SigningKey:   cfg.Authz.HS256SigningKey,
+	})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "init auth verifier: %v\n", err)
 		return 1

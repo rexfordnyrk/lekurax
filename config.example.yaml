@@ -1,0 +1,60 @@
+# Lekurax — example configuration
+# Copy to config.yaml in the repo root (or set LEKURAX_* environment variables).
+#
+#   cp config.example.yaml config.yaml
+#
+# Environment overrides use prefix LEKURAX_ and underscores for nesting, e.g.:
+#   LEKURAX_DB_HOST=127.0.0.1
+#   LEKURAX_DB_USER=postgres
+#   LEKURAX_DB_PASSWORD=postgres
+#   LEKURAX_DB_NAME=lekurax
+#   LEKURAX_DB_DSN=postgres://...   # optional: wins over individual fields when set
+#   LEKURAX_AUTHZ_BASE_URL=http://127.0.0.1:8080
+#   LEKURAX_AUTHZ_JWT_ALGORITHM=HS256
+#   LEKURAX_AUTHZ_HS256_SIGNING_KEY='your-32-byte-minimum-secret-here'
+
+http:
+  # Listen address for lekurax-api (Gin).
+  addr: ":8081"
+
+db:
+  # Preferred: individual fields (DSN is built for you; user/password are URL-encoded).
+  host: "127.0.0.1"
+  port: 5432
+  user: "postgres"
+  password: "postgres"
+  name: "lekurax"
+  sslmode: "disable"
+
+  # Optional override: if set, this exact DSN is used and host/user/name above are ignored.
+  # dsn: "postgres://postgres:postgres@127.0.0.1:5432/lekurax?sslmode=disable"
+
+authz:
+  # Base URL of the AuthzKit service (no trailing /v1 — the client adds /v1).
+  base_url: "http://127.0.0.1:8080"
+  # Service API key for Lekurax → Authz server-to-server calls (X-Service-Key).
+  service_api_key: "replace-with-service-key-from-authz"
+
+  # Issuer claim (iss) on access tokens issued by Authz — must match Authz jwt.issuer.
+  jwt_issuer: "authzKit"
+
+  # JWT verification algorithm for incoming Bearer tokens: RS256 or HS256.
+  # Must match the algorithm configured on the Authz server (jwt.algorithm there).
+  jwt_algorithm: "RS256"
+
+  # RS256: PEM-encoded PKIX public key (same keypair Authz uses for RS256 tokens).
+  # Paste the full PEM block including BEGIN/END lines, or use a one-line escaped form.
+  rs256_public_key_pem: |
+    -----BEGIN PUBLIC KEY-----
+    REPLACE_ME
+    -----END PUBLIC KEY-----
+
+  # HS256: shared signing secret (Authz jwt.signing_key when algorithm is HS256).
+  # Required when jwt_algorithm is HS256. Minimum 32 characters (same rule as Authz).
+  # Leave empty when using RS256.
+  hs256_signing_key: ""
+
+security:
+  # When true, branch-scoped routes require X-Branch-Id (or equivalent) resolution.
+  require_branch_context: true
+  request_timeout: "15s"

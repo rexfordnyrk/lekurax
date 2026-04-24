@@ -12,6 +12,9 @@ dist/
 # Local-only runtime config (smoke / dev); do not commit secrets
 /config.yaml
 
+# make build output
+/bin/
+
 # Logs / env
 npm-debug.log*
 yarn-debug.log*

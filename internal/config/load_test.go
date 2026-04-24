@@ -19,11 +19,13 @@ func setRequiredEnv(t *testing.T) {
 func TestLoad_RequiresDBDSN(t *testing.T) {
 	setRequiredEnv(t)
 	t.Setenv("LEKURAX_DB_DSN", "")
+	t.Setenv("LEKURAX_DB_USER", "")
+	t.Setenv("LEKURAX_DB_NAME", "")
 
 	cfg, err := Load()
 
 	require.Nil(t, cfg)
-	require.EqualError(t, err, "db.dsn is required")
+	require.EqualError(t, err, "db: either 'dsn' or both 'user' and 'name' are required")
 }
 
 func TestLoad_RequiresAuthzBaseURL(t *testing.T) {
@@ -72,4 +74,24 @@ func TestLoad_UsesEnvAndDefaults(t *testing.T) {
 	require.Equal(t, "postgres://user:pass@localhost:5432/lekurax?sslmode=disable", cfg.DB.DSN)
 	require.Equal(t, "https://authz.example.com", cfg.Authz.BaseURL)
 	require.Equal(t, "secret", cfg.Authz.ServiceAPIKey)
+}
+
+func TestLoad_BuildsDSNFromIndividualDBEnv(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Chdir(tmpDir)
+
+	t.Setenv("LEKURAX_AUTHZ_BASE_URL", "http://localhost:8080")
+	t.Setenv("LEKURAX_AUTHZ_SERVICE_API_KEY", "key")
+	t.Setenv("LEKURAX_DB_DSN", "")
+	t.Setenv("LEKURAX_DB_USER", "appuser")
+	t.Setenv("LEKURAX_DB_PASSWORD", "apppass")
+	t.Setenv("LEKURAX_DB_NAME", "lekuraxdb")
+	t.Setenv("LEKURAX_DB_HOST", "db.internal")
+	t.Setenv("LEKURAX_DB_PORT", "5433")
+	t.Setenv("LEKURAX_DB_SSLMODE", "require")
+
+	cfg, err := Load()
+	require.NoError(t, err)
+	require.Contains(t, cfg.DB.DSN, "postgres://appuser:apppass@db.internal:5433/lekuraxdb")
+	require.Contains(t, cfg.DB.DSN, "sslmode=require")
 }
