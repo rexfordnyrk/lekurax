@@ -11,6 +11,7 @@ import (
 	"lekurax/internal/authzkit"
 	"lekurax/internal/branchctx"
 	claimshttp "lekurax/internal/claims/http"
+	documentshttp "lekurax/internal/docs/http"
 	notifyhttp "lekurax/internal/notify/http"
 	procurementhttp "lekurax/internal/procurement/http"
 	reportshttp "lekurax/internal/reports/http"
@@ -57,6 +58,7 @@ func New(db *gorm.DB, authVerifier *auth.Verifier, auditWriter *audit.Writer, au
 	reportshttp.RegisterInventoryReportRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	reportshttp.RegisterPrescriptionReportRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	notifyhttp.RegisterNotificationRoutes(v1, db, authVerifier)
+	documentshttp.RegisterDocumentRoutes(v1, db, authVerifier, auditWriter, authzClient)
 
 	return &Server{Engine: r}
 }
