@@ -18,6 +18,9 @@ dist/
 # Air (hot reload)
 /tmp/
 
+# Git worktrees (local)
+/.worktrees/
+
 # Logs / env
 npm-debug.log*
 yarn-debug.log*
