@@ -1,0 +1,57 @@
+# Air — hot reload for lekurax-api (https://github.com/air-verse/air)
+# Run: make dev   (requires `air` on PATH, e.g. go install github.com/air-verse/air@latest)
+
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  args_bin = []
+  bin = "./tmp/lekurax-api"
+  cmd = "go build -o ./tmp/lekurax-api ./cmd/lekurax-api"
+  delay = 500
+  exclude_dir = [
+    ".git",
+    ".cursor",
+    ".idea",
+    "authz",
+    "bin",
+    "dist",
+    "frontend",
+    "migrations",
+    "node_modules",
+    "tmp",
+    ".vite",
+  ]
+  exclude_file = []
+  exclude_regex = ["_test\\.go"]
+  exclude_unchanged = false
+  full_bin = ""
+  include_dir = []
+  include_ext = ["go", "tpl", "tmpl", "html", "yaml", "yml"]
+  include_file = []
+  kill_delay = "0s"
+  log = "tmp/air-build-errors.log"
+  poll = false
+  poll_interval = 5
+  rerun = false
+  rerun_delay = 500
+  send_interrupt = true
+  stop_on_error = false
+
+[color]
+  app = ""
+  build = "yellow"
+  main = "magenta"
+  runner = "green"
+  watcher = "cyan"
+
+[log]
+  main_only = false
+  time = false
+
+[misc]
+  clean_on_exit = false
+
+[screen]
+  clear_on_rebuild = false
+  keep_scroll = true

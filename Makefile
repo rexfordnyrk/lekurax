@@ -1,7 +1,15 @@
-.PHONY: build test migrate-up migrate-down migrate-status
+.PHONY: build run dev test migrate-up migrate-down migrate-status
 
 # Default binary output directory (gitignored).
 BIN_DIR := bin
+
+# Run API once (no reload). Uses config.yaml / LEKURAX_* from cwd.
+run:
+	go run ./cmd/lekurax-api
+
+# Hot reload with Air (see .air.toml). Install: go install github.com/air-verse/air@latest
+dev:
+	air -c .air.toml
 
 build:
 	mkdir -p $(BIN_DIR)

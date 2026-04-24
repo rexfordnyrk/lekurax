@@ -23,6 +23,7 @@ Typical deployment: **AuthzKit** (identity, tenants, branches, roles) + **Lekura
 |------|---------|
 | `cmd/lekurax-api` | HTTP API entrypoint (Gin). |
 | `cmd/lekurax-migrate` | Goose CLI: `up`, `down`, `status`. |
+| `.air.toml` | Air hot-reload config for `make dev`. |
 | `migrations/` | SQL migrations for the Lekurax database. |
 | `internal/httpserver` | REST handlers and route registration. |
 | `internal/auth` | JWT verification (**RS256** or **HS256**). |
@@ -103,9 +104,18 @@ go run ./cmd/lekurax-migrate up
 ## 4. Run the API
 
 ```bash
-go run ./cmd/lekurax-api
+make run
+# or: go run ./cmd/lekurax-api
 # or after: make build && ./bin/lekurax-api
 ```
+
+**Hot reload (Air):** install [Air](https://github.com/air-verse/air) (`go install github.com/air-verse/air@latest`), then from the repo root:
+
+```bash
+make dev
+```
+
+This uses `.air.toml`: rebuilds on `*.go` / `*.yaml` under the tree, and **ignores** `frontend/`, `authz/`, `node_modules/`, `migrations/`, `tmp/`, Vite output, and test-only Go files (`*_test.go`).
 
 Defaults: `http.addr` `:8081`, health at `GET /health/ready`.
 
@@ -141,6 +151,8 @@ Read the script header for variables and key paths.
 
 | Target | Description |
 |--------|-------------|
+| `make run` | Run `lekurax-api` once with `go run` (no reload). |
+| `make dev` | Run API under **Air** hot reload (see `.air.toml`). |
 | `make build` | Build `bin/lekurax-api` and `bin/lekurax-migrate`. |
 | `make test` | Run `go test ./...`. |
 | `make migrate-up` | Apply Goose migrations. |
