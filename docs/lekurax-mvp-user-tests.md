@@ -10,12 +10,14 @@ Record pass/fail and any error text you see.
 
 **Human (setup)** — not automated in this doc.
 
-| Variable / file | Purpose |
-|-----------------|--------|
-| `frontend/web-ui/.env.local` | Copy from `frontend/web-ui/.env.example`. Set `VITE_AUTHZ_BASE_URL` to your Authz HTTP origin (e.g. `http://127.0.0.1:18080`). Set `VITE_LEKURAX_API_BASE_URL` to Lekurax (e.g. `http://127.0.0.1:18081`). |
-| Lekurax `config.yaml` (or env) | DB DSN, `authz.base_url`, JWT issuer/public key aligned with Authz, and `service_api_key` if you test **non–tenant-admin** branch checks (see §10). |
-| Authz | Migrated + seeded; tenant admin can sign in. Lekurax permissions are granted to `tenant-admin` via Authz migrations/seeder. |
-| Postgres | Databases `authz` and `lekurax` migrated (`lekurax-migrate`, Authz migrate). |
+
+| Variable / file                | Purpose                                                                                                                                                                                                    |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `frontend/web-ui/.env.local`   | Copy from `frontend/web-ui/.env.example`. Set `VITE_AUTHZ_BASE_URL` to your Authz HTTP origin (e.g. `http://127.0.0.1:18080`). Set `VITE_LEKURAX_API_BASE_URL` to Lekurax (e.g. `http://127.0.0.1:18081`). |
+| Lekurax `config.yaml` (or env) | DB DSN, `authz.base_url`, JWT issuer/public key aligned with Authz, and `service_api_key` if you test **non–tenant-admin** branch checks (see §10).                                                        |
+| Authz                          | Migrated + seeded; tenant admin can sign in. Lekurax permissions are granted to `tenant-admin` via Authz migrations/seeder.                                                                                |
+| Postgres                       | Databases `authz` and `lekurax` migrated (`lekurax-migrate`, Authz migrate).                                                                                                                               |
+
 
 **Optional — Human (script)** — end-to-end API smoke without the UI:
 
@@ -115,7 +117,7 @@ Lekurax inventory, prescriptions, POS, and sales are **branch-scoped**. The UI s
 
 **Human (UI)** — edge case
 
-5. If you can create an Rx line for a product the patient is **allergic** to, confirm the API/UI blocks or warns as designed (capture actual behavior).
+1. If you can create an Rx line for a product the patient is **allergic** to, confirm the API/UI blocks or warns as designed (capture actual behavior).
 
 ---
 
@@ -163,18 +165,20 @@ Automated smoke often uses **tenant-admin**, which may bypass strict branch memb
 
 ## 12. Regression checklist (quick)
 
-| Area | Route | Human (UI) |
-|------|-------|------------|
-| Auth | sign-in | §1 |
-| Branches | `/lekurax/branches` | §2 |
-| Branch members | `/lekurax/branches/:branchId/users` | §2 |
-| Products | `/lekurax/products` | §3 |
-| Tax | `/lekurax/tax-rules` | §4 |
-| Stock | `/lekurax/stock` | §5 |
-| Patients | `/lekurax/patients`, `/lekurax/patients/:id` | §6 |
-| Rx | `/lekurax/prescriptions` | §7 |
-| POS | `/lekurax/pos` | §8 |
-| Sales | `/lekurax/sales` | §9 |
+
+| Area           | Route                                        | Human (UI) |
+| -------------- | -------------------------------------------- | ---------- |
+| Auth           | sign-in                                      | §1         |
+| Branches       | `/lekurax/branches`                          | §2         |
+| Branch members | `/lekurax/branches/:branchId/users`          | §2         |
+| Products       | `/lekurax/products`                          | §3         |
+| Tax            | `/lekurax/tax-rules`                         | §4         |
+| Stock          | `/lekurax/stock`                             | §5         |
+| Patients       | `/lekurax/patients`, `/lekurax/patients/:id` | §6         |
+| Rx             | `/lekurax/prescriptions`                     | §7         |
+| POS            | `/lekurax/pos`                               | §8         |
+| Sales          | `/lekurax/sales`                             | §9         |
+
 
 ---
 
@@ -183,54 +187,58 @@ Automated smoke often uses **tenant-admin**, which may bypass strict branch memb
 ### 13.1 Insurance providers (admin)
 
 **Human (API)** — requires perms:
+
 - `claims.providers.view` (list)
 - `claims.providers.manage` (create)
 
 1. List providers:
-   - `GET /api/v1/insurance/providers`
-   - **Expected**: `200` with `{ "items": [] }` (or non-empty if already created).
+  - `GET /api/v1/insurance/providers`
+  - **Expected**: `200` with `{ "items": [] }` (or non-empty if already created).
 2. Create provider:
-   - `POST /api/v1/insurance/providers` with JSON: `{ "name": "Acme Insurance", "payer_id": "ACME-001" }`
-   - **Expected**: `201` and returned provider row (uuid `id`, correct `tenant_id`, `name`).
+  - `POST /api/v1/insurance/providers` with JSON: `{ "name": "Acme Insurance", "payer_id": "ACME-001" }`
+  - **Expected**: `201` and returned provider row (uuid `id`, correct `tenant_id`, `name`).
 3. List again:
-   - **Expected**: `items` includes the new provider.
+  - **Expected**: `items` includes the new provider.
 
 ### 13.2 Insurance plans (admin)
 
 **Human (API)** — requires perms:
+
 - `claims.plans.view` (list)
 - `claims.plans.manage` (create)
 
 1. Create a plan under the provider you created above:
-   - `POST /api/v1/insurance/providers/{providerId}/plans` with JSON: `{ "name": "Acme Silver" }`
-   - **Expected**: `201` with returned plan row (`provider_id` = providerId).
+  - `POST /api/v1/insurance/providers/{providerId}/plans` with JSON: `{ "name": "Acme Silver" }`
+  - **Expected**: `201` with returned plan row (`provider_id` = providerId).
 2. List plans:
-   - `GET /api/v1/insurance/plans`
-   - **Expected**: `200` with `{ "items": [...] }` including the plan.
+  - `GET /api/v1/insurance/plans`
+  - **Expected**: `200` with `{ "items": [...] }` including the plan.
 
 ### 13.3 Patient coverages
 
 **Human (UI)** (preferred): after the E1 UI work lands, use the patient detail page coverage section.
 
 **Human (API)** — requires perms:
+
 - `claims.coverage.view` (list)
 - `claims.coverage.manage` (create)
 
 Pre-req: create a patient via the existing UI (§6) and note its `{patientId}`.
 
 1. List coverages:
-   - `GET /api/v1/patients/{patientId}/coverages`
-   - **Expected**: `200` with `{ "items": [] }` initially.
+  - `GET /api/v1/patients/{patientId}/coverages`
+  - **Expected**: `200` with `{ "items": [] }` initially.
 2. Add coverage:
-   - `POST /api/v1/patients/{patientId}/coverages` with JSON:
-     - `{ "plan_id": "{planId}", "member_id": "MEM-123", "is_primary": true }`
-   - **Expected**: `201` and returned coverage row.
+  - `POST /api/v1/patients/{patientId}/coverages` with JSON:
+    - `{ "plan_id": "{planId}", "member_id": "MEM-123", "is_primary": true }`
+  - **Expected**: `201` and returned coverage row.
 3. List again:
-   - **Expected**: `items` includes the row you created.
+  - **Expected**: `items` includes the row you created.
 
 ### 13.4 Claims lifecycle (manual adjudication)
 
 **Human (API)** — requires branch membership + branch context + perms:
+
 - `claims.create` (create draft from sale)
 - `claims.list` / `claims.view`
 - `claims.submit`
@@ -238,6 +246,7 @@ Pre-req: create a patient via the existing UI (§6) and note its `{patientId}`.
 - `claims.mark_paid`
 
 Pre-req:
+
 - Select a branch (§2) and complete a sale (§8). Capture:
   - `{branchId}` (UUID)
   - `{saleId}` (UUID) from the Sales history API (`GET /api/v1/branches/{branchId}/sales`) or DB.
@@ -245,24 +254,26 @@ Pre-req:
   - If you set `X-Branch-Id`, it must equal `{branchId}` used in the URL.
 
 1. Create claim draft from sale:
-   - `POST /api/v1/branches/{branchId}/claims` with JSON: `{ "sale_id": "{saleId}", "plan_id": "{planId}" }`
-   - **Expected**: `201` with claim row, `status = "draft"`.
+  - `POST /api/v1/branches/{branchId}/claims` with JSON: `{ "sale_id": "{saleId}", "plan_id": "{planId}" }`
+  - **Expected**: `201` with claim row, `status = "draft"`.
 2. Submit:
-   - `POST /api/v1/branches/{branchId}/claims/{claimId}/submit`
-   - **Expected**: `200` with updated claim, `status = "submitted"`, `submitted_at` set.
+  - `POST /api/v1/branches/{branchId}/claims/{claimId}/submit`
+  - **Expected**: `200` with updated claim, `status = "submitted"`, `submitted_at` set.
 3. Adjudicate (approve):
-   - `POST /api/v1/branches/{branchId}/claims/{claimId}/adjudicate` with JSON: `{ "status": "approved", "approved_amount_cents": 12345 }`
-   - **Expected**: `200`, `status = "approved"`, `adjudicated_at` set, `approved_amount_cents` set.
+  - `POST /api/v1/branches/{branchId}/claims/{claimId}/adjudicate` with JSON: `{ "status": "approved", "approved_amount_cents": 12345 }`
+  - **Expected**: `200`, `status = "approved"`, `adjudicated_at` set, `approved_amount_cents` set.
 4. Mark paid:
-   - `POST /api/v1/branches/{branchId}/claims/{claimId}/mark-paid`
-   - **Expected**: `200`, `status = "paid"`, `paid_at` set.
+  - `POST /api/v1/branches/{branchId}/claims/{claimId}/mark-paid`
+  - **Expected**: `200`, `status = "paid"`, `paid_at` set.
 
 **Human (API)** — rejection path
 5. Create another draft and submit it, then reject:
-   - `POST .../adjudicate` with JSON: `{ "status": "rejected", "rejection_reason": "Missing prior auth" }`
-   - **Expected**: `200`, `status = "rejected"`, `rejection_reason` set.
-6. Attempt to mark-paid a rejected claim:
-   - **Expected**: `409 INVALID_STATE`.
+
+- `POST .../adjudicate` with JSON: `{ "status": "rejected", "rejection_reason": "Missing prior auth" }`
+- **Expected**: `200`, `status = "rejected"`, `rejection_reason` set.
+
+1. Attempt to mark-paid a rejected claim:
+  - **Expected**: `409 INVALID_STATE`.
 
 ---
 
@@ -282,9 +293,9 @@ Pre-req:
 **Human (UI)** — `/lekurax/requisitions` (branch selected)
 
 1. Open the page; confirm you can see:
-   - a **New requisition** CTA
-   - a Status filter dropdown (Draft/Submitted/Approved/Rejected)
-   - a table with status badges, created time, and an **Open** action.
+  - a **New requisition** CTA
+  - a Status filter dropdown (Draft/Submitted/Approved/Rejected)
+  - a table with status badges, created time, and an **Open** action.
 2. Click **New requisition**; confirm you are taken to a detail screen (create flow).
 
 ### 14.3 Requisition detail workflow
@@ -292,16 +303,16 @@ Pre-req:
 **Human (UI)** — `/lekurax/requisitions/:id` (branch selected)
 
 1. **Create**: open `/lekurax/requisitions/new` and click **Create requisition**.
-   - **Expected**: you land on `/lekurax/requisitions/{id}` (UUID) and see a draft status.
+  - **Expected**: you land on `/lekurax/requisitions/{id}` (UUID) and see a draft status.
 2. **Add line**: add a line item with an existing product and quantity.
-   - **Expected**: it appears in the Line items table and the badge count increments.
+  - **Expected**: it appears in the Line items table and the badge count increments.
 3. **Submit**:
-   - **Expected**: status becomes `submitted`, and the UI indicates it is no longer editable.
+  - **Expected**: status becomes `submitted`, and the UI indicates it is no longer editable.
 4. **Approve**:
-   - **Expected**: status becomes `approved`.
+  - **Expected**: status becomes `approved`.
 5. **Reject path** (separate requisition):
-   - create + add a line + submit, then click **Reject**.
-   - **Expected**: status becomes `rejected`.
+  - create + add a line + submit, then click **Reject**.
+  - **Expected**: status becomes `rejected`.
 
 ---
 
@@ -331,14 +342,15 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 1. Open **Insurance / Claims**; confirm the list loads and supports searching/filtering by status.
 2. Open a claim; on **draft** claims, click **Submit** and confirm status updates.
 3. On **submitted** claims, adjudicate:
-   - approve with amount (cents), or reject with reason
-   - confirm status updates.
+  - approve with amount (cents), or reject with reason
+  - confirm status updates.
 4. On **approved** claims, click **Mark paid**; confirm status updates to `paid`.
 
 ---
 
 ## Notes for the tester
 
-- **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.*` names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
+- **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
 - **CORS:** if the browser blocks Lekurax calls, configure Lekurax (or a dev proxy) to allow your UI origin.
 - **IDs in POS:** “Linked prescription ID” expects the prescription UUID string from the prescriptions list or API, not a human display number.
+
