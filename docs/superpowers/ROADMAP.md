@@ -1,6 +1,7 @@
 # Lekurax — MVP-to-Production Roadmap (Backend + Frontend)
 
 **Date:** 2026-04-23  
+**Last updated:** 2026-04-23 (post-MVP DX items DX-1 through DX-6)  
 **Spec:** `docs/superpowers/specs/2026-04-23-lekurax-mvp-design.md`
 
 This roadmap tracks **what is implemented vs pending** for both **backend** and **frontend** using the same unit structure for MVP and post‑MVP extensions.
@@ -85,6 +86,37 @@ Legend:
 
 ---
 
+## Post‑MVP — platform & developer experience (completed)
+
+Ship-hardening and **local reproducibility** work done **after** the MVP slice (F0–F3, M1–M6) landed. These items are **not** new business modules; they align Lekurax with Authz-style config and day‑to‑day engineering workflows.
+
+- [x] **DX-1 Configuration template**  
+  - `config.example.yaml` at repo root: copy → `config.yaml`; documents `http`, `db`, `authz` (JWT), `security`, and `LEKURAX_*` env overrides.  
+  - `.gitignore` continues to exclude committed secrets (`/config.yaml`).
+
+- [x] **DX-2 Database DSN composition (Authz-style)**  
+  - `db` block supports either raw `db.dsn` **or** individual `host`, `port`, `user`, `password`, `name`, `sslmode`; loader composes a Postgres URL with **URL-encoded** credentials (mirrors Authz `database.*` pattern).  
+  - `internal/config/db.go` + tests; `cmd/lekurax-migrate` and `lekurax-api` both use resolved `cfg.DB.DSN`.
+
+- [x] **DX-3 JWT parity with Authz (RS256 + HS256)**  
+  - `authz.jwt_algorithm` (`RS256` default, `HS256` optional) and `authz.hs256_signing_key` (≥32 chars when HS256); `authz.rs256_public_key_pem` when RS256.  
+  - `internal/auth` verifier options + tests; `cmd/lekurax-api` wires from config.
+
+- [x] **DX-4 Makefile & Goose CLI**  
+  - Root `Makefile`: `build`, **`run`** (`go run` API), **`dev`** (Air), `test`, **`migrate-up` / `migrate-down` / `migrate-status`** (Authz-style migration ergonomics).  
+  - `cmd/lekurax-migrate` accepts `up` (default), `down`, `status`.  
+  - `.gitignore`: `/bin/` for `make build` outputs.
+
+- [x] **DX-5 Air hot reload for `lekurax-api`**  
+  - `.air.toml`: rebuild on `go` / `yaml` changes; **`exclude_dir`** includes `frontend/`, **`authz/`** (submodule), **`node_modules/`**, **`migrations/`**, **`tmp/`**, `.vite`, `bin`, IDE dirs — avoids noisy reloads from UI or SQL-only edits; **`exclude_regex`** skips `*_test.go` churn.  
+  - **`make dev`** → `air -c .air.toml`.
+
+- [x] **DX-6 Documentation**  
+  - Root `README.md`: product context, Authz relationship, DB/JWT tables, Makefile / Air / migrate / web UI / smoke script.  
+  - `docs/lekurax-mvp-user-tests.md`: manual UAT checklist for the MVP UI and branch flows.
+
+---
+
 ## Post‑MVP Extensions (additive, same spec format)
 
 Each extension below is tracked as a unit with backend+frontend deliverables. These can be shipped incrementally after MVP is stable in production.
@@ -163,6 +195,7 @@ Each extension below is tracked as a unit with backend+frontend deliverables. Th
 
 ## Notes
 
+- **DX-1 through DX-6** (above) are tracked only in this roadmap for visibility; they do not use separate plan files under `docs/superpowers/plans/`.
 - MVP units are implemented **backend-first**, then frontend in the **same order**, to maintain tangible end-to-end progress.
 - For every unit we will create:
   - a **backend plan** section/file
