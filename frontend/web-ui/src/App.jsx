@@ -122,6 +122,8 @@ import ClaimsPage from "./pages/ClaimsPage";
 import ClaimDetailPage from "./pages/ClaimDetailPage";
 import NotificationsInboxPage from "./pages/NotificationsInboxPage";
 import DocumentsPage from "./pages/DocumentsPage";
+import TrainingCoursesPage from "./pages/TrainingCoursesPage";
+import TrainingCourseDetailPage from "./pages/TrainingCourseDetailPage";
 
 function App() {
   return (
@@ -468,6 +470,25 @@ function App() {
           element={
             <RequireAuth>
               <DocumentsPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/training/courses'
+          element={
+            <RequireAuth>
+              <TrainingCoursesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/training/courses/:id'
+          element={
+            <RequireAuth>
+              <TrainingCourseDetailPage />
             </RequireAuth>
           }
         />
