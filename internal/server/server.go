@@ -24,6 +24,7 @@ type Server struct {
 func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) *Server {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
+	r.Use(allowAllCORS())
 	r.Use(ExposeDependencies(authVerifier, auditWriter, authzClient))
 	r.GET("/health/live", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"status": "ok"}) })
 	r.GET("/api/v1/branches/:branch_id/ping",
@@ -38,6 +39,24 @@ func New(authVerifier *auth.Verifier, auditWriter *audit.Writer, authzClient *au
 		},
 	)
 	return &Server{Engine: r}
+}
+
+// allowAllCORS reflects the request Origin and allows typical API headers (insecure; dev / MVP).
+func allowAllCORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if o := c.GetHeader("Origin"); o != "" {
+			c.Header("Access-Control-Allow-Origin", o)
+			c.Header("Access-Control-Allow-Credentials", "true")
+		}
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Branch-Id")
+		c.Header("Access-Control-Max-Age", "3600")
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+		c.Next()
+	}
 }
 
 // ExposeDependencies attaches shared services to the Gin context for downstream handlers.
