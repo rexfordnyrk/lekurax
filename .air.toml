@@ -8,7 +8,7 @@ tmp_dir = "tmp"
   args_bin = []
   bin = "./tmp/lekurax-api"
   cmd = "go build -o ./tmp/lekurax-api ./cmd/lekurax-api"
-  delay = 500
+  delay = 1000
   exclude_dir = [
     ".git",
     ".cursor",
@@ -34,9 +34,10 @@ tmp_dir = "tmp"
   poll = false
   poll_interval = 5
   rerun = false
-  rerun_delay = 500
+  rerun_delay = 1000
   send_interrupt = true
   stop_on_error = false
+  post_cmd = ["lsof -i tcp:8081 | awk 'NR==2{print $2}' | xargs kill"]
 
 [color]
   app = ""
