@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"lekurax/internal/audit"
 )
@@ -17,6 +18,7 @@ var (
 	ErrNotFound     = errors.New("NOT_FOUND")
 	ErrInvalidInput = errors.New("INVALID_INPUT")
 	ErrInvalidState = errors.New("INVALID_STATE")
+	ErrNoDatabase   = errors.New("NO_DATABASE")
 )
 
 type Status string
@@ -63,7 +65,7 @@ type Actor struct {
 
 func (s *Service) CreateDraftFromSale(ctx context.Context, actor Actor, saleID, planID uuid.UUID) (*Claim, error) {
 	if s.db == nil {
-		return nil, errors.New("NO_DATABASE")
+		return nil, ErrNoDatabase
 	}
 	if actor.TenantID == uuid.Nil || actor.BranchID == uuid.Nil || saleID == uuid.Nil || planID == uuid.Nil {
 		return nil, ErrInvalidInput
@@ -118,10 +120,36 @@ func (s *Service) CreateDraftFromSale(ctx context.Context, actor Actor, saleID, 
 
 func (s *Service) Submit(ctx context.Context, actor Actor, id uuid.UUID) (*Claim, error) {
 	if s.db == nil {
-		return nil, errors.New("NO_DATABASE")
+		return nil, ErrNoDatabase
 	}
 	if actor.TenantID == uuid.Nil || actor.BranchID == uuid.Nil || id == uuid.Nil {
 		return nil, ErrInvalidInput
+	}
+
+	now := time.Now().UTC()
+	result := s.db.WithContext(ctx).
+		Model(&Claim{}).
+		Where("id = ? AND tenant_id = ? AND branch_id = ? AND status = ?", id, actor.TenantID, actor.BranchID, StatusDraft).
+		Updates(map[string]any{
+			"status":       StatusSubmitted,
+			"submitted_at": &now,
+		})
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		// Distinguish NOT_FOUND vs INVALID_STATE.
+		var count int64
+		if err := s.db.WithContext(ctx).
+			Model(&Claim{}).
+			Where("id = ? AND tenant_id = ? AND branch_id = ?", id, actor.TenantID, actor.BranchID).
+			Count(&count).Error; err != nil {
+			return nil, err
+		}
+		if count == 0 {
+			return nil, ErrNotFound
+		}
+		return nil, ErrInvalidState
 	}
 
 	var row Claim
@@ -131,18 +159,6 @@ func (s *Service) Submit(ctx context.Context, actor Actor, id uuid.UUID) (*Claim
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrNotFound
 		}
-		return nil, err
-	}
-
-	if row.Status != StatusDraft {
-		return nil, ErrInvalidState
-	}
-
-	now := time.Now().UTC()
-	row.Status = StatusSubmitted
-	row.SubmittedAt = &now
-
-	if err := s.db.WithContext(ctx).Save(&row).Error; err != nil {
 		return nil, err
 	}
 
@@ -162,10 +178,57 @@ type Adjudication struct {
 
 func (s *Service) Adjudicate(ctx context.Context, actor Actor, id uuid.UUID, adj Adjudication) (*Claim, error) {
 	if s.db == nil {
-		return nil, errors.New("NO_DATABASE")
+		return nil, ErrNoDatabase
 	}
 	if actor.TenantID == uuid.Nil || actor.BranchID == uuid.Nil || id == uuid.Nil {
 		return nil, ErrInvalidInput
+	}
+
+	now := time.Now().UTC()
+	update := map[string]any{
+		"adjudicated_at": &now,
+	}
+
+	switch adj.Status {
+	case StatusApproved:
+		if adj.ApprovedAmountCents == nil {
+			return nil, ErrInvalidInput
+		}
+		update["status"] = StatusApproved
+		update["approved_amount_cents"] = *adj.ApprovedAmountCents
+		update["rejection_reason"] = nil
+	case StatusRejected:
+		if adj.RejectionReason == nil || strings.TrimSpace(*adj.RejectionReason) == "" {
+			return nil, ErrInvalidInput
+		}
+		reason := strings.TrimSpace(*adj.RejectionReason)
+		update["status"] = StatusRejected
+		update["rejection_reason"] = reason
+		update["approved_amount_cents"] = nil
+	default:
+		return nil, ErrInvalidInput
+	}
+
+	result := s.db.WithContext(ctx).
+		Model(&Claim{}).
+		Where("id = ? AND tenant_id = ? AND branch_id = ? AND status = ?", id, actor.TenantID, actor.BranchID, StatusSubmitted).
+		Clauses(clause.Returning{}).
+		Updates(update)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		var count int64
+		if err := s.db.WithContext(ctx).
+			Model(&Claim{}).
+			Where("id = ? AND tenant_id = ? AND branch_id = ?", id, actor.TenantID, actor.BranchID).
+			Count(&count).Error; err != nil {
+			return nil, err
+		}
+		if count == 0 {
+			return nil, ErrNotFound
+		}
+		return nil, ErrInvalidState
 	}
 
 	var row Claim
@@ -175,37 +238,6 @@ func (s *Service) Adjudicate(ctx context.Context, actor Actor, id uuid.UUID, adj
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrNotFound
 		}
-		return nil, err
-	}
-
-	if row.Status != StatusSubmitted {
-		return nil, ErrInvalidState
-	}
-
-	now := time.Now().UTC()
-	row.AdjudicatedAt = &now
-
-	switch adj.Status {
-	case StatusApproved:
-		if adj.ApprovedAmountCents == nil {
-			return nil, ErrInvalidInput
-		}
-		row.Status = StatusApproved
-		row.ApprovedAmountCents = adj.ApprovedAmountCents
-		row.RejectionReason = nil
-	case StatusRejected:
-		if adj.RejectionReason == nil || strings.TrimSpace(*adj.RejectionReason) == "" {
-			return nil, ErrInvalidInput
-		}
-		reason := strings.TrimSpace(*adj.RejectionReason)
-		row.Status = StatusRejected
-		row.RejectionReason = &reason
-		row.ApprovedAmountCents = nil
-	default:
-		return nil, ErrInvalidInput
-	}
-
-	if err := s.db.WithContext(ctx).Save(&row).Error; err != nil {
 		return nil, err
 	}
 
@@ -226,10 +258,35 @@ func (s *Service) Adjudicate(ctx context.Context, actor Actor, id uuid.UUID, adj
 
 func (s *Service) MarkPaid(ctx context.Context, actor Actor, id uuid.UUID) (*Claim, error) {
 	if s.db == nil {
-		return nil, errors.New("NO_DATABASE")
+		return nil, ErrNoDatabase
 	}
 	if actor.TenantID == uuid.Nil || actor.BranchID == uuid.Nil || id == uuid.Nil {
 		return nil, ErrInvalidInput
+	}
+
+	now := time.Now().UTC()
+	result := s.db.WithContext(ctx).
+		Model(&Claim{}).
+		Where("id = ? AND tenant_id = ? AND branch_id = ? AND status = ?", id, actor.TenantID, actor.BranchID, StatusApproved).
+		Updates(map[string]any{
+			"status":  StatusPaid,
+			"paid_at": &now,
+		})
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		var count int64
+		if err := s.db.WithContext(ctx).
+			Model(&Claim{}).
+			Where("id = ? AND tenant_id = ? AND branch_id = ?", id, actor.TenantID, actor.BranchID).
+			Count(&count).Error; err != nil {
+			return nil, err
+		}
+		if count == 0 {
+			return nil, ErrNotFound
+		}
+		return nil, ErrInvalidState
 	}
 
 	var row Claim
@@ -239,18 +296,6 @@ func (s *Service) MarkPaid(ctx context.Context, actor Actor, id uuid.UUID) (*Cla
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrNotFound
 		}
-		return nil, err
-	}
-
-	if row.Status != StatusApproved {
-		return nil, ErrInvalidState
-	}
-
-	now := time.Now().UTC()
-	row.Status = StatusPaid
-	row.PaidAt = &now
-
-	if err := s.db.WithContext(ctx).Save(&row).Error; err != nil {
 		return nil, err
 	}
 
@@ -264,7 +309,7 @@ func (s *Service) MarkPaid(ctx context.Context, actor Actor, id uuid.UUID) (*Cla
 
 func (s *Service) Get(ctx context.Context, tenantID, branchID, id uuid.UUID) (*Claim, error) {
 	if s.db == nil {
-		return nil, errors.New("NO_DATABASE")
+		return nil, ErrNoDatabase
 	}
 	if tenantID == uuid.Nil || branchID == uuid.Nil || id == uuid.Nil {
 		return nil, ErrInvalidInput
@@ -285,7 +330,7 @@ func (s *Service) Get(ctx context.Context, tenantID, branchID, id uuid.UUID) (*C
 
 func (s *Service) List(ctx context.Context, tenantID, branchID uuid.UUID) ([]Claim, error) {
 	if s.db == nil {
-		return nil, errors.New("NO_DATABASE")
+		return nil, ErrNoDatabase
 	}
 	if tenantID == uuid.Nil || branchID == uuid.Nil {
 		return nil, ErrInvalidInput

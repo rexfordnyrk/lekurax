@@ -1,6 +1,7 @@
 package http
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -74,9 +75,8 @@ func (h *ClaimHandler) createDraftFromSale(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
 		return
 	}
-	branchID, ok := branchIDFromContext(c)
+	branchID, ok := requireBranchIDMatch(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "BRANCH_REQUIRED"})
 		return
 	}
 
@@ -116,9 +116,8 @@ func (h *ClaimHandler) submit(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
 		return
 	}
-	branchID, ok := branchIDFromContext(c)
+	branchID, ok := requireBranchIDMatch(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "BRANCH_REQUIRED"})
 		return
 	}
 
@@ -152,9 +151,8 @@ func (h *ClaimHandler) adjudicate(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
 		return
 	}
-	branchID, ok := branchIDFromContext(c)
+	branchID, ok := requireBranchIDMatch(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "BRANCH_REQUIRED"})
 		return
 	}
 
@@ -205,9 +203,8 @@ func (h *ClaimHandler) markPaid(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
 		return
 	}
-	branchID, ok := branchIDFromContext(c)
+	branchID, ok := requireBranchIDMatch(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "BRANCH_REQUIRED"})
 		return
 	}
 
@@ -235,9 +232,8 @@ func (h *ClaimHandler) get(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
 		return
 	}
-	branchID, ok := branchIDFromContext(c)
+	branchID, ok := requireBranchIDMatch(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "BRANCH_REQUIRED"})
 		return
 	}
 
@@ -261,9 +257,8 @@ func (h *ClaimHandler) list(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "UNAUTHORIZED"})
 		return
 	}
-	branchID, ok := branchIDFromContext(c)
+	branchID, ok := requireBranchIDMatch(c)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "BRANCH_REQUIRED"})
 		return
 	}
 
@@ -287,6 +282,23 @@ func branchIDFromContext(c *gin.Context) (uuid.UUID, bool) {
 	return branchID, true
 }
 
+func requireBranchIDMatch(c *gin.Context) (uuid.UUID, bool) {
+	paramRaw := strings.TrimSpace(c.Param(branchctx.PathParamKey))
+	paramID, err := uuid.Parse(paramRaw)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "INVALID_BRANCH"})
+		return uuid.Nil, false
+	}
+
+	ctxID, ok := branchIDFromContext(c)
+	if !ok || ctxID != paramID {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "INVALID_BRANCH"})
+		return uuid.Nil, false
+	}
+
+	return paramID, true
+}
+
 func writeClaimError(c *gin.Context, err error) {
 	switch err {
 	case claimsapp.ErrNotFound:
@@ -296,11 +308,11 @@ func writeClaimError(c *gin.Context, err error) {
 	case claimsapp.ErrInvalidState:
 		c.JSON(http.StatusConflict, gin.H{"error": "INVALID_STATE"})
 	default:
-		if strings.Contains(err.Error(), "NO_DATABASE") {
+		if errors.Is(err, claimsapp.ErrNoDatabase) {
 			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "NO_DATABASE"})
 			return
 		}
-		if err == gorm.ErrInvalidDB {
+		if errors.Is(err, gorm.ErrInvalidDB) {
 			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "NO_DATABASE"})
 			return
 		}
