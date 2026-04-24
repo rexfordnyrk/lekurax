@@ -8,23 +8,32 @@ const PatientDetailPage = () => {
   const { id } = useParams();
   const [patient, setPatient] = useState(null);
   const [allergies, setAllergies] = useState([]);
+  const [coverages, setCoverages] = useState([]);
+  const [plans, setPlans] = useState([]);
   const [error, setError] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [dob, setDob] = useState("");
   const [allergen, setAllergen] = useState("");
   const [reaction, setReaction] = useState("");
+  const [planId, setPlanId] = useState("");
+  const [memberId, setMemberId] = useState("");
+  const [isPrimary, setIsPrimary] = useState(true);
 
   const load = useCallback(async () => {
     if (!id) return;
     setError("");
     try {
-      const [p, a] = await Promise.all([
+      const [p, a, c, pl] = await Promise.all([
         lekuraxFetch(`/api/v1/patients/${id}`),
         lekuraxFetch(`/api/v1/patients/${id}/allergies`),
+        lekuraxFetch(`/api/v1/patients/${id}/coverages`),
+        lekuraxFetch(`/api/v1/insurance/plans`),
       ]);
       setPatient(p);
       setAllergies(a.items ?? []);
+      setCoverages(c.items ?? []);
+      setPlans(pl.items ?? []);
       setFirstName(p.first_name ?? "");
       setLastName(p.last_name ?? "");
       setDob(p.date_of_birth ? String(p.date_of_birth).slice(0, 10) : "");
@@ -32,6 +41,8 @@ const PatientDetailPage = () => {
       setError(e?.message ?? "Failed to load patient");
       setPatient(null);
       setAllergies([]);
+      setCoverages([]);
+      setPlans([]);
     }
   }, [id]);
 
@@ -78,6 +89,30 @@ const PatientDetailPage = () => {
     }
   };
 
+  const onAddCoverage = async (e) => {
+    e.preventDefault();
+    if (!id || !planId || !memberId.trim()) return;
+    setError("");
+    try {
+      await lekuraxFetch(`/api/v1/patients/${id}/coverages`, {
+        method: "POST",
+        body: {
+          plan_id: planId,
+          member_id: memberId.trim(),
+          is_primary: isPrimary,
+        },
+      });
+      setPlanId("");
+      setMemberId("");
+      setIsPrimary(true);
+      await load();
+    } catch (err) {
+      setError(err?.message ?? "Coverage add failed");
+    }
+  };
+
+  const planNameById = new Map(plans.map((pl) => [String(pl.id), pl.name]));
+
   return (
     <MasterLayout>
       <Breadcrumb title='Patient detail' />
@@ -120,6 +155,53 @@ const PatientDetailPage = () => {
                   />
                   <button type='submit' className='btn btn-primary w-100'>
                     Save changes
+                  </button>
+                </form>
+              </div>
+              <div className='card p-24 radius-12 mt-4'>
+                <div className='d-flex align-items-center justify-content-between gap-2 mb-3'>
+                  <h6 className='mb-0'>Insurance coverage</h6>
+                  <span className='badge bg-primary-50 text-primary-600 border border-primary-100'>
+                    {coverages.length}
+                  </span>
+                </div>
+                <p className='text-secondary-light text-sm mb-3'>
+                  Add coverage for claims submission. Primary is used by default.
+                </p>
+                <form onSubmit={onAddCoverage}>
+                  <label className='form-label'>Plan</label>
+                  <select
+                    className='form-select mb-2'
+                    value={planId}
+                    onChange={(ev) => setPlanId(ev.target.value)}
+                    required
+                  >
+                    <option value=''>Select…</option>
+                    {plans.map((pl) => (
+                      <option key={pl.id} value={pl.id}>
+                        {pl.name}
+                      </option>
+                    ))}
+                  </select>
+                  <label className='form-label'>Member ID</label>
+                  <input
+                    className='form-control mb-2'
+                    value={memberId}
+                    onChange={(ev) => setMemberId(ev.target.value)}
+                    required
+                    placeholder='e.g. MEM-123'
+                  />
+                  <label className='form-check mb-3'>
+                    <input
+                      type='checkbox'
+                      className='form-check-input'
+                      checked={isPrimary}
+                      onChange={(ev) => setIsPrimary(ev.target.checked)}
+                    />
+                    <span className='form-check-label ms-2'>Primary</span>
+                  </label>
+                  <button type='submit' className='btn btn-outline-primary w-100'>
+                    Add coverage
                   </button>
                 </form>
               </div>
@@ -171,6 +253,34 @@ const PatientDetailPage = () => {
                 {!allergies.length ? (
                   <p className='text-secondary-light text-sm mb-0 mt-2'>
                     No allergies recorded.
+                  </p>
+                ) : null}
+              </div>
+              <div className='card p-24 radius-12 mt-4'>
+                <h6 className='mb-3'>Coverages</h6>
+                <div className='table-responsive'>
+                  <table className='table table-hover mb-0'>
+                    <thead>
+                      <tr>
+                        <th>Plan</th>
+                        <th>Member</th>
+                        <th>Primary</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {coverages.map((c) => (
+                        <tr key={c.id}>
+                          <td>{planNameById.get(String(c.plan_id)) ?? c.plan_id}</td>
+                          <td>{c.member_id}</td>
+                          <td>{c.is_primary ? "Yes" : "No"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {!coverages.length ? (
+                  <p className='text-secondary-light text-sm mb-0 mt-2'>
+                    No coverages recorded.
                   </p>
                 ) : null}
               </div>
