@@ -110,6 +110,7 @@ import SalesPage from "./lekurax/SalesPage";
 import TaxRulesPage from "./lekurax/TaxRulesPage";
 import BranchesPage from "./lekurax/BranchesPage";
 import BranchUsersPage from "./lekurax/BranchUsersPage";
+import SuppliersPage from "./pages/SuppliersPage";
 
 function App() {
   return (
@@ -333,6 +334,16 @@ function App() {
           element={
             <RequireAuth>
               <TaxRulesPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/suppliers'
+          element={
+            <RequireAuth>
+              <SuppliersPage />
             </RequireAuth>
           }
         />
