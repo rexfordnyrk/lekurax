@@ -126,6 +126,7 @@ import TrainingCoursesPage from "./pages/TrainingCoursesPage";
 import TrainingCourseDetailPage from "./pages/TrainingCourseDetailPage";
 import IncidentsPage from "./pages/IncidentsPage";
 import IncidentDetailPage from "./pages/IncidentDetailPage";
+import IntegrationsWebhooksPage from "./pages/IntegrationsWebhooksPage";
 
 function App() {
   return (
@@ -510,6 +511,16 @@ function App() {
           element={
             <RequireAuth>
               <IncidentDetailPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/integrations/webhooks'
+          element={
+            <RequireAuth>
+              <IntegrationsWebhooksPage />
             </RequireAuth>
           }
         />

@@ -479,6 +479,17 @@ const MasterLayout = ({ children }) => {
                 </li>
                 <li>
                   <NavLink
+                    to='/lekurax/integrations/webhooks'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-info-main w-auto' />
+                    Webhooks
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to='/lekurax/training/courses'
                     className={(navData) =>
                       navData.isActive ? "active-page" : ""
