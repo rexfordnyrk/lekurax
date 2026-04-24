@@ -266,6 +266,45 @@ Pre-req:
 
 ---
 
+## 14. E2 — Procurement: suppliers and requisitions
+
+### 14.1 Suppliers
+
+**Human (UI)** — `/lekurax/suppliers`
+
+1. Open the page; confirm it loads a **Directory** table with a total count badge.
+2. Create a supplier with just a name; confirm it appears in the table after creation.
+3. Create another supplier with email + phone; confirm the email renders as a clickable `mailto:` link.
+4. Use the **Search suppliers** input; confirm filtering works by name/email/phone/ID.
+
+### 14.2 Requisitions list
+
+**Human (UI)** — `/lekurax/requisitions` (branch selected)
+
+1. Open the page; confirm you can see:
+   - a **New requisition** CTA
+   - a Status filter dropdown (Draft/Submitted/Approved/Rejected)
+   - a table with status badges, created time, and an **Open** action.
+2. Click **New requisition**; confirm you are taken to a detail screen (create flow).
+
+### 14.3 Requisition detail workflow
+
+**Human (UI)** — `/lekurax/requisitions/:id` (branch selected)
+
+1. **Create**: open `/lekurax/requisitions/new` and click **Create requisition**.
+   - **Expected**: you land on `/lekurax/requisitions/{id}` (UUID) and see a draft status.
+2. **Add line**: add a line item with an existing product and quantity.
+   - **Expected**: it appears in the Line items table and the badge count increments.
+3. **Submit**:
+   - **Expected**: status becomes `submitted`, and the UI indicates it is no longer editable.
+4. **Approve**:
+   - **Expected**: status becomes `approved`.
+5. **Reject path** (separate requisition):
+   - create + add a line + submit, then click **Reject**.
+   - **Expected**: status becomes `rejected`.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.*` names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
