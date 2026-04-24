@@ -121,6 +121,7 @@ import InsurancePlansPage from "./pages/InsurancePlansPage";
 import ClaimsPage from "./pages/ClaimsPage";
 import ClaimDetailPage from "./pages/ClaimDetailPage";
 import NotificationsInboxPage from "./pages/NotificationsInboxPage";
+import DocumentsPage from "./pages/DocumentsPage";
 
 function App() {
   return (
@@ -457,6 +458,16 @@ function App() {
           element={
             <RequireAuth>
               <NotificationsInboxPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/documents'
+          element={
+            <RequireAuth>
+              <DocumentsPage />
             </RequireAuth>
           }
         />
