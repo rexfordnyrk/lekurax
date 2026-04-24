@@ -12,6 +12,7 @@ import (
 	"lekurax/internal/branchctx"
 	claimshttp "lekurax/internal/claims/http"
 	procurementhttp "lekurax/internal/procurement/http"
+	reportshttp "lekurax/internal/reports/http"
 )
 
 const (
@@ -51,6 +52,9 @@ func New(db *gorm.DB, authVerifier *auth.Verifier, auditWriter *audit.Writer, au
 	claimshttp.RegisterClaimRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	procurementhttp.RegisterSupplierRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	procurementhttp.RegisterRequisitionRoutes(v1, db, authVerifier, auditWriter, authzClient)
+	reportshttp.RegisterSalesReportRoutes(v1, db, authVerifier, auditWriter, authzClient)
+	reportshttp.RegisterInventoryReportRoutes(v1, db, authVerifier, auditWriter, authzClient)
+	reportshttp.RegisterPrescriptionReportRoutes(v1, db, authVerifier, auditWriter, authzClient)
 
 	return &Server{Engine: r}
 }

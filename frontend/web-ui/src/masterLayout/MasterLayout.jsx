@@ -369,6 +369,39 @@ const MasterLayout = ({ children }) => {
                 </li>
                 <li>
                   <NavLink
+                    to='/lekurax/reports/sales'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-info-main w-auto' />
+                    Sales report
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/reports/inventory'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-warning-main w-auto' />
+                    Inventory report
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/reports/prescriptions'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-purple w-auto' />
+                    Prescriptions report
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to='/lekurax/suppliers'
                     className={(navData) =>
                       navData.isActive ? "active-page" : ""

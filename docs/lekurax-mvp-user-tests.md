@@ -348,6 +348,47 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 16. E3 — Reporting & Analytics dashboards
+
+### 16.1 Sales report (branch-scoped)
+
+**Human (UI)** — `/lekurax/reports/sales` (branch selected)
+
+1. Open **Lekurax → Sales report**.
+2. Confirm the page shows a compact filter bar with **From** and **To** date inputs and quick ranges (**7d**, **30d**).
+3. Set a date range (e.g. last 7 days) and click **Refresh**.
+4. Confirm KPI cards render values for:
+  - sale count
+  - subtotal (cents)
+  - tax (cents)
+  - total (cents)
+  - average total (cents)
+5. Change the date range quickly a few times; confirm you do **not** see flickering “HTTP 4xx/5xx” errors from cancelled requests.
+
+### 16.2 Inventory near-expiry report
+
+**Human (UI)** — `/lekurax/reports/inventory` (branch selected)
+
+1. Open **Lekurax → Inventory report**.
+2. Confirm a **Days** filter is present (default 30) and a **Refresh** button.
+3. Click **Refresh** and confirm the page renders:
+  - a summary (items count, total quantity)
+  - a table with product name, batch number, expires on, quantity on hand, days until expiry
+4. If you have a batch expiring soon (within the window) with `quantity_on_hand > 0`, confirm it appears sorted by expiry ascending.
+
+### 16.3 Prescription volume report
+
+**Human (UI)** — `/lekurax/reports/prescriptions` (branch selected)
+
+1. Open **Lekurax → Prescriptions report**.
+2. Confirm the page shows a compact filter bar with **From** and **To** date inputs and quick ranges (**7d**, **30d**) plus **Refresh**.
+3. Click **Refresh** and confirm you see:
+  - total prescriptions count
+  - a breakdown by status (table or bars) with status labels and counts
+4. Change date range quickly; confirm aborted loads do **not** surface as errors.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).

@@ -110,6 +110,9 @@ import SalesPage from "./lekurax/SalesPage";
 import TaxRulesPage from "./lekurax/TaxRulesPage";
 import BranchesPage from "./lekurax/BranchesPage";
 import BranchUsersPage from "./lekurax/BranchUsersPage";
+import ReportsSalesPage from "./pages/ReportsSalesPage";
+import ReportsInventoryPage from "./pages/ReportsInventoryPage";
+import ReportsPrescriptionsPage from "./pages/ReportsPrescriptionsPage";
 import SuppliersPage from "./pages/SuppliersPage";
 import RequisitionsPage from "./pages/RequisitionsPage";
 import RequisitionDetailPage from "./pages/RequisitionDetailPage";
@@ -331,6 +334,33 @@ function App() {
           element={
             <RequireAuth>
               <SalesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/reports/sales'
+          element={
+            <RequireAuth>
+              <ReportsSalesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/reports/inventory'
+          element={
+            <RequireAuth>
+              <ReportsInventoryPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/reports/prescriptions'
+          element={
+            <RequireAuth>
+              <ReportsPrescriptionsPage />
             </RequireAuth>
           }
         />
