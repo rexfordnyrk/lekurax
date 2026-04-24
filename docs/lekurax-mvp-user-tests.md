@@ -452,6 +452,27 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 20. E7 — Incidents and CAPA
+
+### 20.1 Incident list + create
+
+**Human (UI)** — `/lekurax/incidents` (branch selected)
+
+1. Select a branch in the header.
+2. Open **Lekurax → Incidents & CAPA**.
+3. Confirm the incidents table loads (or shows empty state) without errors.
+4. Create an incident (kind, severity, description). Confirm it appears in the list with status `open`.
+
+### 20.2 Incident detail + CAPA create
+
+**Human (UI)** — `/lekurax/incidents/:id` (branch selected)
+
+1. Open an incident detail page from the list.
+2. Create a CAPA action (action text + optional due date + optional owner user id if UI allows).
+3. Confirm success feedback and that the CAPA action appears in the page list (if displayed).
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
