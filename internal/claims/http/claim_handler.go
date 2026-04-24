@@ -14,6 +14,7 @@ import (
 	"lekurax/internal/authzkit"
 	"lekurax/internal/branchctx"
 	claimsapp "lekurax/internal/claims/app"
+	integrationsapp "lekurax/internal/integrations/app"
 	"lekurax/internal/rbac"
 )
 
@@ -22,7 +23,7 @@ type ClaimHandler struct {
 }
 
 func RegisterClaimRoutes(v1 *gin.RouterGroup, db *gorm.DB, verifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) {
-	h := &ClaimHandler{svc: claimsapp.NewClaimService(db, auditWriter)}
+	h := &ClaimHandler{svc: claimsapp.NewClaimService(db, auditWriter, integrationsapp.NewDispatcher(db))}
 
 	branches := v1.Group("/branches/:branch_id")
 

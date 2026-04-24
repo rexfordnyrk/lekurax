@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 
 	"lekurax/internal/audit"
+	integrationsapp "lekurax/internal/integrations/app"
 )
 
 var (
@@ -48,12 +49,13 @@ type Claim struct {
 func (Claim) TableName() string { return "claims" }
 
 type Service struct {
-	db    *gorm.DB
-	audit *audit.Writer
+	db         *gorm.DB
+	audit      *audit.Writer
+	dispatcher *integrationsapp.Dispatcher
 }
 
-func NewClaimService(db *gorm.DB, auditWriter *audit.Writer) *Service {
-	return &Service{db: db, audit: auditWriter}
+func NewClaimService(db *gorm.DB, auditWriter *audit.Writer, dispatcher *integrationsapp.Dispatcher) *Service {
+	return &Service{db: db, audit: auditWriter, dispatcher: dispatcher}
 }
 
 type Actor struct {
@@ -165,6 +167,13 @@ func (s *Service) Submit(ctx context.Context, actor Actor, id uuid.UUID) (*Claim
 		"status":       string(row.Status),
 		"submitted_at": now.Format(time.RFC3339Nano),
 	})
+
+	if s.dispatcher != nil {
+		s.dispatcher.Dispatch(ctx, actor.TenantID, "claim.submitted", now, map[string]any{
+			"claim_id":  row.ID.String(),
+			"branch_id": actor.BranchID.String(),
+		})
+	}
 
 	return &row, nil
 }

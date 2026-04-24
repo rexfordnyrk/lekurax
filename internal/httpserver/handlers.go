@@ -1022,6 +1022,13 @@ func (a *API) dispenseRx(c *gin.Context) {
 	branchIDPtr = &bidCopy
 	a.logCtx(c.Request.Context(), tid, branchIDPtr, &uid, "rx.dispensed", "prescription", &rxid, map[string]any{"branch_id": bid.String()})
 
+	if a.dispatcher != nil {
+		a.dispatcher.Dispatch(c.Request.Context(), tid, "rx.dispensed", time.Now().UTC(), map[string]any{
+			"prescription_id": rxid.String(),
+			"branch_id":       bid.String(),
+		})
+	}
+
 	var rx Prescription
 	_ = a.db.WithContext(c.Request.Context()).Where("id = ?", rxid).First(&rx).Error
 	c.JSON(http.StatusOK, rx)
@@ -1162,6 +1169,15 @@ func (a *API) createSale(c *gin.Context) {
 		return
 	}
 	a.log(c, "sale.created", "sale", &sale.ID, map[string]any{"total_cents": sale.TotalCents})
+
+	if a.dispatcher != nil {
+		a.dispatcher.Dispatch(c.Request.Context(), tid, "sale.created", sale.CreatedAt, map[string]any{
+			"sale_id":      sale.ID.String(),
+			"branch_id":    bid.String(),
+			"total_cents":  sale.TotalCents,
+			"currency":     sale.Currency,
+		})
+	}
 	c.JSON(http.StatusCreated, sale)
 }
 

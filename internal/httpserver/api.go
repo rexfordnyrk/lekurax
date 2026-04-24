@@ -8,17 +8,19 @@ import (
 	"lekurax/internal/auth"
 	"lekurax/internal/authzkit"
 	"lekurax/internal/branchctx"
+	integrationsapp "lekurax/internal/integrations/app"
 	"lekurax/internal/rbac"
 )
 
 type API struct {
-	db    *gorm.DB
-	audit *audit.Writer
-	authz *authzkit.Client
+	db         *gorm.DB
+	audit      *audit.Writer
+	authz      *authzkit.Client
+	dispatcher *integrationsapp.Dispatcher
 }
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB, verifier *auth.Verifier, auditWriter *audit.Writer, authzClient *authzkit.Client) {
-	api := &API{db: db, audit: auditWriter, authz: authzClient}
+	api := &API{db: db, audit: auditWriter, authz: authzClient, dispatcher: integrationsapp.NewDispatcher(db)}
 
 	r.GET("/health/ready", api.healthReady)
 
