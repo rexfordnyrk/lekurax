@@ -432,6 +432,26 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 19. E6 — Training & Knowledge (courses)
+
+### 19.1 Courses list + create
+
+**Human (UI)** — `/lekurax/training/courses`
+
+1. Open **Lekurax → Training** (Courses).
+2. Confirm the courses table loads (or shows an empty state with no errors).
+3. Create a new course (title + optional description; toggle mandatory if available) and confirm it appears in the list.
+
+### 19.2 Assign + complete
+
+**Human (UI)** — `/lekurax/training/courses/:id`
+
+1. Open a course detail page from the list.
+2. Use the admin Assign action to assign the course to a user (enter a `user_id` UUID); confirm success feedback.
+3. Click **Mark complete** (or equivalent) and confirm completion succeeds without a full page reload.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).

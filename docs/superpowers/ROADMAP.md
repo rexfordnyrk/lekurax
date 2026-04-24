@@ -1,7 +1,7 @@
 # Lekurax — MVP-to-Production Roadmap (Backend + Frontend)
 
 **Date:** 2026-04-24  
-**Last updated:** 2026-04-24 (E5 Document Management)  
+**Last updated:** 2026-04-24 (E6 Training & Knowledge)  
 **Spec:** `docs/superpowers/specs/2026-04-23-lekurax-mvp-design.md`
 
 This roadmap tracks **what is implemented vs pending** for both **backend** and **frontend** using the same unit structure for MVP and post‑MVP extensions.
@@ -143,8 +143,8 @@ Secure storage, versioning, access control, OCR (if needed).
 LMS + competency tracking.
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e6-training-backend.md](./plans/2026-04-23-lekurax-e6-training-backend.md)`  
   - Frontend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e6-training-frontend.md](./plans/2026-04-23-lekurax-e6-training-frontend.md)`
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 - **E7 Quality Assurance & Compliance (Module 18)**  
 Incident/error reporting, CAPA, audits, risk registry.
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e7-quality-compliance-backend.md](./plans/2026-04-23-lekurax-e7-quality-compliance-backend.md)`  
