@@ -367,6 +367,61 @@ const MasterLayout = ({ children }) => {
                     Sales history
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/suppliers'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-primary-600 w-auto' />
+                    Suppliers
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/requisitions'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-warning-main w-auto' />
+                    Requisitions
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/insurance/providers'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-info-main w-auto' />
+                    Insurance providers
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/insurance/plans'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-success-main w-auto' />
+                    Insurance plans
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/lekurax/claims'
+                    className={(navData) =>
+                      navData.isActive ? "active-page" : ""
+                    }
+                  >
+                    <i className='ri-circle-fill circle-icon text-danger-main w-auto' />
+                    Claims
+                  </NavLink>
+                </li>
               </ul>
             </li>
 
