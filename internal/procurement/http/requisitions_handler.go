@@ -33,6 +33,7 @@ func RegisterRequisitionRoutes(v1 *gin.RouterGroup, db *gorm.DB, verifier *auth.
 		auth.RequireAuth(verifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
 		rbac.RequirePermission("procurement.requisitions.create"),
 		h.createRequisition,
 	)
@@ -40,6 +41,7 @@ func RegisterRequisitionRoutes(v1 *gin.RouterGroup, db *gorm.DB, verifier *auth.
 		auth.RequireAuth(verifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
 		rbac.RequirePermission("procurement.requisitions.create"),
 		h.addLine,
 	)
@@ -47,6 +49,7 @@ func RegisterRequisitionRoutes(v1 *gin.RouterGroup, db *gorm.DB, verifier *auth.
 		auth.RequireAuth(verifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
 		rbac.RequirePermission("procurement.requisitions.submit"),
 		h.submit,
 	)
@@ -54,6 +57,7 @@ func RegisterRequisitionRoutes(v1 *gin.RouterGroup, db *gorm.DB, verifier *auth.
 		auth.RequireAuth(verifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
 		rbac.RequirePermission("procurement.requisitions.approve"),
 		h.approve,
 	)
@@ -61,13 +65,23 @@ func RegisterRequisitionRoutes(v1 *gin.RouterGroup, db *gorm.DB, verifier *auth.
 		auth.RequireAuth(verifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
 		rbac.RequirePermission("procurement.requisitions.reject"),
 		h.reject,
+	)
+	v1.GET(base+"/:id",
+		auth.RequireAuth(verifier),
+		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
+		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
+		rbac.RequirePermission("procurement.requisitions.view"),
+		h.get,
 	)
 	v1.GET(base,
 		auth.RequireAuth(verifier),
 		authzkit.RequireBranchMembership(authzClient, isTenantAdmin),
 		branchctx.RequireBranchContext(),
+		requireConsistentBranchParam(),
 		rbac.RequirePermission("procurement.requisitions.list"),
 		h.list,
 	)
@@ -256,6 +270,18 @@ func (h *RequisitionsHandler) submit(c *gin.Context) {
 		return
 	}
 	if result.RowsAffected == 0 {
+		var count int64
+		if err := h.db.WithContext(c.Request.Context()).
+			Model(&PurchaseRequisition{}).
+			Where("id = ? AND tenant_id = ? AND branch_id = ?", id, tid, bid).
+			Count(&count).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
+			return
+		}
+		if count == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "NOT_FOUND"})
+			return
+		}
 		c.JSON(http.StatusConflict, gin.H{"error": "INVALID_STATE"})
 		return
 	}
@@ -308,6 +334,18 @@ func (h *RequisitionsHandler) approve(c *gin.Context) {
 		return
 	}
 	if result.RowsAffected == 0 {
+		var count int64
+		if err := h.db.WithContext(c.Request.Context()).
+			Model(&PurchaseRequisition{}).
+			Where("id = ? AND tenant_id = ? AND branch_id = ?", id, tid, bid).
+			Count(&count).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
+			return
+		}
+		if count == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "NOT_FOUND"})
+			return
+		}
 		c.JSON(http.StatusConflict, gin.H{"error": "INVALID_STATE"})
 		return
 	}
@@ -330,6 +368,48 @@ func (h *RequisitionsHandler) approve(c *gin.Context) {
 
 type rejectBody struct {
 	Reason *string `json:"reason"`
+}
+
+func (h *RequisitionsHandler) get(c *gin.Context) {
+	if h.db == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "NO_DATABASE"})
+		return
+	}
+
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "INVALID_ID"})
+		return
+	}
+
+	tid := tenantIDFromPrincipal(c)
+	bid := mustBranchID(c)
+
+	var row PurchaseRequisition
+	if err := h.db.WithContext(c.Request.Context()).
+		Where("id = ? AND tenant_id = ? AND branch_id = ?", id, tid, bid).
+		First(&row).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "NOT_FOUND"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
+		return
+	}
+
+	var lines []PurchaseRequisitionLine
+	if err := h.db.WithContext(c.Request.Context()).
+		Where("tenant_id = ? AND requisition_id = ?", tid, id).
+		Order("created_at ASC").
+		Find(&lines).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
+		return
+	}
+	if lines == nil {
+		lines = []PurchaseRequisitionLine{}
+	}
+
+	c.JSON(http.StatusOK, gin.H{"requisition": row, "lines": lines})
 }
 
 func (h *RequisitionsHandler) reject(c *gin.Context) {
@@ -375,6 +455,18 @@ func (h *RequisitionsHandler) reject(c *gin.Context) {
 		return
 	}
 	if result.RowsAffected == 0 {
+		var count int64
+		if err := h.db.WithContext(c.Request.Context()).
+			Model(&PurchaseRequisition{}).
+			Where("id = ? AND tenant_id = ? AND branch_id = ?", id, tid, bid).
+			Count(&count).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
+			return
+		}
+		if count == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"error": "NOT_FOUND"})
+			return
+		}
 		c.JSON(http.StatusConflict, gin.H{"error": "INVALID_STATE"})
 		return
 	}
@@ -437,6 +529,25 @@ func mustBranchID(c *gin.Context) uuid.UUID {
 		return uuid.Nil
 	}
 	return bid
+}
+
+func requireConsistentBranchParam() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		pathRaw := strings.TrimSpace(c.Param(branchctx.PathParamKey))
+		pathID, err := uuid.Parse(pathRaw)
+		if err != nil || pathID == uuid.Nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "INVALID_BRANCH"})
+			return
+		}
+
+		resolvedID := mustBranchID(c)
+		if resolvedID == uuid.Nil || resolvedID != pathID {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "INVALID_BRANCH"})
+			return
+		}
+
+		c.Next()
+	}
 }
 
 func logAuditBranch(c *gin.Context, w *audit.Writer, action, entityType string, entityID *uuid.UUID, metadata map[string]any) {
