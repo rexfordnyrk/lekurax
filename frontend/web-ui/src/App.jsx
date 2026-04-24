@@ -111,6 +111,8 @@ import TaxRulesPage from "./lekurax/TaxRulesPage";
 import BranchesPage from "./lekurax/BranchesPage";
 import BranchUsersPage from "./lekurax/BranchUsersPage";
 import SuppliersPage from "./pages/SuppliersPage";
+import RequisitionsPage from "./pages/RequisitionsPage";
+import RequisitionDetailPage from "./pages/RequisitionDetailPage";
 
 function App() {
   return (
@@ -344,6 +346,34 @@ function App() {
           element={
             <RequireAuth>
               <SuppliersPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/requisitions'
+          element={
+            <RequireAuth>
+              <RequisitionsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/requisitions/new'
+          element={
+            <RequireAuth>
+              <RequisitionDetailPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/requisitions/:id'
+          element={
+            <RequireAuth>
+              <RequisitionDetailPage />
             </RequireAuth>
           }
         />
