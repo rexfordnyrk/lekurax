@@ -411,6 +411,27 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 18. E5 — Documents upload and retrieval
+
+### 18.1 Upload a document
+
+**Human (UI)** — `/lekurax/documents`
+
+1. Open **Lekurax → Documents**.
+2. In **Upload document**, choose a file (e.g. `.png` or `.pdf`) and select a **Kind** (e.g. `license`).
+3. If a branch is selected in the header, confirm the upload targets that branch (branch field locked or defaulted).
+4. Click **Upload** and confirm you see a success state and the document appears in the list.
+
+### 18.2 List + open content
+
+**Human (UI)** — `/lekurax/documents`
+
+1. Use the Kind filter (if present) and click **Refresh**; confirm the table updates.
+2. Click **Open** on a document row; confirm it opens in a new tab (or prompts download) without a 401/403.
+3. Optional: upload a second doc and confirm newest-first ordering.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
