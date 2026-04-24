@@ -50,6 +50,7 @@ func New(db *gorm.DB, authVerifier *auth.Verifier, auditWriter *audit.Writer, au
 	claimshttp.RegisterCoverageRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	claimshttp.RegisterClaimRoutes(v1, db, authVerifier, auditWriter, authzClient)
 	procurementhttp.RegisterSupplierRoutes(v1, db, authVerifier, auditWriter, authzClient)
+	procurementhttp.RegisterRequisitionRoutes(v1, db, authVerifier, auditWriter, authzClient)
 
 	return &Server{Engine: r}
 }
