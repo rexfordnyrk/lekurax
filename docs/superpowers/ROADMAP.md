@@ -132,7 +132,7 @@ Each extension below is tracked as a unit with backend+frontend deliverables. Th
   Requisitions, RFQ, contracts, approvals (beyond MVP inventory purchasing basics).
   - Backend plan: [`docs/superpowers/plans/2026-04-23-lekurax-e2-procurement-backend.md`](./plans/2026-04-23-lekurax-e2-procurement-backend.md)  
   - Frontend plan: [`docs/superpowers/plans/2026-04-23-lekurax-e2-procurement-frontend.md`](./plans/2026-04-23-lekurax-e2-procurement-frontend.md)
-  - Backend: ⏳
+  - Backend: ✅
   - Frontend: ⬜
 
 - [ ] **E3 Reporting & Analytics (Module 11)**  
