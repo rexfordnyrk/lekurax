@@ -250,8 +250,9 @@ func (h *RequisitionsHandler) submit(c *gin.Context) {
 
 	var linesCount int64
 	if err := h.db.WithContext(c.Request.Context()).
-		Model(&PurchaseRequisitionLine{}).
-		Where("tenant_id = ? AND requisition_id = ?", tid, id).
+		Table("purchase_requisition_lines").
+		Joins("JOIN purchase_requisitions pr ON pr.id = purchase_requisition_lines.requisition_id").
+		Where("pr.tenant_id = ? AND pr.branch_id = ? AND pr.id = ?", tid, bid, id).
 		Count(&linesCount).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
 		return
@@ -399,7 +400,10 @@ func (h *RequisitionsHandler) get(c *gin.Context) {
 
 	var lines []PurchaseRequisitionLine
 	if err := h.db.WithContext(c.Request.Context()).
-		Where("tenant_id = ? AND requisition_id = ?", tid, id).
+		Table("purchase_requisition_lines").
+		Select("purchase_requisition_lines.*").
+		Joins("JOIN purchase_requisitions pr ON pr.id = purchase_requisition_lines.requisition_id").
+		Where("pr.tenant_id = ? AND pr.branch_id = ? AND pr.id = ?", tid, bid, id).
 		Order("created_at ASC").
 		Find(&lines).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "DB_ERROR"})
