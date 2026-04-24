@@ -1,7 +1,7 @@
 # Lekurax — MVP-to-Production Roadmap (Backend + Frontend)
 
 **Date:** 2026-04-24  
-**Last updated:** 2026-04-24 (E3 Reporting & Analytics)  
+**Last updated:** 2026-04-24 (E4 Notifications & Communications)  
 **Spec:** `docs/superpowers/specs/2026-04-23-lekurax-mvp-design.md`
 
 This roadmap tracks **what is implemented vs pending** for both **backend** and **frontend** using the same unit structure for MVP and post‑MVP extensions.
@@ -131,8 +131,8 @@ Dashboards + exports; phased report library.
 Template library, retries, preferences, in-app + SMS/email beyond MVP operational alerts.
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e4-notifications-backend.md](./plans/2026-04-23-lekurax-e4-notifications-backend.md)`  
   - Frontend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e4-notifications-frontend.md](./plans/2026-04-23-lekurax-e4-notifications-frontend.md)`
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 - **E5 Document Management (Module 16)**  
 Secure storage, versioning, access control, OCR (if needed).
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e5-documents-backend.md](./plans/2026-04-23-lekurax-e5-documents-backend.md)`  

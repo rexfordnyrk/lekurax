@@ -389,6 +389,28 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 17. E4 — In-app notifications inbox
+
+### 17.1 Notifications list + filters
+
+**Human (UI)** — `/lekurax/notifications`
+
+1. Open **Lekurax → Notifications**.
+2. Confirm you see filter tabs/buttons for **All**, **Unread**, **Read**.
+3. Switch to **Unread**; confirm only unread notifications are shown (or “No notifications found.” if none exist).
+4. Switch to **Read**; confirm only read notifications are shown (or empty state).
+
+### 17.2 Mark as read interactions
+
+**Human (UI)** — `/lekurax/notifications`
+
+1. On an unread row, click **Mark as read**.
+2. Confirm the row updates to **read** status without a full page reload.
+3. Click **Mark all visible as read** (when there are unread rows visible).
+4. While mark-all is running, confirm filters/refresh controls are disabled and no errors appear from cancelled requests.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
