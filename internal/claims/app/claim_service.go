@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 
 	"lekurax/internal/audit"
 )
@@ -212,7 +211,6 @@ func (s *Service) Adjudicate(ctx context.Context, actor Actor, id uuid.UUID, adj
 	result := s.db.WithContext(ctx).
 		Model(&Claim{}).
 		Where("id = ? AND tenant_id = ? AND branch_id = ? AND status = ?", id, actor.TenantID, actor.BranchID, StatusSubmitted).
-		Clauses(clause.Returning{}).
 		Updates(update)
 	if result.Error != nil {
 		return nil, result.Error
