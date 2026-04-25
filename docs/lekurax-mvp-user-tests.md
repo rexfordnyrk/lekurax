@@ -499,6 +499,33 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 22. E9 — Patient portal: prescriptions + refill requests
+
+### 22.1 Portal access (pre-req: patient link)
+
+**Human (setup)** — requires a portal user linked to a patient.
+
+- Ensure a row exists in `portal_patient_links` for your tenant:
+  - `user_id` = Authz user UUID you sign in with for the portal
+  - `patient_id` = existing patient UUID in Lekurax
+
+### 22.2 View prescriptions
+
+**Human (UI)** — `/portal/prescriptions`
+
+1. Open `/portal` and navigate to **Prescriptions**.
+2. Confirm the prescriptions list loads (or shows a clear empty state) without a 401/403.
+
+### 22.3 Request a refill
+
+**Human (UI)** — `/portal/prescriptions`
+
+1. Click **Request refill** on a prescription.
+2. Confirm success feedback (and that the button disables while submitting).
+3. Repeat on another prescription; confirm you can request multiple refills.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
