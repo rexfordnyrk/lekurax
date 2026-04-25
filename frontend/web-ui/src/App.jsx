@@ -129,6 +129,7 @@ import IncidentDetailPage from "./pages/IncidentDetailPage";
 import IntegrationsWebhooksPage from "./pages/IntegrationsWebhooksPage";
 import PortalHomePage from "./pages/portal/PortalHomePage";
 import PortalPrescriptionsPage from "./pages/portal/PortalPrescriptionsPage";
+import CouriersPage from "./pages/CouriersPage";
 
 function App() {
   return (
@@ -389,6 +390,16 @@ function App() {
           element={
             <RequireAuth>
               <SuppliersPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/lekurax/couriers'
+          element={
+            <RequireAuth>
+              <CouriersPage />
             </RequireAuth>
           }
         />
