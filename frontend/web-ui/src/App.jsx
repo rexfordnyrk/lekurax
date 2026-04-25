@@ -130,6 +130,7 @@ import IntegrationsWebhooksPage from "./pages/IntegrationsWebhooksPage";
 import PortalHomePage from "./pages/portal/PortalHomePage";
 import PortalPrescriptionsPage from "./pages/portal/PortalPrescriptionsPage";
 import CouriersPage from "./pages/CouriersPage";
+import DeliveriesPage from "./pages/DeliveriesPage";
 
 function App() {
   return (
@@ -400,6 +401,15 @@ function App() {
           element={
             <RequireAuth>
               <CouriersPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/lekurax/deliveries'
+          element={
+            <RequireAuth>
+              <DeliveriesPage />
             </RequireAuth>
           }
         />
