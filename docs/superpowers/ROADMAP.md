@@ -1,7 +1,7 @@
 # Lekurax — MVP-to-Production Roadmap (Backend + Frontend)
 
-**Date:** 2026-04-24  
-**Last updated:** 2026-04-25 (E9 Patient Portal)  
+**Date:** 2026-04-25  
+**Last updated:** 2026-04-25 (E10 Delivery & Logistics)  
 **Spec:** `docs/superpowers/specs/2026-04-23-lekurax-mvp-design.md`
 
 This roadmap tracks **what is implemented vs pending** for both **backend** and **frontend** using the same unit structure for MVP and post‑MVP extensions.
@@ -167,8 +167,8 @@ Patient portal, refills, booking.
 Courier mgmt, routing, tracking, cold chain.
   - Backend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e10-delivery-backend.md](./plans/2026-04-23-lekurax-e10-delivery-backend.md)`  
   - Frontend plan: `[docs/superpowers/plans/2026-04-23-lekurax-e10-delivery-frontend.md](./plans/2026-04-23-lekurax-e10-delivery-frontend.md)`
-  - Backend: ⬜
-  - Frontend: ⬜
+  - Backend: ✅
+  - Frontend: ✅
 
 ---
 

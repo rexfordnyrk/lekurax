@@ -526,6 +526,28 @@ Pre-req: have at least one claim created via API step §13.4 (or wire a UI claim
 
 ---
 
+## 23. E10 — Couriers and deliveries
+
+### 23.1 Couriers directory
+
+**Human (UI)** — `/lekurax/couriers`
+
+1. Open **Lekurax → Couriers**.
+2. Create a courier (name + optional phone) and confirm it appears in the list.
+3. Use the search input; confirm filtering works by name/phone.
+
+### 23.2 Deliveries board (branch-scoped)
+
+**Human (UI)** — `/lekurax/deliveries` (branch selected)
+
+1. Select a branch in the header.
+2. Open **Lekurax → Deliveries**.
+3. Create a delivery using an existing sale ID and a delivery address; confirm it appears under status `created`.
+4. Assign a courier using the dropdown; confirm status becomes `assigned`.
+5. Change status to `picked_up`, then `delivered`; confirm each update succeeds and the card moves columns.
+
+---
+
 ## Notes for the tester
 
 - **403 / permission errors:** compare JWT roles with Authz seeder permissions (`lekurax.`* names in `authz/internal/application/seeder.go` and migration `0022_lekurax_permissions.sql`).
