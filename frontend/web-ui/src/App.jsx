@@ -127,6 +127,8 @@ import TrainingCourseDetailPage from "./pages/TrainingCourseDetailPage";
 import IncidentsPage from "./pages/IncidentsPage";
 import IncidentDetailPage from "./pages/IncidentDetailPage";
 import IntegrationsWebhooksPage from "./pages/IntegrationsWebhooksPage";
+import PortalHomePage from "./pages/portal/PortalHomePage";
+import PortalPrescriptionsPage from "./pages/portal/PortalPrescriptionsPage";
 
 function App() {
   return (
@@ -521,6 +523,25 @@ function App() {
           element={
             <RequireAuth>
               <IntegrationsWebhooksPage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          exact
+          path='/portal'
+          element={
+            <RequireAuth>
+              <PortalHomePage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          exact
+          path='/portal/prescriptions'
+          element={
+            <RequireAuth>
+              <PortalPrescriptionsPage />
             </RequireAuth>
           }
         />
