@@ -1,0 +1,219 @@
+/* ============================================================
+   WowDash Design System — Colors & Type
+   Ported directly from the WowDash Bootstrap 5 Admin theme
+   (/_source/assets/css/style.css :root block).
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+:root {
+  /* ---------- Typography ---------- */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-default: var(--font-sans);
+
+  /* Fluid display headings (match source) */
+  --h1: clamp(2rem, 1.2rem + 4vw, 4.5rem);
+  --h2: clamp(1.75rem, 1.11rem + 3.2vw, 3.75rem);
+  --h3: clamp(1.5rem, 1.02rem + 2.4vw, 3rem);
+  --h4: clamp(1.375rem, 1.095rem + 1.4vw, 2.25rem);
+  --h5: clamp(1.25rem, 1.05rem + 1vw, 1.875rem);
+  --h6: clamp(1.125rem, 1.005rem + 0.6vw, 1.5rem);
+
+  /* Body type scale */
+  --font-2xxl: 2rem;       /* 32 */
+  --font-2xl: 1.75rem;     /* 28 */
+  --font-xxl: 1.5rem;      /* 24 */
+  --font-xl: 1.25rem;      /* 20 */
+  --font-lg: 1.125rem;     /* 18 */
+  --font-md: 1rem;         /* 16 — body default */
+  --font-sm: 0.875rem;     /* 14 — table / meta */
+  --font-xs: 0.75rem;      /* 12 — chips / labels */
+  --font-xxs: 0.625rem;    /* 10 — badge dots */
+
+  --lh-tight: 1.25;
+  --lh-body: 1.7;          /* source body line-height */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---------- Core Palette — Primary (brand blue) ---------- */
+  --primary-50: #e4f1ff;
+  --primary-100: #bfdcff;
+  --primary-200: #95c7ff;
+  --primary-300: #6bb1ff;
+  --primary-400: #519fff;
+  --primary-500: #458eff;
+  --primary-600: #487fff;  /* BRAND */
+  --primary-700: #486cea;
+  --primary-800: #4759d6;
+  --primary-900: #4536b6;
+
+  /* Neutrals (light theme) */
+  --neutral-50: #f5f6fa;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #ebecef;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+
+  /* Semantic — Success / Info / Warning / Danger */
+  --success-50: #f0fdf4;  --success-100: #dcfce7; --success-200: #bbf7d0;
+  --success-300: #86efac; --success-400: #4ade80; --success-500: #22c55e;
+  --success-600: #16a34a; --success-700: #15803d; --success-800: #166534; --success-900: #14532d;
+
+  --info-50: #eff6ff;  --info-100: #dbeafe; --info-200: #bfdbfe;
+  --info-300: #93c5fd; --info-400: #60a5fa; --info-500: #3b82f6;
+  --info-600: #2563eb; --info-700: #1d4ed8; --info-800: #1e40af; --info-900: #1e3a8a;
+
+  --warning-50: #fefce8; --warning-100: #fef9c3; --warning-200: #fef08a;
+  --warning-300: #fde047; --warning-400: #facc15; --warning-500: #eab308;
+  --warning-600: #ff9f29; --warning-700: #f39016; --warning-800: #e58209; --warning-900: #d77907;
+
+  --danger-50: #fef2f2;  --danger-100: #fee2e2; --danger-200: #fecaca;
+  --danger-300: #fca5a5; --danger-400: #f87171; --danger-500: #ef4444;
+  --danger-600: #dc2626; --danger-700: #b91c1c; --danger-800: #991b1b; --danger-900: #7f1d1d;
+
+  /* Lilac (secondary) */
+  --lilac-50: #f0e1ff;   --lilac-100: #ebd7ff; --lilac-200: #dcc0f8;
+  --lilac-300: #cd9ffa;  --lilac-400: #c48afe; --lilac-500: #b66dff;
+  --lilac-600: #8252e9;  --lilac-700: #6f37e6; --lilac-800: #601eef;
+
+  /* Cyan */
+  --cyan-50: #e2f5fb;  --cyan-100: #daf6ff; --cyan-200: #85daf4;
+  --cyan-300: #6cdafc; --cyan-400: #48cef7; --cyan-500: #2bc9f9;
+  --cyan-600: #00b8f2; --cyan-700: #03a9dc; --cyan-800: #049dcb; --cyan-900: #0390bb;
+
+  /* Accent singletons (used in dashboard tiles) */
+  --cyan:   #00b8f2;
+  --indigo: #7f27ff;
+  --purple: #8252e9;
+  --red:    #e30a0a;
+  --yellow: #f4941e;
+  --orange: #f86624;
+  --pink:   #de3ace;
+
+  /* Transparent tints (used behind icons / stats chips) */
+  --primary-light:        rgba(72, 127, 255, 0.15);
+  --primary-light-white:  rgba(72, 127, 255, 0.25);
+  --yellow-light:         rgba(255, 159, 41, 0.15);
+  --yellow-light-white:   rgba(255, 159, 41, 0.25);
+  --purple-light:         rgba(130, 82, 233, 0.15);
+  --purple-light-white:   rgba(132, 90, 223, 0.25);
+  --pink-light:           rgba(250, 54, 230, 0.15);
+  --pink-light-white:     rgba(250, 54, 230, 0.25);
+
+  /* "Main/surface/border/hover/pressed" status ramps */
+  --success-main: #45b369; --success-surface: #daf0e1; --success-border: #b5e1c3;
+  --success-hover: #009f5e; --success-pressed: #006038;
+  --info-main: #144bd6;    --info-surface: #e7eefc;    --info-border: #aecafc;
+  --info-hover: #0a51ce;   --info-pressed: #06307c;
+  --warning-main: #ff9f29; --warning-surface: #fff9e2; --warning-border: #ffeba6;
+  --warning-hover: #d69705; --warning-pressed: #c28800;
+  --danger-main: #ef4a00;  --danger-surface: #fcdae2;  --danger-border: #f9b5c6;
+  --danger-hover: #d53128; --danger-pressed: #801d18;
+
+  /* Dark mode canvas tokens */
+  --dark-1: #1b2431;
+  --dark-2: #273142;
+  --dark-3: #323d4e;
+
+  /* ---------- Semantic Surface Tokens ---------- */
+  --base: #fff;
+  --brand: var(--primary-600);
+  --button-secondary: var(--primary-50);
+  --black: var(--dark-2);
+  --white: var(--base);
+  --bg-color: var(--neutral-50);
+  --text-primary-light: var(--neutral-900);
+  --text-secondary-light: var(--neutral-600);
+  --text-secondary-dark: var(--neutral-300);
+  --input-form-light: var(--neutral-300);
+  --input-form-dark: var(--neutral-500);
+  --input-bg: var(--neutral-50);
+  --input-stroke: var(--neutral-300);
+  --border-color: #d1d5db80;
+
+  /* ---------- Spacing scale (source uses rem-equivalent size-N tokens) ---------- */
+  --size-2: 0.125rem;  --size-4: 0.25rem;  --size-6: 0.375rem;
+  --size-8: 0.5rem;    --size-10: 0.625rem; --size-12: 0.75rem;
+  --size-16: 1rem;     --size-20: 1.25rem;  --size-24: 1.5rem;
+  --size-32: 2rem;     --size-40: 2.5rem;   --size-48: 3rem;
+  --size-56: 3.5rem;   --size-64: 4rem;     --size-80: 5rem;
+
+  /* Radii — the theme uses explicit "radius-N" utilities */
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;   /* default card */
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-24: 24px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-1: 0 4px 60px 0 rgba(4, 6, 15, 0.8);
+  --shadow-2: 0 4px 60px 0 rgba(4, 6, 15, 0.5);
+  --shadow-3: 0 20px 100px 0 rgba(4, 6, 15, 0.8);
+  --shadow-4: 4px 8px 24px 0 rgba(182, 182, 182, 0.2);
+  --shadow-5: 4px 12px 32px 0 rgba(0, 169, 158, 0.1);
+  --shadow-6: 4px 16px 32px 0 rgba(0, 169, 158, 0.1);
+  --shadow-card: 0 2px 6px 0 rgba(17, 24, 39, 0.05);
+  --shadow-hover: 0 10px 24px 0 rgba(72, 127, 255, 0.18);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 300ms;
+}
+
+/* ---------- Dark theme overrides (mirror source) ---------- */
+[data-theme="dark"] {
+  --button-secondary: var(--neutral-300);
+  --black: var(--base);
+  --white: var(--dark-2);
+  --bg-color: var(--dark-1);
+  --text-primary-light: var(--base);
+  --text-secondary-light: #d1d5db;
+  --text-secondary-dark: var(--dark-2);
+  --input-form-light: #6b7280;
+  --input-form-dark: #d1d5db;
+  --input-bg: var(--dark-3);
+  --input-stroke: #f3f4f6;
+  --border-color: #d1d5db33;
+  --neutral-50: #1b2431;
+  --neutral-100: #273142;
+  --neutral-200: #323d4e;
+  --neutral-300: #4b5563;
+  --neutral-400: #6b7280;
+  --neutral-500: #9ca3af;
+  --neutral-600: #d1d5db;
+  --neutral-700: #ebecef;
+  --neutral-800: #f3f4f6;
+  --neutral-900: #f5f6fa;
+}
+
+/* ---------- Semantic element styles ---------- */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-md);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  color: var(--text-secondary-light);
+  background-color: var(--bg-color);
+}
+h1 { font-size: var(--h1); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--text-primary-light); }
+h2 { font-size: var(--h2); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--text-primary-light); }
+h3 { font-size: var(--h3); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--text-primary-light); }
+h4 { font-size: var(--h4); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--text-primary-light); }
+h5 { font-size: var(--h5); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--text-primary-light); }
+h6 { font-size: var(--font-lg); font-weight: var(--fw-semibold); line-height: 1.3; color: var(--text-primary-light); }
+p  { font-size: var(--font-md); line-height: var(--lh-body); color: var(--text-secondary-light); margin: 0 0 .75rem; }
+small, .text-sm { font-size: var(--font-sm); }
+.text-xs { font-size: var(--font-xs); }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }

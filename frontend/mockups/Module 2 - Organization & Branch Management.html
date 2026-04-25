@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization & Branch Management - Lekurax Pharmacy System</title>
+    <link rel="stylesheet" href="colors_and_type.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--neutral-50);
+            color: var(--neutral-600);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-600);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--neutral-400);
+            padding: 0 12px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--neutral-600);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-900);
+        }
+
+        .nav-item.active {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .breadcrumb a {
+            color: var(--neutral-500);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-600);
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-700);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--neutral-700);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-50);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .content-area {
+            padding: 24px;
+            flex: 1;
+        }
+
+        .tabs {
+            border-bottom: 1px solid var(--border-color);
+            background: white;
+            padding: 0 24px;
+            display: flex;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            padding: 14px 0;
+            color: var(--neutral-600);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--neutral-900);
+        }
+
+        .tab.active {
+            color: var(--primary-600);
+            border-bottom-color: var(--primary-600);
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .two-column-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 16px;
+            row-gap: 12px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--neutral-500);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--neutral-900);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--neutral-50);
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--neutral-700);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--neutral-50);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: var(--success-100);
+            color: var(--success-700);
+        }
+
+        .badge-warning {
+            background: var(--warning-100);
+            color: var(--warning-700);
+        }
+
+        .badge-danger {
+            background: var(--danger-100);
+            color: var(--danger-700);
+        }
+
+        .badge-info {
+            background: var(--info-100);
+            color: var(--info-700);
+        }
+
+        .badge-neutral {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .action-btn {
+            padding: 6px;
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.primary {
+            background: var(--primary-100);
+            color: var(--primary-600);
+        }
+
+        .stat-icon.success {
+            background: var(--success-100);
+            color: var(--success-600);
+        }
+
+        .stat-icon.warning {
+            background: var(--warning-100);
+            color: var(--warning-600);
+        }
+
+        .stat-icon.cyan {
+            background: rgba(0, 184, 242, 0.15);
+            color: #00b8f2;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--neutral-500);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neutral-900);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--neutral-400);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger-600);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-600);
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .branch-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .branch-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .branch-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .branch-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: 4px;
+        }
+
+        .branch-location {
+            font-size: 13px;
+            color: var(--neutral-500);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .branch-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .branch-stat {
+            text-align: center;
+        }
+
+        .branch-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 2px;
+        }
+
+        .branch-stat-label {
+            font-size: 11px;
+            color: var(--neutral-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filters-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input input:focus {
+            border-color: var(--primary-600);
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neutral-400);
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--neutral-700);
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .hierarchy-tree {
+            padding: 20px 0;
+        }
+
+        .tree-node {
+            margin-bottom: 12px;
+        }
+
+        .tree-node-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tree-node-content:hover {
+            background: var(--neutral-50);
+        }
+
+        .tree-node-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .tree-node-info {
+            flex: 1;
+        }
+
+        .tree-node-name {
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: 2px;
+        }
+
+        .tree-node-meta {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .tree-children {
+            margin-left: 48px;
+            margin-top: 12px;
+            padding-left: 20px;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .time-picker-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .schedule-day {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .schedule-day input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .schedule-day-name {
+            width: 100px;
+            font-weight: 500;
+        }
+
+        .schedule-times {
+            flex: 1;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .schedule-times input {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const mockBranches = [
+            {
+                id: 1,
+                name: 'Main Branch',
+                code: 'MB-001',
+                address: '123 Healthcare Avenue, Medical District',
+                city: 'New York',
+                phone: '+1 (555) 123-4567',
+                license: 'PH-NY-12345',
+                status: 'Active',
+                type: 'Headquarters',
+                staff: 12,
+                inventory: 4850,
+                dailySales: 15240
+            },
+            {
+                id: 2,
+                name: 'Downtown Branch',
+                code: 'DT-002',
+                address: '456 Central Plaza, Suite 200',
+                city: 'New York',
+                phone: '+1 (555) 234-5678',
+                license: 'PH-NY-12346',
+                status: 'Active',
+                type: 'Branch',
+                staff: 8,
+                inventory: 3420,
+                dailySales: 9850
+            },
+            {
+                id: 3,
+                name: 'Westside Branch',
+                code: 'WS-003',
+                address: '789 Wellness Road',
+                city: 'New York',
+                phone: '+1 (555) 345-6789',
+                license: 'PH-NY-12347',
+                status: 'Active',
+                type: 'Branch',
+                staff: 6,
+                inventory: 2890,
+                dailySales: 7320
+            },
+            {
+                id: 4,
+                name: 'Eastside Clinic Pharmacy',
+                code: 'EC-004',
+                address: '321 Hospital Drive',
+                city: 'New York',
+                phone: '+1 (555) 456-7890',
+                license: 'PH-NY-12348',
+                status: 'Inactive',
+                type: 'Branch',
+                staff: 5,
+                inventory: 1240,
+                dailySales: 0
+            }
+        ];
+
+        function OrganizationApp() {
+            const [activeTab, setActiveTab] = useState('overview');
+            const [showModal, setShowModal] = useState(false);
+            const [modalType, setModalType] = useState('');
+            const [selectedBranch, setSelectedBranch] = useState(null);
+
+            const openModal = (type, branch = null) => {
+                setModalType(type);
+                setSelectedBranch(branch);
+                setShowModal(true);
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setSelectedBranch(null);
+            };
+
+            return (
+                <div className="admin-layout">
+                    <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <div className="main-content">
+                        <TopBar 
+                            activeTab={activeTab}
+                            onAddBranch={() => openModal('addBranch')}
+                        />
+                        <div className="content-area">
+                            {activeTab === 'overview' && (
+                                <OverviewTab onEditOrg={() => openModal('editOrg')} />
+                            )}
+                            {activeTab === 'branches' && (
+                                <BranchesTab 
+                                    branches={mockBranches}
+                                    onViewBranch={(branch) => openModal('viewBranch', branch)}
+                                    onEditBranch={(branch) => openModal('editBranch', branch)}
+                                />
+                            )}
+                            {activeTab === 'hierarchy' && (
+                                <HierarchyTab branches={mockBranches} />
+                            )}
+                        </div>
+                    </div>
+                    {showModal && (
+                        <Modal 
+                            type={modalType}
+                            branch={selectedBranch}
+                            onClose={closeModal}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        function Sidebar({ activeTab, setActiveTab }) {
+            return (
+                <div className="sidebar">
+                    <div className="sidebar-header">
+                        <div className="logo">
+                            <i className="ri-capsule-fill"></i>
+                            <span>Lekurax</span>
+                        </div>
+                    </div>
+                    <div className="sidebar-nav">
+                        <div className="nav-section">
+                            <div className="nav-section-title">Organization</div>
+                            <div className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('overview')}>
+                                <i className="ri-building-line"></i>
+                                <span>Organization Setup</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'branches' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('branches')}>
+                                <i className="ri-store-2-line"></i>
+                                <span>Branches</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'hierarchy' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('hierarchy')}>
+                                <i className="ri-organization-chart"></i>
+                                <span>Hierarchy</span>
+                            </div>
+                        </div>
+                        <div className="nav-section">
+                            <div className="nav-section-title">Configuration</div>
+                            <div className="nav-item">
+                                <i className="ri-time-line"></i>
+                                <span>Operating Hours</span>
+                            </div>
+                            <div className="nav-item">
+                                <i className="ri-exchange-line"></i>
+                                <span>Transfer Rules</span>
+                            </div>
+                            <div className="nav-item">
+                                <i className="ri-price-tag-3-line"></i>
+                                <span>Pricing Policies</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function TopBar({ activeTab, onAddBranch }) {
+            return (
+                <div className="top-bar">
+                    <div className="page-title-section">
+                        <div>
+                            <div className="breadcrumb">
+                                <a href="#">Admin</a>
+                                <i className="ri-arrow-right-s-line"></i>
+                                <span>Organization & Branch Management</span>
+                            </div>
+                            <h1 className="page-title">Organization & Branch Management</h1>
+                        </div>
+                    </div>
+                    <div className="top-bar-actions">
+                        {activeTab === 'branches' && (
+                            <button className="btn btn-primary" onClick={onAddBranch}>
+                                <i className="ri-add-line"></i>
+                                Add Branch
+                            </button>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        function OverviewTab({ onEditOrg }) {
+            return (
+                <>
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Organization Profile</h3>
+                            <button className="btn btn-secondary btn-sm" onClick={onEditOrg}>
+                                <i className="ri-edit-line"></i>
+                                Edit
+                            </button>
+                        </div>
+                        <div className="card-body">
+                            <div className="two-column-layout">
+                                <div>
+                                    <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '16px', 
+                                              color: 'var(--neutral-900)'}}>
+                                        Company Information
+                                    </h4>
+                                    <div className="info-grid">
+                                        <div className="info-label">Legal Name</div>
+                                        <div className="info-value">Lekurax Pharmacy Inc.</div>
+                                        
+                                        <div className="info-label">Trading Name</div>
+                                        <div className="info-value">Lekurax Pharmacy</div>
+                                        
+                                        <div className="info-label">Registration No.</div>
+                                        <div className="info-value">REG-2024-98765</div>
+                                        
+                                        <div className="info-label">Tax ID</div>
+                                        <div className="info-value">TAX-US-123456789</div>
+                                        
+                                        <div className="info-label">License Number</div>
+                                        <div className="info-value">PH-CORP-NY-001</div>
+                                        
+                                        <div className="info-label">License Expiry</div>
+                                        <div className="info-value">December 31, 2025</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '16px', 
+                                              color: 'var(--neutral-900)'}}>
+                                        Contact Information
+                                    </h4>
+                                    <div className="info-grid">
+                                        <div className="info-label">Address</div>
+                                        <div className="info-value">123 Healthcare Avenue<br/>Medical District, NY 10001</div>
+                                        
+                                        <div className="info-label">Phone</div>
+                                        <div className="info-value">+1 (555) 100-2000</div>
+                                        
+                                        <div className="info-label">Email</div>
+                                        <div className="info-value">contact@lekurax.com</div>
+                                        
+                                        <div className="info-label">Website</div>
+                                        <div className="info-value">www.lekurax.com</div>
+                                        
+                                        <div className="info-label">Support Email</div>
+                                        <div className="info-value">support@lekurax.com</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon primary">
+                                <i className="ri-store-2-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Total Branches</div>
+                                <div className="stat-value">4</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon success">
+                                <i className="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Active Branches</div>
+                                <div className="stat-value">3</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-team-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Total Staff</div>
+                                <div className="stat-value">31</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon cyan">
+                                <i className="ri-money-dollar-circle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Daily Revenue</div>
+                                <div className="stat-value">$32,410</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">System Preferences</h3>
+                        </div>
+                        <div className="card-body">
+                            <div className="two-column-layout">
+                                <div>
+                                    <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '16px', 
+                                              color: 'var(--neutral-900)'}}>
+                                        Regional Settings
+                                    </h4>
+                                    <div className="info-grid">
+                                        <div className="info-label">Default Timezone</div>
+                                        <div className="info-value">EST (UTC-5)</div>
+                                        
+                                        <div className="info-label">Currency</div>
+                                        <div className="info-value">USD ($)</div>
+                                        
+                                        <div className="info-label">Date Format</div>
+                                        <div className="info-value">MM/DD/YYYY</div>
+                                        
+                                        <div className="info-label">Language</div>
+                                        <div className="info-value">English (US)</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '16px', 
+                                              color: 'var(--neutral-900)'}}>
+                                        Business Settings
+                                    </h4>
+                                    <div className="info-grid">
+                                        <div className="info-label">Inventory Policy</div>
+                                        <div className="info-value">Centralized</div>
+                                        
+                                        <div className="info-label">Pricing Strategy</div>
+                                        <div className="info-value">Shared Across Branches</div>
+                                        
+                                        <div className="info-label">Transfer Approval</div>
+                                        <div className="info-value">Required for >$500</div>
+                                        
+                                        <div className="info-label">Fiscal Year Start</div>
+                                        <div className="info-value">January 1</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function BranchesTab({ branches, onViewBranch, onEditBranch }) {
+            const [searchQuery, setSearchQuery] = useState('');
+            const [filterStatus, setFilterStatus] = useState('all');
+
+            const filteredBranches = branches.filter(branch => {
+                const matchesSearch = branch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                    branch.code.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesStatus = filterStatus === 'all' || branch.status === filterStatus;
+                return matchesSearch && matchesStatus;
+            });
+
+            return (
+                <>
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input 
+                                type="text" 
+                                placeholder="Search branches..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                        <select className="filter-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                            <option value="all">All Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                        <button className="btn btn-secondary btn-sm">
+                            <i className="ri-map-pin-line"></i>
+                            Map View
+                        </button>
+                    </div>
+
+                    {filteredBranches.map(branch => (
+                        <div className="branch-card" key={branch.id}>
+                            <div className="branch-header">
+                                <div>
+                                    <div className="branch-name">{branch.name}</div>
+                                    <div className="branch-location">
+                                        <i className="ri-map-pin-line"></i>
+                                        {branch.address}
+                                    </div>
+                                    <div style={{marginTop: '8px', display: 'flex', gap: '8px', alignItems: 'center'}}>
+                                        <span className="badge badge-neutral">{branch.code}</span>
+                                        <span className={`badge badge-${branch.status === 'Active' ? 'success' : 'neutral'}`}>
+                                            {branch.status}
+                                        </span>
+                                        <span className="badge badge-info">{branch.type}</span>
+                                    </div>
+                                </div>
+                                <div style={{display: 'flex', gap: '8px'}}>
+                                    <button className="btn btn-secondary btn-sm" onClick={() => onViewBranch(branch)}>
+                                        <i className="ri-eye-line"></i>
+                                        View
+                                    </button>
+                                    <button className="btn btn-secondary btn-sm" onClick={() => onEditBranch(branch)}>
+                                        <i className="ri-edit-line"></i>
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="branch-stats">
+                                <div className="branch-stat">
+                                    <div className="branch-stat-value">{branch.staff}</div>
+                                    <div className="branch-stat-label">Staff Members</div>
+                                </div>
+                                <div className="branch-stat">
+                                    <div className="branch-stat-value">{branch.inventory.toLocaleString()}</div>
+                                    <div className="branch-stat-label">Inventory Items</div>
+                                </div>
+                                <div className="branch-stat">
+                                    <div className="branch-stat-value">${branch.dailySales.toLocaleString()}</div>
+                                    <div className="branch-stat-label">Daily Sales</div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </>
+            );
+        }
+
+        function HierarchyTab({ branches }) {
+            const headquarters = branches.find(b => b.type === 'Headquarters');
+            const branchList = branches.filter(b => b.type === 'Branch');
+
+            return (
+                <>
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Organization Hierarchy</h3>
+                            <button className="btn btn-secondary btn-sm">
+                                <i className="ri-download-line"></i>
+                                Export Chart
+                            </button>
+                        </div>
+                        <div className="card-body">
+                            <div className="hierarchy-tree">
+                                {/* Headquarters Node */}
+                                <div className="tree-node">
+                                    <div className="tree-node-content">
+                                        <div className="tree-node-icon" style={{background: 'var(--primary-100)', color: 'var(--primary-600)'}}>
+                                            <i className="ri-building-4-line"></i>
+                                        </div>
+                                        <div className="tree-node-info">
+                                            <div className="tree-node-name">Lekurax Pharmacy Inc.</div>
+                                            <div className="tree-node-meta">Corporate Headquarters</div>
+                                        </div>
+                                        <span className="badge badge-primary">HQ</span>
+                                    </div>
+                                    
+                                    {/* Branches under HQ */}
+                                    <div className="tree-children">
+                                        {headquarters && (
+                                            <div className="tree-node">
+                                                <div className="tree-node-content">
+                                                    <div className="tree-node-icon" style={{background: 'var(--success-100)', color: 'var(--success-600)'}}>
+                                                        <i className="ri-store-2-line"></i>
+                                                    </div>
+                                                    <div className="tree-node-info">
+                                                        <div className="tree-node-name">{headquarters.name}</div>
+                                                        <div className="tree-node-meta">{headquarters.address}</div>
+                                                    </div>
+                                                    <span className={`badge badge-${headquarters.status === 'Active' ? 'success' : 'neutral'}`}>
+                                                        {headquarters.status}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        {branchList.map(branch => (
+                                            <div className="tree-node" key={branch.id}>
+                                                <div className="tree-node-content">
+                                                    <div className="tree-node-icon" style={{background: 'var(--info-100)', color: 'var(--info-600)'}}>
+                                                        <i className="ri-store-3-line"></i>
+                                                    </div>
+                                                    <div className="tree-node-info">
+                                                        <div className="tree-node-name">{branch.name}</div>
+                                                        <div className="tree-node-meta">{branch.address}</div>
+                                                    </div>
+                                                    <span className={`badge badge-${branch.status === 'Active' ? 'success' : 'neutral'}`}>
+                                                        {branch.status}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Inter-Branch Relationships</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Branch Pair</th>
+                                            <th>Transfer Authorization</th>
+                                            <th>Shared Inventory</th>
+                                            <th>Pricing Policy</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Main Branch</strong> ↔ <strong>Downtown Branch</strong>
+                                            </td>
+                                            <td><span className="badge badge-success">Auto-Approved</span></td>
+                                            <td><span className="badge badge-info">Enabled</span></td>
+                                            <td>Shared</td>
+                                            <td>
+                                                <button className="action-btn">
+                                                    <i className="ri-edit-line"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Main Branch</strong> ↔ <strong>Westside Branch</strong>
+                                            </td>
+                                            <td><span className="badge badge-warning">Manager Approval</span></td>
+                                            <td><span className="badge badge-info">Enabled</span></td>
+                                            <td>Shared</td>
+                                            <td>
+                                                <button className="action-btn">
+                                                    <i className="ri-edit-line"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Downtown Branch</strong> ↔ <strong>Westside Branch</strong>
+                                            </td>
+                                            <td><span className="badge badge-success">Auto-Approved</span></td>
+                                            <td><span className="badge badge-neutral">Disabled</span></td>
+                                            <td>Independent</td>
+                                            <td>
+                                                <button className="action-btn">
+                                                    <i className="ri-edit-line"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function Modal({ type, branch, onClose }) {
+            if (type === 'editOrg') {
+                return <EditOrgModal onClose={onClose} />;
+            }
+            if (type === 'addBranch' || type === 'editBranch') {
+                return <BranchFormModal branch={branch} onClose={onClose} isEdit={type === 'editBranch'} />;
+            }
+            if (type === 'viewBranch') {
+                return <ViewBranchModal branch={branch} onClose={onClose} />;
+            }
+            return null;
+        }
+
+        function EditOrgModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Edit Organization Profile</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Legal Name</label>
+                                    <input type="text" className="form-input" defaultValue="Lekurax Pharmacy Inc." />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Trading Name</label>
+                                    <input type="text" className="form-input" defaultValue="Lekurax Pharmacy" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Registration Number</label>
+                                    <input type="text" className="form-input" defaultValue="REG-2024-98765" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Tax ID</label>
+                                    <input type="text" className="form-input" defaultValue="TAX-US-123456789" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Corporate License</label>
+                                    <input type="text" className="form-input" defaultValue="PH-CORP-NY-001" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">License Expiry</label>
+                                    <input type="date" className="form-input" defaultValue="2025-12-31" />
+                                </div>
+                            </div>
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Phone</label>
+                                    <input type="tel" className="form-input" defaultValue="+1 (555) 100-2000" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Email</label>
+                                    <input type="email" className="form-input" defaultValue="contact@lekurax.com" />
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Address</label>
+                                    <textarea className="form-input" rows="2" defaultValue="123 Healthcare Avenue, Medical District, NY 10001"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function BranchFormModal({ branch, onClose, isEdit }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">
+                                {isEdit ? 'Edit Branch' : 'Add New Branch'}
+                            </h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Branch Name</label>
+                                    <input type="text" className="form-input" defaultValue={branch?.name} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Branch Code</label>
+                                    <input type="text" className="form-input" defaultValue={branch?.code} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Branch Type</label>
+                                    <select className="form-input" defaultValue={branch?.type}>
+                                        <option>Headquarters</option>
+                                        <option>Branch</option>
+                                        <option>Franchise</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">License Number</label>
+                                    <input type="text" className="form-input" defaultValue={branch?.license} />
+                                </div>
+                            </div>
+                            
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Address</label>
+                                    <input type="text" className="form-input" defaultValue={branch?.address} />
+                                </div>
+                            </div>
+
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">City</label>
+                                    <input type="text" className="form-input" defaultValue={branch?.city} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Phone</label>
+                                    <input type="tel" className="form-input" defaultValue={branch?.phone} />
+                                </div>
+                            </div>
+
+                            <h4 style={{fontSize: '14px', fontWeight: 600, marginTop: '24px', marginBottom: '12px'}}>
+                                Operating Hours
+                            </h4>
+                            
+                            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
+                                <div className="schedule-day" key={day}>
+                                    <input type="checkbox" defaultChecked={day !== 'Sunday'} />
+                                    <div className="schedule-day-name">{day}</div>
+                                    <div className="schedule-times">
+                                        <input type="time" defaultValue="09:00" />
+                                        <span>to</span>
+                                        <input type="time" defaultValue="18:00" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">
+                                {isEdit ? 'Save Changes' : 'Add Branch'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ViewBranchModal({ branch, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{maxWidth: '800px'}}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">{branch.name}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{display: 'flex', gap: '12px', marginBottom: '24px'}}>
+                                <span className="badge badge-neutral">{branch.code}</span>
+                                <span className={`badge badge-${branch.status === 'Active' ? 'success' : 'neutral'}`}>
+                                    {branch.status}
+                                </span>
+                                <span className="badge badge-info">{branch.type}</span>
+                            </div>
+
+                            <div className="two-column-layout">
+                                <div>
+                                    <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '12px'}}>
+                                        Branch Details
+                                    </h4>
+                                    <div className="info-grid">
+                                        <div className="info-label">Address</div>
+                                        <div className="info-value">{branch.address}</div>
+                                        
+                                        <div className="info-label">City</div>
+                                        <div className="info-value">{branch.city}</div>
+                                        
+                                        <div className="info-label">Phone</div>
+                                        <div className="info-value">{branch.phone}</div>
+                                        
+                                        <div className="info-label">License</div>
+                                        <div className="info-value">{branch.license}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '12px'}}>
+                                        Operational Metrics
+                                    </h4>
+                                    <div className="info-grid">
+                                        <div className="info-label">Staff Count</div>
+                                        <div className="info-value">{branch.staff} employees</div>
+                                        
+                                        <div className="info-label">Inventory Items</div>
+                                        <div className="info-value">{branch.inventory.toLocaleString()} products</div>
+                                        
+                                        <div className="info-label">Daily Sales</div>
+                                        <div className="info-value">${branch.dailySales.toLocaleString()}</div>
+                                        
+                                        <div className="info-label">Last Audit</div>
+                                        <div className="info-value">March 15, 2024</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{marginTop: '24px'}}>
+                                <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '12px'}}>
+                                    Operating Hours
+                                </h4>
+                                <div style={{border: '1px solid var(--border-color)', borderRadius: '8px', padding: '16px'}}>
+                                    <div style={{display: 'grid', gap: '8px'}}>
+                                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                            <span>Monday - Friday</span>
+                                            <strong>9:00 AM - 6:00 PM</strong>
+                                        </div>
+                                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                            <span>Saturday</span>
+                                            <strong>10:00 AM - 4:00 PM</strong>
+                                        </div>
+                                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                            <span>Sunday</span>
+                                            <strong>Closed</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            <button className="btn btn-primary">
+                                <i className="ri-edit-line"></i>
+                                Edit Branch
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<OrganizationApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>

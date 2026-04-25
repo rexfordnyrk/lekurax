@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier & Procurement Management - Lekurax Pharmacy System</title>
+    <link rel="stylesheet" href="colors_and_type.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--neutral-50);
+            color: var(--neutral-600);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-600);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--neutral-400);
+            padding: 0 12px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--neutral-600);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-900);
+        }
+
+        .nav-item.active {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--danger-100);
+            color: var(--danger-600);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .breadcrumb a {
+            color: var(--neutral-500);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-600);
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-700);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--neutral-700);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-50);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .content-area {
+            padding: 24px;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.primary {
+            background: var(--primary-100);
+            color: var(--primary-600);
+        }
+
+        .stat-icon.success {
+            background: var(--success-100);
+            color: var(--success-600);
+        }
+
+        .stat-icon.warning {
+            background: var(--warning-100);
+            color: var(--warning-600);
+        }
+
+        .stat-icon.info {
+            background: var(--info-100);
+            color: var(--info-600);
+        }
+
+        .stat-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            line-height: 1.2;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--neutral-50);
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--neutral-700);
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--neutral-50);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: var(--success-100);
+            color: var(--success-700);
+        }
+
+        .badge-warning {
+            background: var(--warning-100);
+            color: var(--warning-700);
+        }
+
+        .badge-danger {
+            background: var(--danger-100);
+            color: var(--danger-700);
+        }
+
+        .badge-info {
+            background: var(--info-100);
+            color: var(--info-700);
+        }
+
+        .badge-neutral {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .action-btn {
+            padding: 6px;
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .filters-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 350px;
+            position: relative;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input input:focus {
+            border-color: var(--primary-600);
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neutral-400);
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--neutral-700);
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal.modal-large {
+            max-width: calc(100vw - 280px);
+            margin-left: 260px;
+            margin-right: 20px;
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--neutral-400);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger-600);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            padding: 9px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-600);
+        }
+
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 12px;
+            row-gap: 10px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--neutral-500);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: var(--neutral-900);
+        }
+
+        .supplier-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+
+        .supplier-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .supplier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .supplier-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: 4px;
+        }
+
+        .supplier-meta {
+            font-size: 13px;
+            color: var(--neutral-500);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rating-stars {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .star {
+            color: var(--warning-600);
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            background: white;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--neutral-900);
+        }
+
+        .tab.active {
+            color: var(--primary-600);
+            border-bottom-color: var(--primary-600);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--neutral-100);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success-600);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const mockSuppliers = [
+            {
+                id: 1,
+                name: 'PharmaCorp Ltd.',
+                contact: '+1 (555) 200-3000',
+                email: 'sales@pharmacorp.com',
+                address: '456 Pharma Street, Medical District, NY',
+                rating: 4.8,
+                products: 245,
+                status: 'Active',
+                paymentTerms: 'Net 30',
+                category: 'Preferred'
+            },
+            {
+                id: 2,
+                name: 'HealthMed Inc.',
+                contact: '+1 (555) 300-4000',
+                email: 'orders@healthmed.com',
+                address: '789 Medicine Ave, Healthcare Plaza, NY',
+                rating: 4.5,
+                products: 189,
+                status: 'Active',
+                paymentTerms: 'Net 60',
+                category: 'Approved'
+            },
+            {
+                id: 3,
+                name: 'MediSupply Global',
+                contact: '+1 (555) 400-5000',
+                email: 'contact@medisupply.com',
+                address: '123 Supply Road, Business Park, NY',
+                rating: 4.7,
+                products: 312,
+                status: 'Active',
+                paymentTerms: 'Net 30',
+                category: 'Preferred'
+            }
+        ];
+
+        const mockRequisitions = [
+            {
+                id: 1,
+                reqNumber: 'REQ-2024-0089',
+                requestedBy: 'Sarah Johnson',
+                date: '2024-04-24',
+                items: 8,
+                estimatedValue: 3450.00,
+                status: 'Pending Approval'
+            },
+            {
+                id: 2,
+                reqNumber: 'REQ-2024-0088',
+                requestedBy: 'Michael Chen',
+                date: '2024-04-23',
+                items: 12,
+                estimatedValue: 5820.00,
+                status: 'Approved'
+            }
+        ];
+
+        const mockRFQs = [
+            {
+                id: 1,
+                rfqNumber: 'RFQ-2024-0034',
+                date: '2024-04-22',
+                items: 15,
+                suppliers: 3,
+                responses: 2,
+                status: 'Open',
+                closingDate: '2024-04-30'
+            }
+        ];
+
+        const mockContracts = [
+            {
+                id: 1,
+                contractNumber: 'CNT-2024-0012',
+                supplier: 'PharmaCorp Ltd.',
+                startDate: '2024-01-01',
+                endDate: '2024-12-31',
+                value: 250000.00,
+                status: 'Active'
+            },
+            {
+                id: 2,
+                contractNumber: 'CNT-2024-0008',
+                supplier: 'HealthMed Inc.',
+                startDate: '2023-06-01',
+                endDate: '2024-05-31',
+                value: 180000.00,
+                status: 'Expiring Soon'
+            }
+        ];
+
+        function ProcurementApp() {
+            const [activeTab, setActiveTab] = useState('suppliers');
+            const [showModal, setShowModal] = useState(false);
+            const [modalType, setModalType] = useState('');
+            const [selectedItem, setSelectedItem] = useState(null);
+
+            const openModal = (type, item = null) => {
+                setModalType(type);
+                setSelectedItem(item);
+                setShowModal(true);
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setSelectedItem(null);
+            };
+
+            return (
+                <div className="admin-layout">
+                    <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <div className="main-content">
+                        <TopBar activeTab={activeTab} openModal={openModal} />
+                        <div className="content-area">
+                            {activeTab === 'suppliers' && (
+                                <SuppliersTab suppliers={mockSuppliers} openModal={openModal} />
+                            )}
+                            {activeTab === 'requisitions' && (
+                                <RequisitionsTab requisitions={mockRequisitions} openModal={openModal} />
+                            )}
+                            {activeTab === 'rfq' && (
+                                <RFQTab rfqs={mockRFQs} openModal={openModal} />
+                            )}
+                            {activeTab === 'contracts' && (
+                                <ContractsTab contracts={mockContracts} openModal={openModal} />
+                            )}
+                            {activeTab === 'performance' && (
+                                <PerformanceTab suppliers={mockSuppliers} openModal={openModal} />
+                            )}
+                        </div>
+                    </div>
+                    {showModal && (
+                        <Modal type={modalType} item={selectedItem} onClose={closeModal} />
+                    )}
+                </div>
+            );
+        }
+
+        function Sidebar({ activeTab, setActiveTab }) {
+            return (
+                <div className="sidebar">
+                    <div className="sidebar-header">
+                        <div className="logo">
+                            <i className="ri-capsule-fill"></i>
+                            <span>Lekurax</span>
+                        </div>
+                    </div>
+                    <div className="sidebar-nav">
+                        <div className="nav-section">
+                            <div className="nav-section-title">Supplier Management</div>
+                            <div className={`nav-item ${activeTab === 'suppliers' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('suppliers')}>
+                                <i className="ri-building-line"></i>
+                                <span>Suppliers</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'performance' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('performance')}>
+                                <i className="ri-line-chart-line"></i>
+                                <span>Performance Analytics</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'contracts' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('contracts')}>
+                                <i className="ri-file-text-line"></i>
+                                <span>Contracts</span>
+                                <span className="badge">1</span>
+                            </div>
+                        </div>
+                        <div className="nav-section">
+                            <div className="nav-section-title">Procurement</div>
+                            <div className={`nav-item ${activeTab === 'requisitions' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('requisitions')}>
+                                <i className="ri-file-list-2-line"></i>
+                                <span>Purchase Requisitions</span>
+                                <span className="badge">2</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'rfq' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('rfq')}>
+                                <i className="ri-question-answer-line"></i>
+                                <span>RFQ Management</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'payments' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('payments')}>
+                                <i className="ri-money-dollar-circle-line"></i>
+                                <span>Payment Tracking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function TopBar({ activeTab, openModal }) {
+            const getActionButton = () => {
+                switch(activeTab) {
+                    case 'suppliers':
+                        return <button className="btn btn-primary" onClick={() => openModal('addSupplier')}>
+                            <i className="ri-add-line"></i>Add Supplier
+                        </button>;
+                    case 'requisitions':
+                        return <button className="btn btn-primary" onClick={() => openModal('createRequisition')}>
+                            <i className="ri-add-line"></i>New Requisition
+                        </button>;
+                    case 'rfq':
+                        return <button className="btn btn-primary" onClick={() => openModal('createRFQ')}>
+                            <i className="ri-add-line"></i>Create RFQ
+                        </button>;
+                    case 'contracts':
+                        return <button className="btn btn-primary" onClick={() => openModal('createContract')}>
+                            <i className="ri-add-line"></i>New Contract
+                        </button>;
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div className="top-bar">
+                    <div className="page-title-section">
+                        <div>
+                            <div className="breadcrumb">
+                                <a href="#">Operations</a>
+                                <i className="ri-arrow-right-s-line"></i>
+                                <span>Supplier & Procurement</span>
+                            </div>
+                            <h1 className="page-title">Supplier & Procurement Management</h1>
+                        </div>
+                    </div>
+                    <div className="top-bar-actions">
+                        {getActionButton()}
+                    </div>
+                </div>
+            );
+        }
+
+        function SuppliersTab({ suppliers, openModal }) {
+            return (
+                <>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon primary">
+                                <i className="ri-building-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Total Suppliers</div>
+                                <div className="stat-value">24</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon success">
+                                <i className="ri-star-fill"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Preferred Suppliers</div>
+                                <div className="stat-value">8</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-truck-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Avg Delivery Time</div>
+                                <div className="stat-value">3.2 days</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon info">
+                                <i className="ri-money-dollar-circle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">YTD Spend</div>
+                                <div className="stat-value">$1.2M</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search suppliers..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Categories</option>
+                            <option>Preferred</option>
+                            <option>Approved</option>
+                            <option>On Hold</option>
+                        </select>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">All Suppliers</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Supplier Name</th>
+                                            <th>Contact</th>
+                                            <th>Email</th>
+                                            <th>Products</th>
+                                            <th>Rating</th>
+                                            <th>Payment Terms</th>
+                                            <th>Category</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {suppliers.map(supplier => (
+                                            <tr key={supplier.id}>
+                                                <td style={{fontWeight: 500}}>{supplier.name}</td>
+                                                <td>{supplier.contact}</td>
+                                                <td>{supplier.email}</td>
+                                                <td>{supplier.products}</td>
+                                                <td>
+                                                    <div className="rating-stars">
+                                                        <i className="ri-star-fill star"></i>
+                                                        <span style={{fontWeight: 600}}>{supplier.rating}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{supplier.paymentTerms}</td>
+                                                <td>
+                                                    <span className={`badge badge-${supplier.category === 'Preferred' ? 'success' : 'info'}`}>
+                                                        {supplier.category}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span className="badge badge-success">{supplier.status}</span>
+                                                </td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewSupplier', supplier)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    <button className="action-btn">
+                                                        <i className="ri-edit-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function RequisitionsTab({ requisitions, openModal }) {
+            return (
+                <>
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search requisitions..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Pending Approval</option>
+                            <option>Approved</option>
+                            <option>Rejected</option>
+                            <option>Converted to PO</option>
+                        </select>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Purchase Requisitions</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Req Number</th>
+                                            <th>Requested By</th>
+                                            <th>Date</th>
+                                            <th>Items</th>
+                                            <th>Est. Value</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {requisitions.map(req => (
+                                            <tr key={req.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{req.reqNumber}</td>
+                                                <td>{req.requestedBy}</td>
+                                                <td>{req.date}</td>
+                                                <td>{req.items}</td>
+                                                <td style={{fontWeight: 500}}>${req.estimatedValue.toLocaleString()}</td>
+                                                <td>
+                                                    <span className={`badge badge-${req.status === 'Pending Approval' ? 'warning' : 'success'}`}>
+                                                        {req.status}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewRequisition', req)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    {req.status === 'Pending Approval' && (
+                                                        <button className="action-btn" style={{color: 'var(--success-600)'}}>
+                                                            <i className="ri-check-line"></i>
+                                                        </button>
+                                                    )}
+                                                    {req.status === 'Approved' && (
+                                                        <button className="action-btn" style={{color: 'var(--primary-600)'}}>
+                                                            <i className="ri-file-add-line"></i>
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function RFQTab({ rfqs, openModal }) {
+            return (
+                <>
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Request for Quotations</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>RFQ Number</th>
+                                            <th>Date</th>
+                                            <th>Items</th>
+                                            <th>Suppliers Invited</th>
+                                            <th>Responses</th>
+                                            <th>Closing Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {rfqs.map(rfq => (
+                                            <tr key={rfq.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{rfq.rfqNumber}</td>
+                                                <td>{rfq.date}</td>
+                                                <td>{rfq.items}</td>
+                                                <td>{rfq.suppliers}</td>
+                                                <td>
+                                                    <strong>{rfq.responses}</strong>/{rfq.suppliers}
+                                                </td>
+                                                <td>{rfq.closingDate}</td>
+                                                <td>
+                                                    <span className="badge badge-info">{rfq.status}</span>
+                                                </td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewRFQ', rfq)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    <button className="action-btn">
+                                                        <i className="ri-file-list-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function ContractsTab({ contracts, openModal }) {
+            return (
+                <>
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search contracts..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Expiring Soon</option>
+                            <option>Expired</option>
+                        </select>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Supplier Contracts</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Contract No.</th>
+                                            <th>Supplier</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Contract Value</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {contracts.map(contract => (
+                                            <tr key={contract.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{contract.contractNumber}</td>
+                                                <td>{contract.supplier}</td>
+                                                <td>{contract.startDate}</td>
+                                                <td>{contract.endDate}</td>
+                                                <td style={{fontWeight: 500}}>${contract.value.toLocaleString()}</td>
+                                                <td>
+                                                    <span className={`badge badge-${contract.status === 'Active' ? 'success' : 'warning'}`}>
+                                                        {contract.status}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewContract', contract)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    <button className="action-btn">
+                                                        <i className="ri-download-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function PerformanceTab({ suppliers, openModal }) {
+            return (
+                <>
+                    <div style={{marginBottom: '24px'}}>
+                        <h3 style={{fontSize: '16px', fontWeight: 600, marginBottom: '8px'}}>Supplier Performance Analytics</h3>
+                        <p style={{fontSize: '14px', color: 'var(--neutral-600)'}}>Track and evaluate supplier performance across key metrics</p>
+                    </div>
+
+                    {suppliers.map(supplier => (
+                        <div className="card" key={supplier.id}>
+                            <div className="card-header">
+                                <div>
+                                    <h3 className="card-title">{supplier.name}</h3>
+                                    <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginTop: '4px'}}>
+                                        Performance Scorecard
+                                    </div>
+                                </div>
+                                <div className="rating-stars">
+                                    <i className="ri-star-fill star"></i>
+                                    <span style={{fontWeight: 600, fontSize: '18px'}}>{supplier.rating}</span>
+                                    <span style={{color: 'var(--neutral-500)', fontSize: '13px'}}>/5.0</span>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px'}}>
+                                    <div>
+                                        <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginBottom: '8px'}}>
+                                            On-Time Delivery
+                                        </div>
+                                        <div style={{marginBottom: '6px'}}>
+                                            <strong style={{fontSize: '18px'}}>95%</strong>
+                                        </div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: '95%'}}></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginBottom: '8px'}}>
+                                            Quality Rating
+                                        </div>
+                                        <div style={{marginBottom: '6px'}}>
+                                            <strong style={{fontSize: '18px'}}>4.8</strong>
+                                            <span style={{fontSize: '14px', color: 'var(--neutral-500)'}}>/5.0</span>
+                                        </div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: '96%'}}></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginBottom: '8px'}}>
+                                            Order Accuracy
+                                        </div>
+                                        <div style={{marginBottom: '6px'}}>
+                                            <strong style={{fontSize: '18px'}}>98%</strong>
+                                        </div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: '98%'}}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-color)'}}>
+                                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', fontSize: '13px'}}>
+                                        <div>
+                                            <div style={{color: 'var(--neutral-500)', marginBottom: '4px'}}>Total Orders</div>
+                                            <strong>234</strong>
+                                        </div>
+                                        <div>
+                                            <div style={{color: 'var(--neutral-500)', marginBottom: '4px'}}>Avg Delivery Time</div>
+                                            <strong>2.8 days</strong>
+                                        </div>
+                                        <div>
+                                            <div style={{color: 'var(--neutral-500)', marginBottom: '4px'}}>Quality Issues</div>
+                                            <strong>3</strong>
+                                        </div>
+                                        <div>
+                                            <div style={{color: 'var(--neutral-500)', marginBottom: '4px'}}>YTD Spend</div>
+                                            <strong>$425,000</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </>
+            );
+        }
+
+        function Modal({ type, item, onClose }) {
+            if (type === 'addSupplier') return <AddSupplierModal onClose={onClose} />;
+            if (type === 'viewSupplier') return <ViewSupplierModal supplier={item} onClose={onClose} />;
+            if (type === 'createRequisition') return <CreateRequisitionModal onClose={onClose} />;
+            if (type === 'viewRequisition') return <ViewRequisitionModal requisition={item} onClose={onClose} />;
+            if (type === 'createRFQ') return <CreateRFQModal onClose={onClose} />;
+            if (type === 'viewRFQ') return <ViewRFQModal rfq={item} onClose={onClose} />;
+            if (type === 'createContract') return <CreateContractModal onClose={onClose} />;
+            if (type === 'viewContract') return <ViewContractModal contract={item} onClose={onClose} />;
+            return null;
+        }
+
+        function AddSupplierModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Add New Supplier</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Supplier Name</label>
+                                    <input type="text" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Contact Person</label>
+                                    <input type="text" className="form-input" />
+                                </div>
+                            </div>
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Email</label>
+                                    <input type="email" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Phone</label>
+                                    <input type="tel" className="form-input" />
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Address</label>
+                                    <textarea className="form-input" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Payment Terms</label>
+                                    <select className="form-input">
+                                        <option>Net 30</option>
+                                        <option>Net 60</option>
+                                        <option>COD</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Category</label>
+                                    <select className="form-input">
+                                        <option>Approved</option>
+                                        <option>Preferred</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Add Supplier</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ViewSupplierModal({ supplier, onClose }) {
+            const [activeModalTab, setActiveModalTab] = useState('details');
+
+            const mockSupplierContracts = [
+                {
+                    id: 1,
+                    contractNumber: 'CNT-2024-0012',
+                    startDate: '2024-01-01',
+                    endDate: '2024-12-31',
+                    value: 250000.00,
+                    status: 'Active',
+                    type: 'Annual Supply Agreement'
+                },
+                {
+                    id: 2,
+                    contractNumber: 'CNT-2023-0045',
+                    startDate: '2023-01-01',
+                    endDate: '2023-12-31',
+                    value: 180000.00,
+                    status: 'Completed',
+                    type: 'Volume-Based Contract'
+                }
+            ];
+
+            const mockProducts = [
+                { id: 1, name: 'Amoxicillin 500mg', category: 'Antibiotic', unitPrice: 12.50, stock: 'In Stock' },
+                { id: 2, name: 'Lisinopril 10mg', category: 'Cardiovascular', unitPrice: 8.75, stock: 'In Stock' },
+                { id: 3, name: 'Metformin 850mg', category: 'Diabetes', unitPrice: 15.20, stock: 'Low Stock' },
+                { id: 4, name: 'Atorvastatin 20mg', category: 'Cardiovascular', unitPrice: 22.00, stock: 'In Stock' }
+            ];
+
+            const mockOrders = [
+                { id: 1, poNumber: 'PO-2024-0156', date: '2024-04-20', items: 12, total: 8450.00, status: 'Delivered' },
+                { id: 2, poNumber: 'PO-2024-0142', date: '2024-04-15', items: 8, total: 5200.00, status: 'Delivered' },
+                { id: 3, poNumber: 'PO-2024-0128', date: '2024-04-10', items: 15, total: 12300.00, status: 'Delivered' }
+            ];
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal modal-large" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <div>
+                                <h2 className="modal-title">{supplier.name}</h2>
+                                <div style={{display: 'flex', gap: '12px', marginTop: '8px', alignItems: 'center'}}>
+                                    <span className={`badge badge-${supplier.category === 'Preferred' ? 'success' : 'info'}`}>
+                                        {supplier.category}
+                                    </span>
+                                    <span className="badge badge-success">{supplier.status}</span>
+                                    <div className="rating-stars">
+                                        <i className="ri-star-fill star"></i>
+                                        <span style={{fontWeight: 600}}>{supplier.rating}</span>
+                                        <span style={{color: 'var(--neutral-500)', fontSize: '13px'}}>/5.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="tabs" style={{margin: 0}}>
+                            <div className={`tab ${activeModalTab === 'details' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('details')}>Details</div>
+                            <div className={`tab ${activeModalTab === 'products' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('products')}>Products ({supplier.products})</div>
+                            <div className={`tab ${activeModalTab === 'contracts' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('contracts')}>Contracts</div>
+                            <div className={`tab ${activeModalTab === 'orders' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('orders')}>Order History</div>
+                            <div className={`tab ${activeModalTab === 'performance' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('performance')}>Performance</div>
+                        </div>
+                        <div className="modal-body">
+                            {activeModalTab === 'details' && (
+                                <div className="two-column-grid">
+                                    <div className="info-grid">
+                                        <div className="info-label">Email</div>
+                                        <div className="info-value">{supplier.email}</div>
+                                        
+                                        <div className="info-label">Phone</div>
+                                        <div className="info-value">{supplier.contact}</div>
+                                        
+                                        <div className="info-label">Address</div>
+                                        <div className="info-value">{supplier.address}</div>
+                                        
+                                        <div className="info-label">Payment Terms</div>
+                                        <div className="info-value">{supplier.paymentTerms}</div>
+                                    </div>
+                                    <div className="info-grid">
+                                        <div className="info-label">Total Products</div>
+                                        <div className="info-value">{supplier.products}</div>
+                                        
+                                        <div className="info-label">Active Contracts</div>
+                                        <div className="info-value">1</div>
+                                        
+                                        <div className="info-label">Total Orders YTD</div>
+                                        <div className="info-value">234</div>
+                                        
+                                        <div className="info-label">YTD Spend</div>
+                                        <div className="info-value" style={{fontWeight: 600}}>$425,000</div>
+                                    </div>
+                                </div>
+                            )}
+                            {activeModalTab === 'products' && (
+                                <div className="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Product Name</th>
+                                                <th>Category</th>
+                                                <th>Unit Price</th>
+                                                <th>Availability</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {mockProducts.map(product => (
+                                                <tr key={product.id}>
+                                                    <td style={{fontWeight: 500}}>{product.name}</td>
+                                                    <td>{product.category}</td>
+                                                    <td>${product.unitPrice.toFixed(2)}</td>
+                                                    <td>
+                                                        <span className={`badge badge-${product.stock === 'In Stock' ? 'success' : 'warning'}`}>
+                                                            {product.stock}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <button className="action-btn">
+                                                            <i className="ri-eye-line"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                            {activeModalTab === 'contracts' && (
+                                <div className="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Contract No.</th>
+                                                <th>Type</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Contract Value</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {mockSupplierContracts.map(contract => (
+                                                <tr key={contract.id}>
+                                                    <td style={{fontFamily: 'monospace', fontWeight: 500}}>{contract.contractNumber}</td>
+                                                    <td>{contract.type}</td>
+                                                    <td>{contract.startDate}</td>
+                                                    <td>{contract.endDate}</td>
+                                                    <td style={{fontWeight: 500}}>${contract.value.toLocaleString()}</td>
+                                                    <td>
+                                                        <span className={`badge badge-${contract.status === 'Active' ? 'success' : 'neutral'}`}>
+                                                            {contract.status}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <button className="action-btn">
+                                                            <i className="ri-eye-line"></i>
+                                                        </button>
+                                                        <button className="action-btn">
+                                                            <i className="ri-download-line"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                            {activeModalTab === 'orders' && (
+                                <div className="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>PO Number</th>
+                                                <th>Date</th>
+                                                <th>Items</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {mockOrders.map(order => (
+                                                <tr key={order.id}>
+                                                    <td style={{fontFamily: 'monospace', fontWeight: 500}}>{order.poNumber}</td>
+                                                    <td>{order.date}</td>
+                                                    <td>{order.items}</td>
+                                                    <td style={{fontWeight: 500}}>${order.total.toLocaleString()}</td>
+                                                    <td>
+                                                        <span className="badge badge-success">{order.status}</span>
+                                                    </td>
+                                                    <td>
+                                                        <button className="action-btn">
+                                                            <i className="ri-eye-line"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                            {activeModalTab === 'performance' && (
+                                <div>
+                                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px'}}>
+                                        <div>
+                                            <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginBottom: '8px'}}>
+                                                On-Time Delivery
+                                            </div>
+                                            <div style={{marginBottom: '6px'}}>
+                                                <strong style={{fontSize: '24px'}}>95%</strong>
+                                            </div>
+                                            <div className="progress-bar">
+                                                <div className="progress-fill" style={{width: '95%'}}></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginBottom: '8px'}}>
+                                                Quality Rating
+                                            </div>
+                                            <div style={{marginBottom: '6px'}}>
+                                                <strong style={{fontSize: '24px'}}>4.8</strong>
+                                                <span style={{fontSize: '14px', color: 'var(--neutral-500)'}}>/5.0</span>
+                                            </div>
+                                            <div className="progress-bar">
+                                                <div className="progress-fill" style={{width: '96%'}}></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div style={{fontSize: '13px', color: 'var(--neutral-500)', marginBottom: '8px'}}>
+                                                Order Accuracy
+                                            </div>
+                                            <div style={{marginBottom: '6px'}}>
+                                                <strong style={{fontSize: '24px'}}>98%</strong>
+                                            </div>
+                                            <div className="progress-bar">
+                                                <div className="progress-fill" style={{width: '98%'}}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{padding: '20px', background: 'var(--neutral-50)', borderRadius: '8px'}}>
+                                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px'}}>
+                                            <div>
+                                                <div style={{fontSize: '12px', color: 'var(--neutral-500)', marginBottom: '4px'}}>Total Orders</div>
+                                                <strong style={{fontSize: '20px'}}>234</strong>
+                                            </div>
+                                            <div>
+                                                <div style={{fontSize: '12px', color: 'var(--neutral-500)', marginBottom: '4px'}}>Avg Delivery Time</div>
+                                                <strong style={{fontSize: '20px'}}>2.8 days</strong>
+                                            </div>
+                                            <div>
+                                                <div style={{fontSize: '12px', color: 'var(--neutral-500)', marginBottom: '4px'}}>Quality Issues</div>
+                                                <strong style={{fontSize: '20px'}}>3</strong>
+                                            </div>
+                                            <div>
+                                                <div style={{fontSize: '12px', color: 'var(--neutral-500)', marginBottom: '4px'}}>YTD Spend</div>
+                                                <strong style={{fontSize: '20px'}}>$425,000</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            <button className="btn btn-primary">
+                                <i className="ri-edit-line"></i>Edit Supplier
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CreateRequisitionModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create Purchase Requisition</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Requisition Type</label>
+                                    <select className="form-input">
+                                        <option>Standard Purchase</option>
+                                        <option>Emergency</option>
+                                        <option>Stock Replenishment</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Priority</label>
+                                    <select className="form-input">
+                                        <option>Normal</option>
+                                        <option>High</option>
+                                        <option>Urgent</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Justification</label>
+                                    <textarea className="form-input" rows="3" placeholder="Reason for this requisition..."></textarea>
+                                </div>
+                            </div>
+                            <div style={{marginTop: '20px', padding: '16px', background: 'var(--neutral-50)', borderRadius: '8px'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px'}}>
+                                    <strong>Items</strong>
+                                    <button className="btn btn-secondary btn-sm">
+                                        <i className="ri-add-line"></i>Add Item
+                                    </button>
+                                </div>
+                                <div style={{fontSize: '13px', color: 'var(--neutral-500)'}}>
+                                    No items added yet
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Submit Requisition</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ViewRequisitionModal({ requisition, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Requisition {requisition.reqNumber}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{marginBottom: '20px'}}>
+                                <span className={`badge badge-${requisition.status === 'Pending Approval' ? 'warning' : 'success'}`}>
+                                    {requisition.status}
+                                </span>
+                            </div>
+                            <div className="info-grid">
+                                <div className="info-label">Requested By</div>
+                                <div className="info-value">{requisition.requestedBy}</div>
+                                
+                                <div className="info-label">Date</div>
+                                <div className="info-value">{requisition.date}</div>
+                                
+                                <div className="info-label">Items</div>
+                                <div className="info-value">{requisition.items}</div>
+                                
+                                <div className="info-label">Estimated Value</div>
+                                <div className="info-value" style={{fontWeight: 600}}>${requisition.estimatedValue.toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            {requisition.status === 'Pending Approval' && (
+                                <>
+                                    <button className="btn btn-secondary" style={{color: 'var(--danger-600)'}}>Reject</button>
+                                    <button className="btn btn-primary">Approve</button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CreateRFQModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create Request for Quotation</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Closing Date</label>
+                                    <input type="date" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Delivery Required By</label>
+                                    <input type="date" className="form-input" />
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Description</label>
+                                    <textarea className="form-input" rows="2" placeholder="Brief description of requirements..."></textarea>
+                                </div>
+                            </div>
+                            <div style={{marginTop: '20px'}}>
+                                <label className="form-label required">Invite Suppliers</label>
+                                <div style={{marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '8px'}}>
+                                    {['PharmaCorp Ltd.', 'HealthMed Inc.', 'MediSupply Global'].map(name => (
+                                        <label key={name} style={{display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', border: '1px solid var(--border-color)', borderRadius: '6px'}}>
+                                            <input type="checkbox" />
+                                            <span>{name}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Create RFQ</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ViewRFQModal({ rfq, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">RFQ {rfq.rfqNumber}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{marginBottom: '20px'}}>
+                                <span className="badge badge-info">{rfq.status}</span>
+                            </div>
+                            <div className="info-grid">
+                                <div className="info-label">Date</div>
+                                <div className="info-value">{rfq.date}</div>
+                                
+                                <div className="info-label">Closing Date</div>
+                                <div className="info-value">{rfq.closingDate}</div>
+                                
+                                <div className="info-label">Items</div>
+                                <div className="info-value">{rfq.items}</div>
+                                
+                                <div className="info-label">Suppliers Invited</div>
+                                <div className="info-value">{rfq.suppliers}</div>
+                                
+                                <div className="info-label">Responses Received</div>
+                                <div className="info-value"><strong>{rfq.responses}</strong> / {rfq.suppliers}</div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            <button className="btn btn-primary">Compare Quotations</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CreateContractModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create Supplier Contract</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Supplier</label>
+                                    <select className="form-input">
+                                        <option>Select supplier...</option>
+                                        <option>PharmaCorp Ltd.</option>
+                                        <option>HealthMed Inc.</option>
+                                        <option>MediSupply Global</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Contract Type</label>
+                                    <select className="form-input">
+                                        <option>Annual Supply Agreement</option>
+                                        <option>Volume-Based Contract</option>
+                                        <option>Exclusive Supply</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Start Date</label>
+                                    <input type="date" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">End Date</label>
+                                    <input type="date" className="form-input" />
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Contract Value</label>
+                                    <input type="number" className="form-input" placeholder="0.00" />
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Terms & Conditions</label>
+                                    <textarea className="form-input" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Create Contract</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ViewContractModal({ contract, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Contract {contract.contractNumber}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{marginBottom: '20px'}}>
+                                <span className={`badge badge-${contract.status === 'Active' ? 'success' : 'warning'}`}>
+                                    {contract.status}
+                                </span>
+                            </div>
+                            <div className="info-grid">
+                                <div className="info-label">Supplier</div>
+                                <div className="info-value">{contract.supplier}</div>
+                                
+                                <div className="info-label">Start Date</div>
+                                <div className="info-value">{contract.startDate}</div>
+                                
+                                <div className="info-label">End Date</div>
+                                <div className="info-value">{contract.endDate}</div>
+                                
+                                <div className="info-label">Contract Value</div>
+                                <div className="info-value" style={{fontWeight: 600}}>${contract.value.toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            <button className="btn btn-primary">
+                                <i className="ri-download-line"></i>Download Contract
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ProcurementApp />);
+    </script>
+</body>
+</html>

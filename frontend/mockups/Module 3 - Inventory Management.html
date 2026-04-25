@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Lekurax Pharmacy System</title>
+    <link rel="stylesheet" href="colors_and_type.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--neutral-50);
+            color: var(--neutral-600);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-600);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--neutral-400);
+            padding: 0 12px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--neutral-600);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-900);
+        }
+
+        .nav-item.active {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--danger-100);
+            color: var(--danger-600);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .breadcrumb a {
+            color: var(--neutral-500);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-600);
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-700);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--neutral-700);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-50);
+        }
+
+        .btn-success {
+            background: var(--success-600);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: var(--success-700);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .content-area {
+            padding: 24px;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.primary {
+            background: var(--primary-100);
+            color: var(--primary-600);
+        }
+
+        .stat-icon.success {
+            background: var(--success-100);
+            color: var(--success-600);
+        }
+
+        .stat-icon.warning {
+            background: var(--warning-100);
+            color: var(--warning-600);
+        }
+
+        .stat-icon.danger {
+            background: var(--danger-100);
+            color: var(--danger-600);
+        }
+
+        .stat-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            line-height: 1.2;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--neutral-50);
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--neutral-700);
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--neutral-50);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: var(--success-100);
+            color: var(--success-700);
+        }
+
+        .badge-warning {
+            background: var(--warning-100);
+            color: var(--warning-700);
+        }
+
+        .badge-danger {
+            background: var(--danger-100);
+            color: var(--danger-700);
+        }
+
+        .badge-info {
+            background: var(--info-100);
+            color: var(--info-700);
+        }
+
+        .badge-neutral {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .action-btn {
+            padding: 6px;
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .filters-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 350px;
+            position: relative;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input input:focus {
+            border-color: var(--primary-600);
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neutral-400);
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--neutral-700);
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--neutral-400);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .form-grid.two-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger-600);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            padding: 9px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-600);
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            background: white;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--neutral-900);
+        }
+
+        .tab.active {
+            color: var(--primary-600);
+            border-bottom-color: var(--primary-600);
+        }
+
+        .stock-level-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stock-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .stock-dot.high {
+            background: var(--success-600);
+        }
+
+        .stock-dot.medium {
+            background: var(--warning-600);
+        }
+
+        .stock-dot.low {
+            background: var(--danger-600);
+        }
+
+        .product-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .product-name {
+            font-weight: 500;
+            color: var(--neutral-900);
+        }
+
+        .product-meta {
+            font-size: 11px;
+            color: var(--neutral-500);
+        }
+
+        .batch-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .batch-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--neutral-50);
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .batch-info {
+            display: flex;
+            gap: 16px;
+        }
+
+        .info-pair {
+            display: flex;
+            gap: 4px;
+        }
+
+        .info-pair-label {
+            color: var(--neutral-500);
+        }
+
+        .info-pair-value {
+            color: var(--neutral-900);
+            font-weight: 500;
+        }
+
+        .alert-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .alert-card.danger {
+            border-left-color: var(--danger-600);
+        }
+
+        .alert-card.warning {
+            border-left-color: var(--warning-600);
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.danger {
+            background: var(--danger-100);
+            color: var(--danger-600);
+        }
+
+        .alert-icon.warning {
+            background: var(--warning-100);
+            color: var(--warning-600);
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: 2px;
+            font-size: 14px;
+        }
+
+        .alert-text {
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 12px;
+            row-gap: 10px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--neutral-500);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: var(--neutral-900);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 4px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .dropdown-item {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            color: var(--neutral-700);
+        }
+
+        .dropdown-item:hover {
+            background: var(--neutral-50);
+        }
+
+        .dropdown-item.danger {
+            color: var(--danger-600);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const mockProducts = [
+            {
+                id: 1,
+                name: 'Amoxicillin 500mg',
+                genericName: 'Amoxicillin',
+                sku: 'MED-AMX-500',
+                category: 'Antibiotics',
+                type: 'Prescription',
+                manufacturer: 'PharmaCorp Ltd.',
+                totalStock: 450,
+                reorderPoint: 200,
+                batches: [
+                    { batch: 'BT-2024-001', quantity: 300, expiry: '2025-08-15', cost: 12.50 },
+                    { batch: 'BT-2024-045', quantity: 150, expiry: '2025-11-20', cost: 12.80 }
+                ]
+            },
+            {
+                id: 2,
+                name: 'Paracetamol 500mg Tablets',
+                genericName: 'Paracetamol',
+                sku: 'MED-PAR-500',
+                category: 'Analgesics',
+                type: 'OTC',
+                manufacturer: 'HealthMed Inc.',
+                totalStock: 85,
+                reorderPoint: 150,
+                batches: [
+                    { batch: 'BT-2024-023', quantity: 85, expiry: '2024-06-30', cost: 4.20 }
+                ]
+            },
+            {
+                id: 3,
+                name: 'Lisinopril 10mg',
+                genericName: 'Lisinopril',
+                sku: 'MED-LIS-010',
+                category: 'Cardiovascular',
+                type: 'Prescription',
+                manufacturer: 'CardioPharma',
+                totalStock: 320,
+                reorderPoint: 100,
+                batches: [
+                    { batch: 'BT-2024-067', quantity: 320, expiry: '2026-03-10', cost: 8.90 }
+                ]
+            },
+            {
+                id: 4,
+                name: 'Insulin Glargine 100U/ml',
+                genericName: 'Insulin Glargine',
+                sku: 'MED-INS-100',
+                category: 'Diabetes',
+                type: 'Prescription',
+                manufacturer: 'DiabetesCare Co.',
+                totalStock: 45,
+                reorderPoint: 50,
+                batches: [
+                    { batch: 'BT-2024-089', quantity: 45, expiry: '2025-01-15', cost: 125.00 }
+                ]
+            }
+        ];
+
+        const mockSuppliers = [
+            { id: 1, name: 'PharmaCorp Ltd.', contact: '+1 (555) 200-3000', email: 'sales@pharmacorp.com', rating: 4.8 },
+            { id: 2, name: 'HealthMed Inc.', contact: '+1 (555) 300-4000', email: 'orders@healthmed.com', rating: 4.5 },
+            { id: 3, name: 'MediSupply Global', contact: '+1 (555) 400-5000', email: 'contact@medisupply.com', rating: 4.7 }
+        ];
+
+        const mockPurchaseOrders = [
+            {
+                id: 1,
+                poNumber: 'PO-2024-0045',
+                supplier: 'PharmaCorp Ltd.',
+                date: '2024-04-20',
+                status: 'Pending',
+                items: 12,
+                total: 4850.00
+            },
+            {
+                id: 2,
+                poNumber: 'PO-2024-0044',
+                supplier: 'HealthMed Inc.',
+                date: '2024-04-18',
+                status: 'Received',
+                items: 8,
+                total: 2340.00
+            },
+            {
+                id: 3,
+                poNumber: 'PO-2024-0043',
+                supplier: 'MediSupply Global',
+                date: '2024-04-15',
+                status: 'Approved',
+                items: 15,
+                total: 8920.00
+            }
+        ];
+
+        const mockTransfers = [
+            {
+                id: 1,
+                transferNo: 'TRF-2024-0023',
+                from: 'Main Branch',
+                to: 'Downtown Branch',
+                date: '2024-04-24',
+                status: 'In Transit',
+                items: 6,
+                value: 1250.00
+            },
+            {
+                id: 2,
+                transferNo: 'TRF-2024-0022',
+                from: 'Downtown Branch',
+                to: 'Westside Branch',
+                date: '2024-04-23',
+                status: 'Pending Approval',
+                items: 4,
+                value: 890.00
+            }
+        ];
+
+        function InventoryApp() {
+            const [activeTab, setActiveTab] = useState('products');
+            const [showModal, setShowModal] = useState(false);
+            const [modalType, setModalType] = useState('');
+            const [selectedItem, setSelectedItem] = useState(null);
+
+            const openModal = (type, item = null) => {
+                setModalType(type);
+                setSelectedItem(item);
+                setShowModal(true);
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setSelectedItem(null);
+            };
+
+            return (
+                <div className="admin-layout">
+                    <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <div className="main-content">
+                        <TopBar activeTab={activeTab} openModal={openModal} />
+                        <div className="content-area">
+                            {activeTab === 'products' && (
+                                <ProductsTab products={mockProducts} openModal={openModal} />
+                            )}
+                            {activeTab === 'suppliers' && (
+                                <SuppliersTab suppliers={mockSuppliers} openModal={openModal} />
+                            )}
+                            {activeTab === 'purchase' && (
+                                <PurchaseOrdersTab orders={mockPurchaseOrders} openModal={openModal} />
+                            )}
+                            {activeTab === 'transfers' && (
+                                <TransfersTab transfers={mockTransfers} openModal={openModal} />
+                            )}
+                            {activeTab === 'expiry' && (
+                                <ExpiryManagementTab products={mockProducts} />
+                            )}
+                            {activeTab === 'receiving' && (
+                                <GoodsReceivingTab openModal={openModal} />
+                            )}
+                            {activeTab === 'adjustments' && (
+                                <AdjustmentsTab openModal={openModal} />
+                            )}
+                            {activeTab === 'controlled' && (
+                                <ControlledSubstancesTab openModal={openModal} />
+                            )}
+                            {activeTab === 'reports' && (
+                                <ReportsTab />
+                            )}
+                        </div>
+                    </div>
+                    {showModal && (
+                        <Modal type={modalType} item={selectedItem} onClose={closeModal} />
+                    )}
+                </div>
+            );
+        }
+
+        function Sidebar({ activeTab, setActiveTab }) {
+            return (
+                <div className="sidebar">
+                    <div className="sidebar-header">
+                        <div className="logo">
+                            <i className="ri-capsule-fill"></i>
+                            <span>Lekurax</span>
+                        </div>
+                    </div>
+                    <div className="sidebar-nav">
+                        <div className="nav-section">
+                            <div className="nav-section-title">Inventory</div>
+                            <div className={`nav-item ${activeTab === 'products' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('products')}>
+                                <i className="ri-medicine-bottle-line"></i>
+                                <span>Products</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'suppliers' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('suppliers')}>
+                                <i className="ri-truck-line"></i>
+                                <span>Suppliers</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'purchase' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('purchase')}>
+                                <i className="ri-file-list-3-line"></i>
+                                <span>Purchase Orders</span>
+                                <span className="badge">3</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'receiving' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('receiving')}>
+                                <i className="ri-inbox-line"></i>
+                                <span>Goods Receiving</span>
+                            </div>
+                        </div>
+                        <div className="nav-section">
+                            <div className="nav-section-title">Stock Management</div>
+                            <div className={`nav-item ${activeTab === 'transfers' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('transfers')}>
+                                <i className="ri-arrow-left-right-line"></i>
+                                <span>Stock Transfers</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'adjustments' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('adjustments')}>
+                                <i className="ri-edit-box-line"></i>
+                                <span>Adjustments</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'expiry' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('expiry')}>
+                                <i className="ri-alarm-warning-line"></i>
+                                <span>Expiry Management</span>
+                                <span className="badge">8</span>
+                            </div>
+                            <div className={`nav-item ${activeTab === 'controlled' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('controlled')}>
+                                <i className="ri-shield-keyhole-line"></i>
+                                <span>Controlled Substances</span>
+                            </div>
+                        </div>
+                        <div className="nav-section">
+                            <div className="nav-section-title">Analytics</div>
+                            <div className={`nav-item ${activeTab === 'reports' ? 'active' : ''}`}
+                                 onClick={() => setActiveTab('reports')}>
+                                <i className="ri-bar-chart-line"></i>
+                                <span>Reports & Analytics</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function TopBar({ activeTab, openModal }) {
+            const getActionButton = () => {
+                switch(activeTab) {
+                    case 'products':
+                        return <button className="btn btn-primary" onClick={() => openModal('addProduct')}>
+                            <i className="ri-add-line"></i>Add Product
+                        </button>;
+                    case 'suppliers':
+                        return <button className="btn btn-primary" onClick={() => openModal('addSupplier')}>
+                            <i className="ri-add-line"></i>Add Supplier
+                        </button>;
+                    case 'purchase':
+                        return <button className="btn btn-primary" onClick={() => openModal('createPO')}>
+                            <i className="ri-add-line"></i>Create Purchase Order
+                        </button>;
+                    case 'transfers':
+                        return <button className="btn btn-primary" onClick={() => openModal('createTransfer')}>
+                            <i className="ri-add-line"></i>New Transfer
+                        </button>;
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div className="top-bar">
+                    <div className="page-title-section">
+                        <div>
+                            <div className="breadcrumb">
+                                <a href="#">Operations</a>
+                                <i className="ri-arrow-right-s-line"></i>
+                                <span>Inventory Management</span>
+                            </div>
+                            <h1 className="page-title">Inventory Management</h1>
+                        </div>
+                    </div>
+                    <div className="top-bar-actions">
+                        {getActionButton()}
+                    </div>
+                </div>
+            );
+        }
+
+        function ProductsTab({ products, openModal }) {
+            const [searchQuery, setSearchQuery] = useState('');
+            const [filterCategory, setFilterCategory] = useState('all');
+
+            return (
+                <>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon primary">
+                                <i className="ri-medicine-bottle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Total Products</div>
+                                <div className="stat-value">4,850</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon success">
+                                <i className="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">In Stock</div>
+                                <div className="stat-value">4,245</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-error-warning-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Low Stock</div>
+                                <div className="stat-value">124</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon danger">
+                                <i className="ri-close-circle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Out of Stock</div>
+                                <div className="stat-value">32</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-alarm-warning-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Near Expiry</div>
+                                <div className="stat-value">18</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input 
+                                type="text" 
+                                placeholder="Search products by name, SKU, or generic..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                        <select className="filter-select" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+                            <option value="all">All Categories</option>
+                            <option value="Antibiotics">Antibiotics</option>
+                            <option value="Analgesics">Analgesics</option>
+                            <option value="Cardiovascular">Cardiovascular</option>
+                            <option value="Diabetes">Diabetes</option>
+                        </select>
+                        <select className="filter-select">
+                            <option>All Types</option>
+                            <option>Prescription</option>
+                            <option>OTC</option>
+                            <option>Controlled</option>
+                        </select>
+                        <select className="filter-select">
+                            <option>Stock Status</option>
+                            <option>In Stock</option>
+                            <option>Low Stock</option>
+                            <option>Out of Stock</option>
+                        </select>
+                        <button className="btn btn-secondary btn-sm">
+                            <i className="ri-download-line"></i>Export
+                        </button>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Product Inventory ({products.length})</h3>
+                            <button className="btn btn-secondary btn-sm">
+                                <i className="ri-barcode-line"></i>Bulk Import
+                            </button>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>SKU</th>
+                                            <th>Category</th>
+                                            <th>Type</th>
+                                            <th>Stock Level</th>
+                                            <th>Reorder Point</th>
+                                            <th>Batches</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {products.map(product => {
+                                            const stockStatus = product.totalStock === 0 ? 'low' : 
+                                                              product.totalStock < product.reorderPoint ? 'medium' : 'high';
+                                            
+                                            return (
+                                                <tr key={product.id}>
+                                                    <td>
+                                                        <div className="product-cell">
+                                                            <div className="product-name">{product.name}</div>
+                                                            <div className="product-meta">{product.genericName} • {product.manufacturer}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td style={{fontFamily: 'monospace', fontSize: '12px'}}>{product.sku}</td>
+                                                    <td>{product.category}</td>
+                                                    <td>
+                                                        <span className={`badge badge-${product.type === 'Prescription' ? 'info' : 'neutral'}`}>
+                                                            {product.type}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div className="stock-level-indicator">
+                                                            <div className={`stock-dot ${stockStatus}`}></div>
+                                                            <strong>{product.totalStock}</strong>
+                                                        </div>
+                                                    </td>
+                                                    <td>{product.reorderPoint}</td>
+                                                    <td>{product.batches.length}</td>
+                                                    <td>
+                                                        <button className="action-btn" onClick={() => openModal('viewProduct', product)}>
+                                                            <i className="ri-eye-line"></i>
+                                                        </button>
+                                                        <button className="action-btn" onClick={() => openModal('editProduct', product)}>
+                                                            <i className="ri-edit-line"></i>
+                                                        </button>
+                                                        <button className="action-btn">
+                                                            <i className="ri-more-2-fill"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function SuppliersTab({ suppliers, openModal }) {
+            return (
+                <>
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Suppliers ({suppliers.length})</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Supplier Name</th>
+                                            <th>Contact</th>
+                                            <th>Email</th>
+                                            <th>Rating</th>
+                                            <th>Products</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {suppliers.map(supplier => (
+                                            <tr key={supplier.id}>
+                                                <td style={{fontWeight: 500}}>{supplier.name}</td>
+                                                <td>{supplier.contact}</td>
+                                                <td>{supplier.email}</td>
+                                                <td>
+                                                    <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                                                        <i className="ri-star-fill" style={{color: 'var(--warning-600)', fontSize: '14px'}}></i>
+                                                        <span>{supplier.rating}</span>
+                                                    </div>
+                                                </td>
+                                                <td>-</td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewSupplier', supplier)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    <button className="action-btn">
+                                                        <i className="ri-edit-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function PurchaseOrdersTab({ orders, openModal }) {
+            return (
+                <>
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search purchase orders..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Pending</option>
+                            <option>Approved</option>
+                            <option>Received</option>
+                            <option>Cancelled</option>
+                        </select>
+                        <select className="filter-select">
+                            <option>All Suppliers</option>
+                            <option>PharmaCorp Ltd.</option>
+                            <option>HealthMed Inc.</option>
+                            <option>MediSupply Global</option>
+                        </select>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Purchase Orders</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>PO Number</th>
+                                            <th>Supplier</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Items</th>
+                                            <th>Total</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {orders.map(order => (
+                                            <tr key={order.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{order.poNumber}</td>
+                                                <td>{order.supplier}</td>
+                                                <td>{order.date}</td>
+                                                <td>
+                                                    <span className={`badge badge-${
+                                                        order.status === 'Pending' ? 'warning' :
+                                                        order.status === 'Approved' ? 'info' :
+                                                        order.status === 'Received' ? 'success' : 'neutral'
+                                                    }`}>
+                                                        {order.status}
+                                                    </span>
+                                                </td>
+                                                <td>{order.items}</td>
+                                                <td style={{fontWeight: 500}}>${order.total.toLocaleString()}</td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewPO', order)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    <button className="action-btn">
+                                                        <i className="ri-download-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function TransfersTab({ transfers, openModal }) {
+            return (
+                <>
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search transfers..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Pending Approval</option>
+                            <option>Approved</option>
+                            <option>In Transit</option>
+                            <option>Received</option>
+                        </select>
+                        <select className="filter-select">
+                            <option>All Branches</option>
+                            <option>Main Branch</option>
+                            <option>Downtown Branch</option>
+                            <option>Westside Branch</option>
+                        </select>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Stock Transfers</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Transfer No.</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Items</th>
+                                            <th>Value</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {transfers.map(transfer => (
+                                            <tr key={transfer.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{transfer.transferNo}</td>
+                                                <td>{transfer.from}</td>
+                                                <td>{transfer.to}</td>
+                                                <td>{transfer.date}</td>
+                                                <td>
+                                                    <span className={`badge badge-${
+                                                        transfer.status === 'Pending Approval' ? 'warning' :
+                                                        transfer.status === 'In Transit' ? 'info' :
+                                                        transfer.status === 'Received' ? 'success' : 'neutral'
+                                                    }`}>
+                                                        {transfer.status}
+                                                    </span>
+                                                </td>
+                                                <td>{transfer.items}</td>
+                                                <td>${transfer.value.toLocaleString()}</td>
+                                                <td>
+                                                    <button className="action-btn" onClick={() => openModal('viewTransfer', transfer)}>
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    {transfer.status === 'Pending Approval' && (
+                                                        <button className="action-btn" style={{color: 'var(--success-600)'}}>
+                                                            <i className="ri-check-line"></i>
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function ExpiryManagementTab({ products }) {
+            return (
+                <>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon danger">
+                                <i className="ri-alarm-warning-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Expired Items</div>
+                                <div className="stat-value">5</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-time-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Expiring in 30 Days</div>
+                                <div className="stat-value">18</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-time-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Expiring in 90 Days</div>
+                                <div className="stat-value">45</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="alert-card danger">
+                        <div className="alert-icon danger">
+                            <i className="ri-error-warning-line"></i>
+                        </div>
+                        <div className="alert-content">
+                            <div className="alert-title">Immediate Action Required</div>
+                            <div className="alert-text">1 product expired yesterday: Paracetamol 500mg (BT-2024-023) - 85 units</div>
+                        </div>
+                        <button className="btn btn-danger btn-sm">Review</button>
+                    </div>
+
+                    <div className="alert-card warning">
+                        <div className="alert-icon warning">
+                            <i className="ri-alarm-warning-line"></i>
+                        </div>
+                        <div className="alert-content">
+                            <div className="alert-title">Expiring Soon</div>
+                            <div className="alert-text">3 products expiring within 7 days - Total value: $2,340</div>
+                        </div>
+                        <button className="btn btn-secondary btn-sm">View Details</button>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Near Expiry Products</h3>
+                            <button className="btn btn-secondary btn-sm">
+                                <i className="ri-download-line"></i>Export Report
+                            </button>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Batch Number</th>
+                                            <th>Quantity</th>
+                                            <th>Expiry Date</th>
+                                            <th>Days Until Expiry</th>
+                                            <th>Value at Cost</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div className="product-cell">
+                                                    <div className="product-name">Paracetamol 500mg Tablets</div>
+                                                    <div className="product-meta">MED-PAR-500</div>
+                                                </div>
+                                            </td>
+                                            <td style={{fontFamily: 'monospace'}}>BT-2024-023</td>
+                                            <td><strong>85</strong></td>
+                                            <td>2024-06-30</td>
+                                            <td>
+                                                <span className="badge badge-danger">-1 days</span>
+                                            </td>
+                                            <td>$357.00</td>
+                                            <td>
+                                                <button className="action-btn">
+                                                    <i className="ri-delete-bin-line"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function GoodsReceivingTab({ openModal }) {
+            const mockReceiving = [
+                {
+                    id: 1,
+                    poNumber: 'PO-2024-0044',
+                    supplier: 'HealthMed Inc.',
+                    expectedDate: '2024-04-20',
+                    status: 'Pending Receipt',
+                    items: 8
+                }
+            ];
+
+            return (
+                <>
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search by PO number or supplier..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Pending Receipt</option>
+                            <option>Partially Received</option>
+                            <option>Fully Received</option>
+                        </select>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Pending Receipts</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>PO Number</th>
+                                            <th>Supplier</th>
+                                            <th>Expected Date</th>
+                                            <th>Items</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {mockReceiving.map(item => (
+                                            <tr key={item.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{item.poNumber}</td>
+                                                <td>{item.supplier}</td>
+                                                <td>{item.expectedDate}</td>
+                                                <td>{item.items}</td>
+                                                <td>
+                                                    <span className="badge badge-warning">{item.status}</span>
+                                                </td>
+                                                <td>
+                                                    <button className="btn btn-primary btn-sm" onClick={() => openModal('receiveGoods', item)}>
+                                                        <i className="ri-inbox-line"></i>Receive
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function AdjustmentsTab({ openModal }) {
+            const mockAdjustments = [
+                {
+                    id: 1,
+                    adjNumber: 'ADJ-2024-0015',
+                    date: '2024-04-24',
+                    reason: 'Physical Count Variance',
+                    items: 3,
+                    value: -245.00,
+                    status: 'Approved',
+                    user: 'Sarah Johnson'
+                },
+                {
+                    id: 2,
+                    adjNumber: 'ADJ-2024-0014',
+                    date: '2024-04-23',
+                    reason: 'Damaged Goods',
+                    items: 1,
+                    value: -180.00,
+                    status: 'Pending',
+                    user: 'Michael Chen'
+                }
+            ];
+
+            return (
+                <>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-edit-box-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">This Month</div>
+                                <div className="stat-value">24</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon danger">
+                                <i className="ri-arrow-down-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Total Loss</div>
+                                <div className="stat-value">$1,240</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="filters-bar">
+                        <div className="search-input">
+                            <i className="ri-search-line"></i>
+                            <input type="text" placeholder="Search adjustments..." />
+                        </div>
+                        <select className="filter-select">
+                            <option>All Reasons</option>
+                            <option>Physical Count Variance</option>
+                            <option>Damaged Goods</option>
+                            <option>Theft/Loss</option>
+                            <option>Expiry</option>
+                            <option>Correction</option>
+                        </select>
+                        <select className="filter-select">
+                            <option>All Status</option>
+                            <option>Pending</option>
+                            <option>Approved</option>
+                            <option>Rejected</option>
+                        </select>
+                        <button className="btn btn-primary btn-sm" onClick={() => openModal('createAdjustment')}>
+                            <i className="ri-add-line"></i>New Adjustment
+                        </button>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Stock Adjustments</h3>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Adjustment No.</th>
+                                            <th>Date</th>
+                                            <th>Reason</th>
+                                            <th>Items</th>
+                                            <th>Value Impact</th>
+                                            <th>Created By</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {mockAdjustments.map(adj => (
+                                            <tr key={adj.id}>
+                                                <td style={{fontFamily: 'monospace', fontWeight: 500}}>{adj.adjNumber}</td>
+                                                <td>{adj.date}</td>
+                                                <td>{adj.reason}</td>
+                                                <td>{adj.items}</td>
+                                                <td style={{color: adj.value < 0 ? 'var(--danger-600)' : 'var(--success-600)', fontWeight: 500}}>
+                                                    ${Math.abs(adj.value).toLocaleString()}
+                                                </td>
+                                                <td>{adj.user}</td>
+                                                <td>
+                                                    <span className={`badge badge-${adj.status === 'Approved' ? 'success' : 'warning'}`}>
+                                                        {adj.status}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button className="action-btn">
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    {adj.status === 'Pending' && (
+                                                        <button className="action-btn" style={{color: 'var(--success-600)'}}>
+                                                            <i className="ri-check-line"></i>
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function ControlledSubstancesTab({ openModal }) {
+            const mockControlled = [
+                {
+                    id: 1,
+                    name: 'Morphine Sulfate 10mg',
+                    schedule: 'Schedule II',
+                    sku: 'MED-MOR-010',
+                    stock: 145,
+                    dispensed: 23,
+                    variance: 0
+                },
+                {
+                    id: 2,
+                    name: 'Alprazolam 1mg',
+                    schedule: 'Schedule IV',
+                    sku: 'MED-ALP-001',
+                    stock: 320,
+                    dispensed: 45,
+                    variance: 2
+                }
+            ];
+
+            return (
+                <>
+                    <div className="alert-card warning">
+                        <div className="alert-icon warning">
+                            <i className="ri-shield-keyhole-line"></i>
+                        </div>
+                        <div className="alert-content">
+                            <div className="alert-title">Controlled Substances Tracking</div>
+                            <div className="alert-text">This module tracks Schedule II-V controlled substances with perpetual inventory and regulatory compliance features.</div>
+                        </div>
+                    </div>
+
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-icon primary">
+                                <i className="ri-shield-keyhole-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Controlled Products</div>
+                                <div className="stat-value">28</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon warning">
+                                <i className="ri-error-warning-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Variance Alerts</div>
+                                <div className="stat-value">1</div>
+                            </div>
+                        </div>
+                        <div className="stat-card">
+                            <div className="stat-icon success">
+                                <i className="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div className="stat-content">
+                                <div className="stat-label">Last Audit</div>
+                                <div className="stat-value">2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Controlled Substances Inventory</h3>
+                            <button className="btn btn-primary btn-sm" onClick={() => openModal('auditControlled')}>
+                                <i className="ri-file-list-3-line"></i>Run Audit
+                            </button>
+                        </div>
+                        <div className="card-body" style={{padding: 0}}>
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Schedule</th>
+                                            <th>Current Stock</th>
+                                            <th>Dispensed (30d)</th>
+                                            <th>Variance</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {mockControlled.map(item => (
+                                            <tr key={item.id}>
+                                                <td>
+                                                    <div className="product-cell">
+                                                        <div className="product-name">{item.name}</div>
+                                                        <div className="product-meta">{item.sku}</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span className="badge badge-danger">{item.schedule}</span>
+                                                </td>
+                                                <td><strong>{item.stock}</strong></td>
+                                                <td>{item.dispensed}</td>
+                                                <td>
+                                                    {item.variance === 0 ? (
+                                                        <span className="badge badge-success">
+                                                            <i className="ri-check-line"></i>None
+                                                        </span>
+                                                    ) : (
+                                                        <span className="badge badge-warning">
+                                                            <i className="ri-error-warning-line"></i>{item.variance}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <button className="action-btn">
+                                                        <i className="ri-eye-line"></i>
+                                                    </button>
+                                                    <button className="action-btn">
+                                                        <i className="ri-file-list-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function ReportsTab() {
+            return (
+                <>
+                    <div style={{marginBottom: '24px'}}>
+                        <h3 style={{fontSize: '16px', fontWeight: 600, color: 'var(--neutral-900)', marginBottom: '8px'}}>
+                            Inventory Reports & Analytics
+                        </h3>
+                        <p style={{color: 'var(--neutral-600)', fontSize: '14px'}}>
+                            Generate comprehensive reports on stock levels, movements, and performance metrics.
+                        </p>
+                    </div>
+
+                    <div className="two-column-grid">
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Stock Reports</h3>
+                            </div>
+                            <div className="card-body">
+                                <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-file-list-line"></i>Current Stock Levels
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-arrow-up-down-line"></i>Stock Movement History
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-fire-line"></i>Fast Moving Items
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-speed-mini-line"></i>Slow Moving Items
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-close-circle-line"></i>Dead Stock Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Financial Reports</h3>
+                            </div>
+                            <div className="card-body">
+                                <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-money-dollar-circle-line"></i>Inventory Valuation
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-shopping-cart-line"></i>Procurement Analytics
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-percent-line"></i>Stock Turnover Ratio
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-line-chart-line"></i>Cost Analysis
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Compliance Reports</h3>
+                            </div>
+                            <div className="card-body">
+                                <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-alarm-warning-line"></i>Expiry Report
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-shield-keyhole-line"></i>Controlled Substances Log
+                                    </button>
+                                    <button className="btn btn-secondary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-edit-box-line"></i>Adjustments Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Custom Reports</h3>
+                            </div>
+                            <div className="card-body">
+                                <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
+                                    <button className="btn btn-primary" style={{justifyContent: 'flex-start'}}>
+                                        <i className="ri-add-line"></i>Create Custom Report
+                                    </button>
+                                    <div style={{padding: '16px', background: 'var(--neutral-50)', borderRadius: '8px', marginTop: '8px'}}>
+                                        <p style={{fontSize: '13px', color: 'var(--neutral-600)'}}>
+                                            Build custom reports with flexible filters and export options.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        function Modal({ type, item, onClose }) {
+            if (type === 'viewProduct') {
+                return <ViewProductModal product={item} onClose={onClose} />;
+            }
+            if (type === 'addProduct' || type === 'editProduct') {
+                return <ProductFormModal product={item} onClose={onClose} isEdit={type === 'editProduct'} />;
+            }
+            if (type === 'createPO') {
+                return <CreatePOModal onClose={onClose} />;
+            }
+            if (type === 'viewPO') {
+                return <ViewPOModal order={item} onClose={onClose} />;
+            }
+            if (type === 'createTransfer') {
+                return <CreateTransferModal onClose={onClose} />;
+            }
+            if (type === 'addSupplier') {
+                return <SupplierFormModal onClose={onClose} />;
+            }
+            if (type === 'receiveGoods') {
+                return <ReceiveGoodsModal item={item} onClose={onClose} />;
+            }
+            if (type === 'createAdjustment') {
+                return <CreateAdjustmentModal onClose={onClose} />;
+            }
+            if (type === 'auditControlled') {
+                return <AuditControlledModal onClose={onClose} />;
+            }
+            return null;
+        }
+
+        function ViewProductModal({ product, onClose }) {
+            const [activeModalTab, setActiveModalTab] = useState('details');
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">{product.name}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="tabs" style={{margin: 0}}>
+                            <div className={`tab ${activeModalTab === 'details' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('details')}>
+                                Details
+                            </div>
+                            <div className={`tab ${activeModalTab === 'batches' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('batches')}>
+                                Batches ({product.batches.length})
+                            </div>
+                            <div className={`tab ${activeModalTab === 'history' ? 'active' : ''}`}
+                                 onClick={() => setActiveModalTab('history')}>
+                                Stock History
+                            </div>
+                        </div>
+                        <div className="modal-body">
+                            {activeModalTab === 'details' && (
+                                <div className="two-column-grid">
+                                    <div>
+                                        <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '12px'}}>Product Information</h4>
+                                        <div className="info-grid">
+                                            <div className="info-label">Generic Name</div>
+                                            <div className="info-value">{product.genericName}</div>
+                                            
+                                            <div className="info-label">SKU</div>
+                                            <div className="info-value" style={{fontFamily: 'monospace'}}>{product.sku}</div>
+                                            
+                                            <div className="info-label">Category</div>
+                                            <div className="info-value">{product.category}</div>
+                                            
+                                            <div className="info-label">Type</div>
+                                            <div className="info-value">
+                                                <span className={`badge badge-${product.type === 'Prescription' ? 'info' : 'neutral'}`}>
+                                                    {product.type}
+                                                </span>
+                                            </div>
+                                            
+                                            <div className="info-label">Manufacturer</div>
+                                            <div className="info-value">{product.manufacturer}</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '12px'}}>Stock Information</h4>
+                                        <div className="info-grid">
+                                            <div className="info-label">Total Stock</div>
+                                            <div className="info-value"><strong>{product.totalStock}</strong> units</div>
+                                            
+                                            <div className="info-label">Reorder Point</div>
+                                            <div className="info-value">{product.reorderPoint} units</div>
+                                            
+                                            <div className="info-label">Active Batches</div>
+                                            <div className="info-value">{product.batches.length}</div>
+                                            
+                                            <div className="info-label">Stock Status</div>
+                                            <div className="info-value">
+                                                {product.totalStock < product.reorderPoint ? (
+                                                    <span className="badge badge-warning">Low Stock</span>
+                                                ) : (
+                                                    <span className="badge badge-success">In Stock</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {activeModalTab === 'batches' && (
+                                <div className="batch-list">
+                                    {product.batches.map((batch, idx) => (
+                                        <div className="batch-item" key={idx}>
+                                            <div className="batch-info">
+                                                <div className="info-pair">
+                                                    <span className="info-pair-label">Batch:</span>
+                                                    <span className="info-pair-value">{batch.batch}</span>
+                                                </div>
+                                                <div className="info-pair">
+                                                    <span className="info-pair-label">Qty:</span>
+                                                    <span className="info-pair-value">{batch.quantity}</span>
+                                                </div>
+                                                <div className="info-pair">
+                                                    <span className="info-pair-label">Expiry:</span>
+                                                    <span className="info-pair-value">{batch.expiry}</span>
+                                                </div>
+                                                <div className="info-pair">
+                                                    <span className="info-pair-label">Cost:</span>
+                                                    <span className="info-pair-value">${batch.cost}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            <button className="btn btn-primary">
+                                <i className="ri-edit-line"></i>Edit Product
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ProductFormModal({ product, onClose, isEdit }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">{isEdit ? 'Edit Product' : 'Add New Product'}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label required">Product Name</label>
+                                    <input type="text" className="form-input" defaultValue={product?.name} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Generic Name</label>
+                                    <input type="text" className="form-input" defaultValue={product?.genericName} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">SKU</label>
+                                    <input type="text" className="form-input" defaultValue={product?.sku} />
+                                </div>
+                            </div>
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Category</label>
+                                    <select className="form-input" defaultValue={product?.category}>
+                                        <option>Select category...</option>
+                                        <option>Antibiotics</option>
+                                        <option>Analgesics</option>
+                                        <option>Cardiovascular</option>
+                                        <option>Diabetes</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Type</label>
+                                    <select className="form-input" defaultValue={product?.type}>
+                                        <option>Prescription</option>
+                                        <option>OTC</option>
+                                        <option>Controlled</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Manufacturer</label>
+                                    <input type="text" className="form-input" defaultValue={product?.manufacturer} />
+                                </div>
+                            </div>
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Reorder Point</label>
+                                    <input type="number" className="form-input" defaultValue={product?.reorderPoint} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Safety Stock</label>
+                                    <input type="number" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Lead Time (days)</label>
+                                    <input type="number" className="form-input" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">
+                                {isEdit ? 'Save Changes' : 'Add Product'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CreatePOModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create Purchase Order</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid two-col">
+                                <div className="form-group">
+                                    <label className="form-label required">Supplier</label>
+                                    <select className="form-input">
+                                        <option>Select supplier...</option>
+                                        <option>PharmaCorp Ltd.</option>
+                                        <option>HealthMed Inc.</option>
+                                        <option>MediSupply Global</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Delivery Branch</label>
+                                    <select className="form-input">
+                                        <option>Main Branch</option>
+                                        <option>Downtown Branch</option>
+                                        <option>Westside Branch</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-grid two-col" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Expected Delivery</label>
+                                    <input type="date" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Payment Terms</label>
+                                    <select className="form-input">
+                                        <option>Net 30</option>
+                                        <option>Net 60</option>
+                                        <option>COD</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style={{marginTop: '20px', padding: '16px', background: 'var(--neutral-50)', borderRadius: '8px'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px'}}>
+                                    <strong>Order Items</strong>
+                                    <button className="btn btn-secondary btn-sm">
+                                        <i className="ri-add-line"></i>Add Item
+                                    </button>
+                                </div>
+                                <div style={{fontSize: '13px', color: 'var(--neutral-500)'}}>
+                                    No items added yet
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Create PO</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ViewPOModal({ order, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Purchase Order {order.poNumber}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{marginBottom: '20px'}}>
+                                <span className={`badge badge-${
+                                    order.status === 'Pending' ? 'warning' :
+                                    order.status === 'Approved' ? 'info' :
+                                    order.status === 'Received' ? 'success' : 'neutral'
+                                }`}>
+                                    {order.status}
+                                </span>
+                            </div>
+                            <div className="two-column-grid">
+                                <div className="info-grid">
+                                    <div className="info-label">Supplier</div>
+                                    <div className="info-value">{order.supplier}</div>
+                                    
+                                    <div className="info-label">Date</div>
+                                    <div className="info-value">{order.date}</div>
+                                    
+                                    <div className="info-label">Items</div>
+                                    <div className="info-value">{order.items}</div>
+                                    
+                                    <div className="info-label">Total</div>
+                                    <div className="info-value" style={{fontWeight: 600}}>${order.total.toLocaleString()}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                            {order.status === 'Pending' && (
+                                <button className="btn btn-success">Approve</button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CreateTransferModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create Stock Transfer</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid two-col">
+                                <div className="form-group">
+                                    <label className="form-label required">From Branch</label>
+                                    <select className="form-input">
+                                        <option>Main Branch</option>
+                                        <option>Downtown Branch</option>
+                                        <option>Westside Branch</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">To Branch</label>
+                                    <select className="form-input">
+                                        <option>Main Branch</option>
+                                        <option>Downtown Branch</option>
+                                        <option>Westside Branch</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Transfer Reason</label>
+                                    <textarea className="form-input" rows="2" placeholder="Optional reason for transfer..."></textarea>
+                                </div>
+                            </div>
+                            <div style={{marginTop: '20px', padding: '16px', background: 'var(--neutral-50)', borderRadius: '8px'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px'}}>
+                                    <strong>Transfer Items</strong>
+                                    <button className="btn btn-secondary btn-sm">
+                                        <i className="ri-add-line"></i>Add Item
+                                    </button>
+                                </div>
+                                <div style={{fontSize: '13px', color: 'var(--neutral-500)'}}>
+                                    No items added yet
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Create Transfer</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function SupplierFormModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Add New Supplier</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid two-col">
+                                <div className="form-group">
+                                    <label className="form-label required">Supplier Name</label>
+                                    <input type="text" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Contact Person</label>
+                                    <input type="text" className="form-input" />
+                                </div>
+                            </div>
+                            <div className="form-grid two-col" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Phone</label>
+                                    <input type="tel" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Email</label>
+                                    <input type="email" className="form-input" />
+                                </div>
+                            </div>
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Address</label>
+                                    <textarea className="form-input" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Add Supplier</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ReceiveGoodsModal({ item, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Receive Goods - {item.poNumber}</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{marginBottom: '20px', padding: '14px', background: 'var(--neutral-50)', borderRadius: '8px'}}>
+                                <div className="info-grid">
+                                    <div className="info-label">Supplier</div>
+                                    <div className="info-value">{item.supplier}</div>
+                                    
+                                    <div className="info-label">Expected Date</div>
+                                    <div className="info-value">{item.expectedDate}</div>
+                                    
+                                    <div className="info-label">Total Items</div>
+                                    <div className="info-value">{item.items}</div>
+                                </div>
+                            </div>
+
+                            <h4 style={{fontSize: '14px', fontWeight: 600, marginBottom: '12px'}}>Receiving Details</h4>
+                            
+                            <div className="form-grid two-col">
+                                <div className="form-group">
+                                    <label className="form-label required">Received Date</label>
+                                    <input type="date" className="form-input" defaultValue={new Date().toISOString().split('T')[0]} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Delivery Note No.</label>
+                                    <input type="text" className="form-input" />
+                                </div>
+                            </div>
+
+                            <div style={{marginTop: '20px', padding: '16px', border: '1px solid var(--border-color)', borderRadius: '8px'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '12px'}}>
+                                    <strong>Items to Receive</strong>
+                                    <span className="badge badge-info">{item.items} items</span>
+                                </div>
+                                <div style={{fontSize: '13px', color: 'var(--neutral-500)'}}>
+                                    Verify batch numbers, expiry dates, and quantities for each item
+                                </div>
+                            </div>
+
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Notes</label>
+                                    <textarea className="form-input" rows="2" placeholder="Any discrepancies, damages, or notes..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Complete Receipt</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CreateAdjustmentModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create Stock Adjustment</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-grid two-col">
+                                <div className="form-group">
+                                    <label className="form-label required">Adjustment Type</label>
+                                    <select className="form-input">
+                                        <option>Select type...</option>
+                                        <option>Increase</option>
+                                        <option>Decrease</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Reason</label>
+                                    <select className="form-input">
+                                        <option>Select reason...</option>
+                                        <option>Physical Count Variance</option>
+                                        <option>Damaged Goods</option>
+                                        <option>Theft/Loss</option>
+                                        <option>Expiry</option>
+                                        <option>Data Correction</option>
+                                        <option>Return to Supplier</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Product</label>
+                                    <input type="text" className="form-input" placeholder="Search product by name or SKU..." />
+                                </div>
+                            </div>
+
+                            <div className="form-grid" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Batch Number</label>
+                                    <input type="text" className="form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Current Quantity</label>
+                                    <input type="number" className="form-input" disabled value="150" />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Adjustment Qty</label>
+                                    <input type="number" className="form-input" />
+                                </div>
+                            </div>
+
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label required">Explanation</label>
+                                    <textarea className="form-input" rows="3" placeholder="Provide detailed explanation for this adjustment..."></textarea>
+                                </div>
+                            </div>
+
+                            <div style={{marginTop: '16px', padding: '12px', background: 'var(--warning-100)', borderRadius: '8px', fontSize: '13px', color: 'var(--warning-700)'}}>
+                                <i className="ri-information-line"></i> Adjustments over $500 require manager approval
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Submit Adjustment</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function AuditControlledModal({ onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Controlled Substances Audit</h2>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="ri-close-line"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div style={{marginBottom: '20px', padding: '14px', background: 'var(--info-100)', borderRadius: '8px', fontSize: '13px', color: 'var(--info-700)'}}>
+                                <i className="ri-shield-check-line"></i> This audit verifies physical counts against system records for all controlled substances
+                            </div>
+
+                            <div className="form-grid two-col">
+                                <div className="form-group">
+                                    <label className="form-label required">Audit Date</label>
+                                    <input type="date" className="form-input" defaultValue={new Date().toISOString().split('T')[0]} />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label required">Auditor</label>
+                                    <input type="text" className="form-input" value="Sarah Johnson" disabled />
+                                </div>
+                            </div>
+
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Audit Scope</label>
+                                    <select className="form-input">
+                                        <option>All Controlled Substances</option>
+                                        <option>Schedule II Only</option>
+                                        <option>Schedule III-V Only</option>
+                                        <option>Custom Selection</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div style={{marginTop: '20px', padding: '16px', border: '1px solid var(--border-color)', borderRadius: '8px'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '8px'}}>
+                                    <strong>Items to Audit</strong>
+                                    <span className="badge badge-neutral">28 products</span>
+                                </div>
+                                <div style={{fontSize: '13px', color: 'var(--neutral-500)'}}>
+                                    Physical count will be compared against system records
+                                </div>
+                            </div>
+
+                            <div className="form-grid single" style={{marginTop: '16px'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Notes</label>
+                                    <textarea className="form-input" rows="2" placeholder="Optional audit notes..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+                            <button className="btn btn-primary">Begin Audit</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<InventoryApp />);
+    </script>
+</body>
+</html>
