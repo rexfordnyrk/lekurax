@@ -43,6 +43,7 @@ describe("AdminAuthPoliciesView", () => {
 
     render(<AdminAuthPoliciesView />);
 
+    expect(await screen.findByRole("heading", { name: /auth policies/i })).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByLabelText("Minimum length")).toBeInTheDocument()
     );

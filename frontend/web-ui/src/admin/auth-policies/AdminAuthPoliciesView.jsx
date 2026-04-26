@@ -127,47 +127,55 @@ export function AdminAuthPoliciesView() {
   };
 
   return (
-    <div className="row gy-4">
-      <div className="col-12">
-        <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap">
-          <div>
-            <h5 className="mb-6">Auth policies</h5>
-            <div className="text-secondary-light">
-              Password, MFA, and session controls for this tenant.
-            </div>
-          </div>
-
+    <div className="content-area">
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div className="card-header">
+          <h3 className="card-title">Auth policies</h3>
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-sm btn-outline-primary" onClick={load} disabled={loading || saving}>
-              <Icon icon="solar:refresh-linear" className="icon text-md me-1" />
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={load}
+              disabled={loading || saving}
+            >
+              <Icon icon="solar:refresh-linear" className="icon text-md" />
               Refresh
             </button>
-            <button type="button" className="btn btn-sm btn-primary" onClick={onSave} disabled={loading || saving || !canUpdateTenant}>
-              <Icon icon="solar:diskette-linear" className="icon text-md me-1" />
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={onSave}
+              disabled={loading || saving || !canUpdateTenant}
+            >
+              <Icon icon="solar:diskette-linear" className="icon text-md" />
               Save policies
             </button>
           </div>
         </div>
+        <div className="card-body">
+          {error ? <Alert variant="danger">{error}</Alert> : null}
+          {success ? <Alert variant="success">{success}</Alert> : null}
+          {!canUpdateTenant ? (
+            <Alert variant="warning" className="mb-0">
+              You don’t have <code>tenants.update</code>, so this page is read-only.
+            </Alert>
+          ) : null}
+        </div>
       </div>
 
-      <div className="col-12">
-        {error ? <Alert variant="danger">{error}</Alert> : null}
-        {success ? <Alert variant="success">{success}</Alert> : null}
-        {!canUpdateTenant ? (
-          <Alert variant="warning">
-            You don’t have `tenants.update`, so this page is read-only.
-          </Alert>
-        ) : null}
-      </div>
+      <div className="row gy-4">
 
       <div className="col-lg-4">
-        <div className="card p-24 radius-12 h-100">
-          <h6 className="mb-12">Password policy</h6>
-          <div className="text-secondary-light mb-16">
-            Enforce minimum complexity and lockout thresholds.
+        <div className="card h-100">
+          <div className="card-header">
+            <h3 className="card-title">Password policy</h3>
           </div>
+          <div className="card-body">
+            <div className="text-secondary-light mb-16">
+              Enforce minimum complexity and lockout thresholds.
+            </div>
 
-          <div className="row g-3">
+            <div className="row g-3">
             <div className="col-12">
               <Form.Group controlId="auth-policy-min-length">
                 <Form.Label>Minimum length</Form.Label>
@@ -241,17 +249,21 @@ export function AdminAuthPoliciesView() {
               </Form.Group>
             </div>
           </div>
+          </div>
         </div>
       </div>
 
       <div className="col-lg-4">
-        <div className="card p-24 radius-12 h-100">
-          <h6 className="mb-12">MFA policy</h6>
-          <div className="text-secondary-light mb-16">
-            Control whether MFA is required and how OTP onboarding behaves.
+        <div className="card h-100">
+          <div className="card-header">
+            <h3 className="card-title">MFA policy</h3>
           </div>
+          <div className="card-body">
+            <div className="text-secondary-light mb-16">
+              Control whether MFA is required and how OTP onboarding behaves.
+            </div>
 
-          <div className="row g-3">
+            <div className="row g-3">
             <div className="col-12">
               <Form.Group controlId="auth-policy-mfa">
                 <Form.Label>MFA policy</Form.Label>
@@ -282,15 +294,19 @@ export function AdminAuthPoliciesView() {
               />
             </div>
           </div>
+          </div>
         </div>
       </div>
 
       <div className="col-lg-4">
-        <div className="card p-24 radius-12 h-100">
-          <h6 className="mb-12">Session policy</h6>
-          <div className="text-secondary-light mb-12">{sessionUnsupportedMessage}</div>
+        <div className="card h-100">
+          <div className="card-header">
+            <h3 className="card-title">Session policy</h3>
+          </div>
+          <div className="card-body">
+            <div className="text-secondary-light mb-12">{sessionUnsupportedMessage}</div>
 
-          <div className="row g-3">
+            <div className="row g-3">
             <div className="col-12">
               <Form.Group controlId="auth-policy-idle">
                 <Form.Label>Idle timeout (minutes)</Form.Label>
@@ -334,8 +350,10 @@ export function AdminAuthPoliciesView() {
               Configure sessions
             </Button>
           </div>
+          </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
