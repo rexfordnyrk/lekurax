@@ -1,25 +1,6 @@
 import React from "react";
-import MasterLayout from "../masterLayout/MasterLayout";
-import Breadcrumb from "../components/Breadcrumb";
-import AssignRoleLayer from "../components/AssignRoleLayer";
+import { Navigate } from "react-router-dom";
 
-
-const AssignRolePage = () => {
-  return (
-    <>
-      {/* MasterLayout */}
-      <MasterLayout>
-
-        {/* Breadcrumb */}
-        <Breadcrumb title="Assign Role" />
-
-        {/* AssignRoleLayer */}
-        <AssignRoleLayer />
-
-
-      </MasterLayout>
-    </>
-  );
-};
-
-export default AssignRolePage;
+export default function AssignRolePage() {
+  return <Navigate to="/admin/roles?tab=assign" replace />;
+}
