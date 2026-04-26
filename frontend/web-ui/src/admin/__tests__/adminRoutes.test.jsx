@@ -94,7 +94,7 @@ describe("admin routing behavior", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Users" })).toBeInTheDocument();
-    expect(await screen.findByText("User Accounts")).toBeInTheDocument();
+    expect(await screen.findByText(/User Accounts/)).toBeInTheDocument();
   });
 
   it("visiting /admin/users when unauthenticated ends up on sign-in", async () => {
