@@ -4,7 +4,9 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import RequireAuth from "../../auth/RequireAuth";
-import AdminUsersPage from "../pages/AdminUsersPage";
+import { AuthProvider } from "../../auth/AuthContext";
+import { BranchProvider } from "../../branch/BranchContext";
+import AdminUsersPage from "../../pages/admin/AdminUsersPage";
 
 let authState = {
   bootstrapping: false,
@@ -13,31 +15,58 @@ let authState = {
   logout: vi.fn(),
 };
 
-vi.mock("../../auth/AuthContext", () => {
+vi.mock("../../auth/authzkitClient", () => ({
+  authzkit: {
+    get isAuthenticated() {
+      return Boolean(authState.isAuthenticated);
+    },
+    users: {
+      getMe: vi.fn(async () => authState.me),
+      getMyPermissions: vi.fn(async () => ({ permissions: ["users.list", "users.view", "audit.view"] })),
+      list: vi.fn(async () => ({
+        items: [],
+        meta: { page: 1, page_size: 200, total: 0 },
+      })),
+    },
+    branches: {
+      list: vi.fn(async () => ({ items: [], meta: { page: 1, page_size: 200, total: 0 } })),
+    },
+    auditLogs: {
+      list: vi.fn(async () => ({ items: [], meta: { page: 1, page_size: 200, total: 0 } })),
+    },
+  },
+}));
+
+vi.mock("../../auth/AuthContext", async () => {
+  const actual = await vi.importActual("../../auth/AuthContext");
   return {
-    AuthProvider: ({ children }) => children,
+    ...actual,
     useAuth: () => authState,
   };
 });
 
 function TestRoutes() {
   return (
-    <Routes>
-      <Route path="/sign-in" element={<h1>Sign In to your Account</h1>} />
+    <AuthProvider>
+      <BranchProvider>
+        <Routes>
+          <Route path="/sign-in" element={<h1>Sign In to your Account</h1>} />
 
-      {/* Legacy redirects */}
-      <Route path="/users-list" element={<Navigate to="/admin/users" replace />} />
+          {/* Legacy redirects */}
+          <Route path="/users-list" element={<Navigate to="/admin/users" replace />} />
 
-      {/* Admin routes (protected) */}
-      <Route
-        path="/admin/users"
-        element={
-          <RequireAuth>
-            <AdminUsersPage />
-          </RequireAuth>
-        }
-      />
-    </Routes>
+          {/* Admin routes (protected) */}
+          <Route
+            path="/admin/users"
+            element={
+              <RequireAuth>
+                <AdminUsersPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </BranchProvider>
+    </AuthProvider>
   );
 }
 
@@ -47,6 +76,15 @@ describe("admin routing behavior", () => {
       ...authState,
       bootstrapping: false,
       isAuthenticated: true,
+      me: {
+        user: { tenant_id: "tenant-test" },
+        is_platform_user: false,
+        branches_enabled: true,
+        accessible_branches: [{ id: "b1", name: "Main" }],
+        default_branch_id: "b1",
+      },
+      refreshMe: vi.fn(),
+      logout: vi.fn(),
     };
 
     render(
@@ -55,7 +93,7 @@ describe("admin routing behavior", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText("Admin Users")).toBeInTheDocument();
+    expect(await screen.findByText("User Accounts")).toBeInTheDocument();
   });
 
   it("visiting /admin/users when unauthenticated ends up on sign-in", async () => {

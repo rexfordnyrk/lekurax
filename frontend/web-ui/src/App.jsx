@@ -131,10 +131,10 @@ import PortalHomePage from "./pages/portal/PortalHomePage";
 import PortalPrescriptionsPage from "./pages/portal/PortalPrescriptionsPage";
 import CouriersPage from "./pages/CouriersPage";
 import DeliveriesPage from "./pages/DeliveriesPage";
-import AdminUsersPage from "./admin/pages/AdminUsersPage";
-import AdminRolesPage from "./admin/pages/AdminRolesPage";
-import AdminAuditLogsPage from "./admin/pages/AdminAuditLogsPage";
-import AdminAuthPoliciesPage from "./admin/pages/AdminAuthPoliciesPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminRolesPage from "./pages/admin/AdminRolesPage";
+import AdminAuditLogsPage from "./pages/admin/AdminAuditLogsPage";
+import AdminAuthPoliciesPage from "./pages/admin/AdminAuthPoliciesPage";
 
 function App() {
   return (
