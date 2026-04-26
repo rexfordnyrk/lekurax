@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePageOne from "./pages/HomePageOne";
 import HomePageTwo from "./pages/HomePageTwo";
 import HomePageThree from "./pages/HomePageThree";
@@ -131,6 +131,10 @@ import PortalHomePage from "./pages/portal/PortalHomePage";
 import PortalPrescriptionsPage from "./pages/portal/PortalPrescriptionsPage";
 import CouriersPage from "./pages/CouriersPage";
 import DeliveriesPage from "./pages/DeliveriesPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminRolesPage from "./pages/admin/AdminRolesPage";
+import AdminAuditLogsPage from "./pages/admin/AdminAuditLogsPage";
+import AdminAuthPoliciesPage from "./pages/admin/AdminAuthPoliciesPage";
 
 function App() {
   return (
@@ -140,11 +144,42 @@ function App() {
         <BranchProvider>
           <Routes>
           <Route
-            exact
             path='/'
             element={
               <RequireAuth>
                 <HomePageOne />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <RequireAuth>
+                <AdminUsersPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admin/roles"
+            element={
+              <RequireAuth>
+                <AdminRolesPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admin/audit"
+            element={
+              <RequireAuth>
+                <AdminAuditLogsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admin/auth-policies"
+            element={
+              <RequireAuth>
+                <AdminAuthPoliciesPage />
               </RequireAuth>
             }
           />
@@ -162,7 +197,10 @@ function App() {
         {/* SL */}
         <Route exact path='/add-user' element={<AddUserPage />} />
         <Route exact path='/alert' element={<AlertPage />} />
-        <Route exact path='/assign-role' element={<AssignRolePage />} />
+         <Route
+           path='/assign-role'
+           element={<Navigate to="/admin/roles?tab=assign" replace />}
+         />
         <Route exact path='/avatar' element={<AvatarPage />} />
         <Route exact path='/badges' element={<BadgesPage />} />
         <Route exact path='/button' element={<ButtonPage />} />
@@ -235,7 +273,10 @@ function App() {
         <Route exact path='/pricing' element={<PricingPage />} />
         <Route exact path='/progress' element={<ProgressPage />} />
         <Route exact path='/radio' element={<RadioPage />} />
-        <Route exact path='/role-access' element={<RoleAccessPage />} />
+         <Route
+           path='/role-access'
+           element={<Navigate to="/admin/roles" replace />}
+         />
         <Route exact path='/sign-in' element={<SignInPage />} />
         <Route exact path='/sign-in/otp' element={<OtpSignInPage />} />
         <Route exact path='/sign-up' element={<SignUpPage />} />
@@ -257,7 +298,10 @@ function App() {
         <Route exact path='/tooltip' element={<TooltipPage />} />
         <Route exact path='/typography' element={<TypographyPage />} />
         <Route exact path='/users-grid' element={<UsersGridPage />} />
-        <Route exact path='/users-list' element={<UsersListPage />} />
+         <Route
+           path='/users-list'
+           element={<Navigate to="/admin/users" replace />}
+         />
         <Route exact path='/view-details' element={<ViewDetailsPage />} />
         <Route exact path='/video-generator' element={<VideoGeneratorPage />} />
         <Route exact path='/videos' element={<VideosPage />} />

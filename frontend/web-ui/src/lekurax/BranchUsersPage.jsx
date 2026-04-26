@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { AuthzKitApiError } from "@authzkit/client";
 import MasterLayout from "../masterLayout/MasterLayout";
 import Breadcrumb from "../components/Breadcrumb";
@@ -15,6 +16,14 @@ function userLabel(u) {
   const name = [u.first_name, u.last_name].filter(Boolean).join(" ").trim();
   if (name) return name;
   return u.email || u.phone_number || u.id;
+}
+
+function initials(u) {
+  const fn = (u?.first_name ?? "").trim();
+  const ln = (u?.last_name ?? "").trim();
+  const a = fn.charAt(0) || (u?.email ?? "").charAt(0) || "?";
+  const b = ln.charAt(0) || (u?.email ?? "").charAt(1) || "";
+  return `${a}${b}`.toUpperCase();
 }
 
 const BranchUsersPage = () => {
@@ -95,50 +104,98 @@ const BranchUsersPage = () => {
 
   return (
     <MasterLayout>
-      <Breadcrumb title='Branch members' />
-      <div className='dashboard-main-body'>
-        <div className='mb-3'>
-          <Link to='/lekurax/branches' className='btn btn-sm btn-outline-secondary'>
-            ← Branches
+      <Breadcrumb title="Branch members" />
+      <div className="dashboard-main-body">
+        <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-16">
+          <div>
+            <h5 className="mb-6">Branch members</h5>
+            <div className="text-secondary-light">
+              Assign tenant users to this branch so Lekurax can enforce membership where required.
+            </div>
+          </div>
+          <Link
+            to="/lekurax/branches"
+            className="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-2"
+          >
+            <Icon icon="solar:arrow-left-linear" className="icon text-md" />
+            Branches
           </Link>
         </div>
-        {error ? <div className='alert alert-danger'>{error}</div> : null}
-        <div className='card p-24 radius-12'>
-          <h6 className='mb-2'>Users for branch</h6>
-          <p className='text-secondary-light text-sm mb-3'>
-            <code className='text-xs'>{branchId}</code>
-            {branchName ? (
-              <>
-                {" "}
-                — <span className='fw-medium'>{branchName}</span>
-              </>
-            ) : null}
-          </p>
-          <p className='text-secondary-light text-sm mb-3'>
-            Non–tenant-admin users must be assigned here (or via Authz API) before
-            Lekurax can enforce branch membership for them.
-          </p>
-          <div className='table-responsive'>
-            <table className='table table-hover mb-0'>
+
+        {error ? <div className="alert alert-danger mb-16">{error}</div> : null}
+
+        <div className="card p-24 radius-12">
+          <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-16">
+            <div>
+              <h6 className="mb-0">Directory</h6>
+              <p className="text-secondary-light text-sm mb-0 mt-8">
+                <span className="fw-medium text-dark">{branchName || "Branch"}</span>
+                <span className="text-secondary-light"> · </span>
+                <code className="text-xs">{branchId}</code>
+              </p>
+            </div>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-2"
+              onClick={load}
+            >
+              <Icon icon="solar:refresh-linear" className="icon text-md" />
+              Refresh
+            </button>
+          </div>
+
+          <div className="table-responsive scroll-sm">
+            <table className="table table-hover mb-0">
               <thead>
                 <tr>
                   <th>User</th>
                   <th>Email</th>
                   <th>Status</th>
-                  <th />
+                  <th className="text-end">Branch access</th>
                 </tr>
               </thead>
               <tbody>
                 {tenantUsers.map((u) => (
                   <tr key={u.id}>
-                    <td>{userLabel(u)}</td>
-                    <td>{u.email ?? "—"}</td>
-                    <td>{u.status ?? "—"}</td>
-                    <td className='text-end'>
+                    <td>
+                      <div className="d-flex align-items-center gap-12">
+                        <div
+                          className="rounded-circle d-flex align-items-center justify-content-center fw-semibold"
+                          style={{
+                            width: 40,
+                            height: 40,
+                            background: "#DCFCE7",
+                            color: "#166534",
+                            fontSize: 12,
+                          }}
+                        >
+                          {initials(u)}
+                        </div>
+                        <div>
+                          <div className="fw-medium">{userLabel(u)}</div>
+                          <div className="text-secondary-light text-sm">{u.id}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="text-secondary-light">{u.email ?? "—"}</td>
+                    <td>
+                      <span
+                        className={`badge ${
+                          u.status === "active"
+                            ? "bg-success"
+                            : u.status === "suspended"
+                              ? "bg-danger"
+                              : "bg-warning text-dark"
+                        }`}
+                      >
+                        {u.status ?? "—"}
+                      </span>
+                    </td>
+                    <td className="text-end">
                       {assignedIds.has(u.id) ? (
                         <button
-                          type='button'
-                          className='btn btn-sm btn-outline-danger'
+                          type="button"
+                          className="btn btn-sm btn-outline-danger"
                           disabled={busyUserId === u.id}
                           onClick={() => onUnassign(u.id)}
                         >
@@ -146,8 +203,8 @@ const BranchUsersPage = () => {
                         </button>
                       ) : (
                         <button
-                          type='button'
-                          className='btn btn-sm btn-primary'
+                          type="button"
+                          className="btn btn-sm btn-primary"
                           disabled={busyUserId === u.id}
                           onClick={() => onAssign(u.id)}
                         >
