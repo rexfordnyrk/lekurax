@@ -35,6 +35,7 @@ describe("AdminAuditLogsView", () => {
     });
 
     render(<AdminAuditLogsView />);
+    expect(screen.getByText(/audit logs/i)).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByText("user.created")).toBeInTheDocument()
     );

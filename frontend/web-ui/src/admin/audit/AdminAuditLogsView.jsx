@@ -137,146 +137,162 @@ export function AdminAuditLogsView() {
   };
 
   return (
-    <div className="card p-24 radius-12">
-      <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-16">
-        <div>
-          <h6 className="mb-0">Audit logs</h6>
-          <div className="text-secondary-light mt-8">
-            Filter security and operational events, then export for review.
-          </div>
-        </div>
-
-        <div className="d-flex gap-2">
-          <button
-            type="button"
-            className="btn btn-sm btn-outline-primary"
-            onClick={load}
-            disabled={loading}
-          >
-            <Icon icon="solar:refresh-linear" className="icon text-md me-1" />
-            Refresh
-          </button>
-          <div className="btn-group">
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-secondary dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              disabled={!filtered.length}
-            >
-              Export
-            </button>
-            <ul className="dropdown-menu dropdown-menu-end">
-              <li>
-                <button type="button" className="dropdown-item" onClick={exportJson}>
-                  Export JSON
-                </button>
-              </li>
-              <li>
-                <button type="button" className="dropdown-item" onClick={exportCsv}>
-                  Export CSV
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {error ? <Alert variant="danger">{error}</Alert> : null}
-      {loading ? <div className="text-secondary-light">Loading…</div> : null}
-
-      <div className="row g-3 align-items-end mb-16">
-        <div className="col-lg-4">
-          <label className="form-label mb-8">Search</label>
+    <div className="content-area">
+      <div className="filters-bar">
+        <div className="search-input">
+          <i className="ri-search-line" />
           <input
-            className="form-control"
-            placeholder="Action, actor, resource, IP…"
+            type="text"
+            placeholder="Search audit logs..."
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <div className="col-lg-2">
-          <label className="form-label mb-8">Action</label>
-          <Form.Control
-            value={action}
-            onChange={(e) => setAction(e.target.value)}
-            placeholder="e.g. user.login"
-          />
-        </div>
-        <div className="col-lg-2">
-          <label className="form-label mb-8">Category</label>
-          <Form.Control
-            value={resourceType}
-            onChange={(e) => setResourceType(e.target.value)}
-            placeholder="e.g. user"
-          />
-        </div>
-        <div className="col-lg-2">
-          <label className="form-label mb-8">From</label>
-          <input
-            type="datetime-local"
-            className="form-control"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-          />
-        </div>
-        <div className="col-lg-2">
-          <label className="form-label mb-8">To</label>
-          <input
-            type="datetime-local"
-            className="form-control"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          />
-        </div>
+        <input
+          className="filter-select"
+          placeholder="Action (e.g. user.login)"
+          value={action}
+          onChange={(e) => setAction(e.target.value)}
+        />
+        <input
+          className="filter-select"
+          placeholder="Category (e.g. user)"
+          value={resourceType}
+          onChange={(e) => setResourceType(e.target.value)}
+        />
+        <input
+          type="datetime-local"
+          className="filter-select"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        <input
+          type="datetime-local"
+          className="filter-select"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
       </div>
 
-      <div className="table-responsive scroll-sm">
-        <table className="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>User</th>
-              <th>Action</th>
-              <th>Category</th>
-              <th>IP</th>
-              <th className="text-end">Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!loading
-              ? filtered.map((e) => (
-                  <tr key={e.id}>
-                    <td className="text-secondary-light">{formatWhen(e.created_at)}</td>
-                    <td className="text-secondary-light">{e.actor_id ?? "—"}</td>
-                    <td>{e.action}</td>
-                    <td className="text-secondary-light">{e.resource_type ?? "—"}</td>
-                    <td className="text-secondary-light">{e.ip_address ?? "—"}</td>
-                    <td className="text-end">
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-outline-secondary"
-                        onClick={() => openDetails(e)}
-                      >
-                        View
-                      </button>
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">Audit logs</h3>
+          <div className="d-flex gap-2">
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={load}
+              disabled={loading}
+            >
+              <Icon icon="solar:refresh-linear" className="icon text-md" />
+              Refresh
+            </button>
+            <div className="btn-group">
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                disabled={!filtered.length}
+              >
+                <i className="ri-download-line" />
+                Export
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={exportJson}
+                  >
+                    Export JSON
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={exportCsv}
+                  >
+                    Export CSV
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {error ? (
+          <div className="card-body">
+            <Alert variant="danger" className="mb-0">
+              {error}
+            </Alert>
+          </div>
+        ) : null}
+
+        <div className="card-body" style={{ padding: 0 }}>
+          <div className="table-container">
+            <table className="m1-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>Category</th>
+                  <th>IP</th>
+                  <th className="text-end">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} style={{ padding: 16, color: "rgba(15,23,42,0.6)" }}>
+                      Loading…
                     </td>
                   </tr>
-                ))
-              : null}
+                ) : null}
 
-            {!loading && filtered.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="text-center text-secondary-light py-24">
-                  No audit entries found.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
+                {!loading
+                  ? filtered.map((e) => (
+                      <tr key={e.id}>
+                        <td>{formatWhen(e.created_at)}</td>
+                        <td>{e.actor_id ?? "—"}</td>
+                        <td>{e.action}</td>
+                        <td>{e.resource_type ?? "—"}</td>
+                        <td>{e.ip_address ?? "—"}</td>
+                        <td className="text-end">
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => openDetails(e)}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  : null}
+
+                {!loading && filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ padding: 20, textAlign: "center", color: "rgba(15,23,42,0.6)" }}>
+                      No audit entries found.
+                    </td>
+                  </tr>
+                ) : null}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <Modal show={detailsOpen} onHide={() => setDetailsOpen(false)} centered size="lg" scrollable>
+      <Modal
+        show={detailsOpen}
+        onHide={() => setDetailsOpen(false)}
+        centered
+        size="lg"
+        scrollable
+      >
         <Modal.Header closeButton>
           <Modal.Title>Audit event</Modal.Title>
         </Modal.Header>
@@ -284,18 +300,12 @@ export function AdminAuditLogsView() {
           {!active ? (
             <div className="text-secondary-light">No event selected.</div>
           ) : (
-            <>
-              <div className="d-flex flex-wrap gap-2 mb-12">
-                <span className="badge bg-light text-dark border">{active.action}</span>
-                <span className="badge bg-light text-dark border">
-                  {active.resource_type}:{active.resource_id}
-                </span>
-                <span className="badge bg-light text-dark border">{active.actor_id}</span>
-              </div>
-              <pre className="bg-light border rounded-3 p-12 mb-0" style={{ whiteSpace: "pre-wrap" }}>
-                {JSON.stringify(active, null, 2)}
-              </pre>
-            </>
+            <pre
+              className="bg-light border rounded-3 p-12 mb-0"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
+              {JSON.stringify(active, null, 2)}
+            </pre>
           )}
         </Modal.Body>
         <Modal.Footer>
