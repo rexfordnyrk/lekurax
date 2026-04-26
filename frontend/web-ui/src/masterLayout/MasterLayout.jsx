@@ -535,6 +535,52 @@ const MasterLayout = ({ children }) => {
               </ul>
             </li>
 
+            <li className='sidebar-menu-group-title'>Admin</li>
+            <li>
+              <NavLink
+                to='/admin/users'
+                className={(navData) =>
+                  navData.isActive ? "active-page" : ""
+                }
+              >
+                <i className='ri-user-line menu-icon' />
+                <span>Users</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='/admin/roles'
+                className={(navData) =>
+                  navData.isActive ? "active-page" : ""
+                }
+              >
+                <i className='ri-shield-user-line menu-icon' />
+                <span>Roles &amp; Permissions</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='/admin/audit'
+                className={(navData) =>
+                  navData.isActive ? "active-page" : ""
+                }
+              >
+                <i className='ri-file-list-3-line menu-icon' />
+                <span>Audit logs</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='/admin/auth-policies'
+                className={(navData) =>
+                  navData.isActive ? "active-page" : ""
+                }
+              >
+                <i className='ri-lock-password-line menu-icon' />
+                <span>Auth policies</span>
+              </NavLink>
+            </li>
+
             <li className='sidebar-menu-group-title'>Application</li>
             <li>
               <NavLink
