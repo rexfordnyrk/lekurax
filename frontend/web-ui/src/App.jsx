@@ -144,7 +144,6 @@ function App() {
         <BranchProvider>
           <Routes>
           <Route
-            exact
             path='/'
             element={
               <RequireAuth>
@@ -153,7 +152,6 @@ function App() {
             }
           />
           <Route
-            exact
             path="/admin/users"
             element={
               <RequireAuth>
@@ -162,7 +160,6 @@ function App() {
             }
           />
           <Route
-            exact
             path="/admin/roles"
             element={
               <RequireAuth>
@@ -171,7 +168,6 @@ function App() {
             }
           />
           <Route
-            exact
             path="/admin/audit"
             element={
               <RequireAuth>
@@ -180,7 +176,6 @@ function App() {
             }
           />
           <Route
-            exact
             path="/admin/auth-policies"
             element={
               <RequireAuth>
@@ -203,7 +198,6 @@ function App() {
         <Route exact path='/add-user' element={<AddUserPage />} />
         <Route exact path='/alert' element={<AlertPage />} />
          <Route
-           exact
            path='/assign-role'
            element={<Navigate to="/admin/roles?tab=assign" replace />}
          />
@@ -280,7 +274,6 @@ function App() {
         <Route exact path='/progress' element={<ProgressPage />} />
         <Route exact path='/radio' element={<RadioPage />} />
          <Route
-           exact
            path='/role-access'
            element={<Navigate to="/admin/roles" replace />}
          />
@@ -306,7 +299,6 @@ function App() {
         <Route exact path='/typography' element={<TypographyPage />} />
         <Route exact path='/users-grid' element={<UsersGridPage />} />
          <Route
-           exact
            path='/users-list'
            element={<Navigate to="/admin/users" replace />}
          />

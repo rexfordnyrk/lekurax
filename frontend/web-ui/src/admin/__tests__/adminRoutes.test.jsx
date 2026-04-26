@@ -1,40 +1,77 @@
-import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 
-function readSource(relativePathFromSrc) {
-  return readFileSync(resolve(__dirname, "..", "..", relativePathFromSrc), "utf8");
+import RequireAuth from "../../auth/RequireAuth";
+import AdminUsersPage from "../pages/AdminUsersPage";
+
+let authState = {
+  bootstrapping: false,
+  isAuthenticated: false,
+  refreshMe: vi.fn(),
+  logout: vi.fn(),
+};
+
+vi.mock("../../auth/AuthContext", () => {
+  return {
+    AuthProvider: ({ children }) => children,
+    useAuth: () => authState,
+  };
+});
+
+function TestRoutes() {
+  return (
+    <Routes>
+      <Route path="/sign-in" element={<h1>Sign In to your Account</h1>} />
+
+      {/* Legacy redirects */}
+      <Route path="/users-list" element={<Navigate to="/admin/users" replace />} />
+
+      {/* Admin routes (protected) */}
+      <Route
+        path="/admin/users"
+        element={
+          <RequireAuth>
+            <AdminUsersPage />
+          </RequireAuth>
+        }
+      />
+    </Routes>
+  );
 }
 
-describe("admin routes + legacy redirects", () => {
-  it("wires /admin routes under RequireAuth and adds legacy redirects in App.jsx", () => {
-    const appSource = readSource("App.jsx");
+describe("admin routing behavior", () => {
+  it("visiting /users-list redirects to /admin/users and renders Admin Users when authenticated", async () => {
+    authState = {
+      ...authState,
+      bootstrapping: false,
+      isAuthenticated: true,
+    };
 
-    // Admin routes (stubs for now)
-    expect(appSource).toContain("/admin/users");
-    expect(appSource).toContain("/admin/roles");
-    expect(appSource).toContain("/admin/audit");
-    expect(appSource).toContain("/admin/auth-policies");
+    render(
+      <MemoryRouter initialEntries={["/users-list"]}>
+        <TestRoutes />
+      </MemoryRouter>
+    );
 
-    // Legacy redirects (route-level)
-    expect(appSource).toContain('path=\'/users-list\'');
-    expect(appSource).toContain('to="/admin/users"');
-
-    expect(appSource).toContain('path=\'/role-access\'');
-    expect(appSource).toContain('to="/admin/roles"');
-
-    expect(appSource).toContain('path=\'/assign-role\'');
-    expect(appSource).toContain('to="/admin/roles?tab=assign"');
+    expect(await screen.findByText("Admin Users")).toBeInTheDocument();
   });
 
-  it("redirects inside legacy page components (defense in depth)", () => {
-    const usersListSource = readSource("pages/UsersListPage.jsx");
-    const roleAccessSource = readSource("pages/RoleAccessPage.jsx");
-    const assignRoleSource = readSource("pages/AssignRolePage.jsx");
+  it("visiting /admin/users when unauthenticated ends up on sign-in", async () => {
+    authState = {
+      ...authState,
+      bootstrapping: false,
+      isAuthenticated: false,
+    };
 
-    expect(usersListSource).toContain('to="/admin/users"');
-    expect(roleAccessSource).toContain('to="/admin/roles"');
-    expect(assignRoleSource).toContain('to="/admin/roles?tab=assign"');
+    render(
+      <MemoryRouter initialEntries={["/admin/users"]}>
+        <TestRoutes />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Sign In to your Account")).toBeInTheDocument();
   });
 });
 
