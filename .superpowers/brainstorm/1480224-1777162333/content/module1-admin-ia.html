@@ -1,0 +1,110 @@
+<h2>Module 1 — Admin IA (menu + routes)</h2>
+<p class="subtitle">
+  Based on your decision: move Module 1 navigation into the app sidebar, with one page per item under <b>Admin</b>.
+</p>
+
+<div class="section">
+  <div class="label">Sidebar information architecture</div>
+  <div class="mockup">
+    <div class="mockup-header">Proposed app sidebar (only the Admin section shown)</div>
+    <div class="mockup-body">
+      <div style="font-weight:700;margin-bottom:10px;">Admin</div>
+      <div style="display:grid;gap:8px;">
+        <div style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;">
+          <div style="font-weight:600;">Users</div>
+          <div style="font-size:13px;opacity:.8;">List, search/filter, create/edit, status, branch assignment, MFA flag</div>
+          <div style="margin-top:6px;font-family:ui-monospace, SFMono-Regular, Menlo, monospace;font-size:12px;opacity:.8;">
+            Route: <b>/admin/users</b>
+          </div>
+        </div>
+
+        <div style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;">
+          <div style="font-weight:600;">Roles &amp; Permissions</div>
+          <div style="font-size:13px;opacity:.8;">System roles + custom roles, permission matrix editor</div>
+          <div style="margin-top:6px;font-family:ui-monospace, SFMono-Regular, Menlo, monospace;font-size:12px;opacity:.8;">
+            Route: <b>/admin/roles</b>
+          </div>
+        </div>
+
+        <div style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;">
+          <div style="font-weight:600;">Audit logs</div>
+          <div style="font-size:13px;opacity:.8;">Search/filter/export, tamper-aware display, key security events highlighted</div>
+          <div style="margin-top:6px;font-family:ui-monospace, SFMono-Regular, Menlo, monospace;font-size:12px;opacity:.8;">
+            Route: <b>/admin/audit</b>
+          </div>
+        </div>
+
+        <div style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;">
+          <div style="font-weight:600;">Auth policies</div>
+          <div style="font-size:13px;opacity:.8;">Tenant security settings: password policy + MFA policy + session policy (single page)</div>
+          <div style="margin-top:6px;font-family:ui-monospace, SFMono-Regular, Menlo, monospace;font-size:12px;opacity:.8;">
+            Route: <b>/admin/auth-policies</b>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding:10px 12px;border:1px dashed #e5e7eb;border-radius:10px;">
+        <div style="font-weight:600;">Compatibility redirects (optional)</div>
+        <div style="font-size:13px;opacity:.85;margin-top:6px;">
+          <div><span style="font-family:ui-monospace,monospace;">/users-list</span> → <span style="font-family:ui-monospace,monospace;">/admin/users</span></div>
+          <div><span style="font-family:ui-monospace,monospace;">/role-access</span> → <span style="font-family:ui-monospace,monospace;">/admin/roles</span></div>
+          <div><span style="font-family:ui-monospace,monospace;">/assign-role</span> → <span style="font-family:ui-monospace,monospace;">/admin/roles</span> (deep-link to assignment)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">How each page maps to your HTML mockup</div>
+  <div class="cards">
+    <div class="card" data-choice="users-page" onclick="toggleSelect(this)">
+      <div class="card-body">
+        <h3>Users page</h3>
+        <p>Uses the mockup’s Users tab layout: KPI row + filters bar + users table + modals.</p>
+      </div>
+    </div>
+    <div class="card" data-choice="roles-page" onclick="toggleSelect(this)">
+      <div class="card-body">
+        <h3>Roles &amp; Permissions page</h3>
+        <p>Uses the mockup’s Roles tab table + “Create custom role” modal + permission matrix layout.</p>
+      </div>
+    </div>
+    <div class="card" data-choice="audit-page" onclick="toggleSelect(this)">
+      <div class="card-body">
+        <h3>Audit logs page</h3>
+        <p>Uses the mockup’s Audit tab: search + category + range + export + table.</p>
+      </div>
+    </div>
+    <div class="card" data-choice="policies-page" onclick="toggleSelect(this)">
+      <div class="card-body">
+        <h3>Auth policies page</h3>
+        <p>New page that consolidates mockup “Settings”: password + MFA + session management, backed by Authz APIs.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">Approval checkpoint</div>
+  <p class="subtitle">
+    If this IA looks right, next I’ll present the detailed page designs (Users → Roles → Audit → Auth policies) and the UX rules
+    (states, errors, empty/loading, permissions).
+  </p>
+  <div class="options">
+    <div class="option" data-choice="ia-approved" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>IA approved</h3>
+        <p>Proceed to page-level design.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="ia-changes" onclick="toggleSelect(this)">
+      <div class="letter">↺</div>
+      <div class="content">
+        <h3>Needs changes</h3>
+        <p>I’ll revise the menu/routes before we design the screens.</p>
+      </div>
+    </div>
+  </div>
+</div>

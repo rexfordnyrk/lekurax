@@ -1,0 +1,113 @@
+<h2>Module 1 UI overwrite scope (from your mockup)</h2>
+<p class="subtitle">
+  Goal: replace current <code>frontend/web-ui</code> screens with the Module 1 layout/workflow you approved in
+  <code>frontend/mockups/Module 1 - User Management &amp; Security.html</code>.
+</p>
+
+<div class="section">
+  <div class="label">Mockup recap (what I’m mapping)</div>
+  <div class="mockup">
+    <div class="mockup-header">Mockup structure</div>
+    <div class="mockup-body">
+      <div class="mock-nav">Fixed left admin sidebar • Top bar with breadcrumb/title/action • Tabs: Users / Roles &amp; Permissions / Audit Logs</div>
+      <div style="display:flex;gap:12px;margin-top:12px;">
+        <div class="mock-sidebar" style="flex:0 0 220px;">
+          <div style="font-weight:700;margin-bottom:8px;">Security &amp; Access</div>
+          <div>Users</div>
+          <div>Roles &amp; Permissions</div>
+          <div>Audit Logs</div>
+          <div style="margin-top:12px;font-weight:700;margin-bottom:8px;">Settings</div>
+          <div>Password Policies</div>
+          <div>MFA Settings</div>
+          <div>Session Management</div>
+        </div>
+        <div class="mock-content" style="flex:1;">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+            <div class="placeholder" style="flex:1;min-width:140px;">Stats cards row</div>
+            <div class="placeholder" style="flex:1;min-width:140px;">Filters bar (search + role + status)</div>
+          </div>
+          <div class="placeholder" style="height:160px;">Primary table (users / roles / audit)</div>
+          <div class="placeholder" style="height:70px;margin-top:10px;">Modal flows (create/edit/view user, role permissions)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">Which existing pages should we overwrite?</div>
+  <p class="subtitle">Select all that should be replaced by the Module 1 Admin screens (multi-select).</p>
+
+  <div class="options" data-multiselect>
+    <div class="option" data-choice="users-list" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Users List</h3>
+        <p>Overwrite <code>/users-list</code> (current generic users list page) with “Users” tab UI.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="role-access" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Role &amp; Access</h3>
+        <p>Overwrite <code>/role-access</code> + <code>/assign-role</code> with “Roles &amp; Permissions” tab UI.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="audit-logs" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>Audit Logs</h3>
+        <p>Create or repurpose a route (e.g. <code>/admin/audit</code>) for the “Audit Logs” tab UI.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="auth-pages" onclick="toggleSelect(this)">
+      <div class="letter">D</div>
+      <div class="content">
+        <h3>Authentication pages</h3>
+        <p>Restyle <code>/sign-in</code> / <code>/forgot-password</code> / <code>/sign-in/otp</code> to match the new Module 1 visual system.</p>
+      </div>
+    </div>
+
+    <div class="option" data-choice="branch-users" onclick="toggleSelect(this)">
+      <div class="letter">E</div>
+      <div class="content">
+        <h3>Branch members (existing Lekurax screen)</h3>
+        <p>Restyle <code>/lekurax/branches/:branchId/users</code> to match Module 1 (it’s “user assignment” adjacent).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">One key decision (drives routing + layout)</div>
+  <p class="subtitle">
+    Should Module 1 live as a dedicated admin area route (recommended), or should it replace the existing “Users” and “Role &amp; Access”
+    menu sections directly?
+  </p>
+  <div class="options">
+    <div class="option" data-choice="dedicated-admin" onclick="toggleSelect(this)">
+      <div class="letter">1</div>
+      <div class="content">
+        <h3>Dedicated Admin area</h3>
+        <p>Add a single entry like “Admin” in sidebar; inside it, Module 1 tabs + settings. Minimal impact to other menus.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="replace-existing-menus" onclick="toggleSelect(this)">
+      <div class="letter">2</div>
+      <div class="content">
+        <h3>Replace existing menus</h3>
+        <p>Keep current sidebar groups, but their targets become the Module 1 screens. More invasive but “feels” integrated.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="subtitle">
+    After you select, reply here with: (1) anything missing from Module 1 (Password Policies / MFA / Session Mgmt?), and (2) whether the
+    mockup’s internal sidebar stays (inside page) or we fold those items into the app’s main sidebar.
+  </p>
+</div>

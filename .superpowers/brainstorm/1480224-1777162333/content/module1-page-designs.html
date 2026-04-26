@@ -1,0 +1,155 @@
+<h2>Module 1 — Page designs (layout + workflow)</h2>
+<p class="subtitle">
+  This screen locks the UI contract for the four Admin pages. It’s based on your mockup’s structure (sidebar + top bar + data-dense content),
+  and your decision to make each item a separate page under <b>Admin</b>.
+</p>
+
+<div class="section">
+  <div class="label">Global layout contract (all Admin pages)</div>
+  <div class="mockup">
+    <div class="mockup-header">Common chrome</div>
+    <div class="mockup-body">
+      <ul style="margin:0;padding-left:18px;line-height:1.7;">
+        <li><b>App sidebar:</b> Admin section contains links to the 4 pages.</li>
+        <li><b>Top bar:</b> Breadcrumb “Admin → {Page}”, page title, right-side primary action (page-specific).</li>
+        <li><b>Content padding:</b> 24px desktop; responsive down to 375px with tables becoming horizontal scroll or stacked rows.</li>
+        <li><b>Data-dense style:</b> KPI cards + filter bar + table card (hover row highlight).</li>
+        <li><b>Icons:</b> use Remixicon/Lucide-style (no emojis).</li>
+        <li><b>Theme:</b> light-first with pharmacy-green primary; dark mode optional later (not required for Module 1).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">1) Admin → Users</div>
+  <div class="mockup">
+    <div class="mockup-header">/admin/users</div>
+    <div class="mockup-body">
+      <div class="mock-nav">KPI row (Total users • Active • MFA enabled • Active sessions)</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <div class="placeholder" style="flex:1;min-width:240px;">Search (name/email/phone)</div>
+        <div class="placeholder" style="width:180px;">Role filter</div>
+        <div class="placeholder" style="width:180px;">Status filter</div>
+        <div class="placeholder" style="width:150px;">More filters</div>
+      </div>
+      <div class="placeholder" style="height:140px;margin-top:12px;">Users table: User • Role • Branch • Status • Last login • MFA • Actions</div>
+      <div style="margin-top:10px;font-size:13px;opacity:.85;">
+        <b>Primary action:</b> “Add user” → modal.
+        <br/>
+        <b>Modals:</b> Create user, Edit user, View user (with suspend/deactivate).
+      </div>
+    </div>
+  </div>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Must support</h4>
+      <ul>
+        <li>Create/edit/suspend user</li>
+        <li>Branch assignment (single or multi; matches Authz capabilities)</li>
+        <li>MFA required flag at user level (if supported)</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nice-to-have later</h4>
+      <ul>
+        <li>Export users CSV</li>
+        <li>Bulk actions</li>
+        <li>Advanced column customization</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">2) Admin → Roles &amp; Permissions</div>
+  <div class="mockup">
+    <div class="mockup-header">/admin/roles</div>
+    <div class="mockup-body">
+      <div class="mock-nav">Table card: Role name • Description • Type (System/Predefined/Custom) • Users • Permissions summary • Actions</div>
+      <div style="margin-top:10px;font-size:13px;opacity:.85;">
+        <b>Primary action:</b> “Create custom role” → modal.
+        <br/>
+        <b>Modal:</b> role details + permission matrix grouped by module (checkbox grid).
+      </div>
+      <div class="placeholder" style="height:90px;margin-top:12px;">Permission matrix: grouped sections + checkboxes + save/cancel</div>
+    </div>
+  </div>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Must support</h4>
+      <ul>
+        <li>View system/predefined roles (read-only)</li>
+        <li>Create/edit custom roles</li>
+        <li>Permission grouping by modules/features</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nice-to-have later</h4>
+      <ul>
+        <li>Role versioning / change history</li>
+        <li>“Compare roles” view</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">3) Admin → Audit logs</div>
+  <div class="mockup">
+    <div class="mockup-header">/admin/audit</div>
+    <div class="mockup-body">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="placeholder" style="flex:1;min-width:240px;">Search audit logs</div>
+        <div class="placeholder" style="width:200px;">Category filter</div>
+        <div class="placeholder" style="width:200px;">Time range</div>
+        <div class="placeholder" style="width:140px;">Export</div>
+      </div>
+      <div class="placeholder" style="height:150px;margin-top:12px;">Table: Timestamp • User • Action • Category • IP • Details</div>
+      <div style="margin-top:10px;font-size:13px;opacity:.85;">
+        <b>Primary action:</b> “Export logs” (CSV/JSON).
+        <br/>
+        <b>Details:</b> row “view” opens side panel or modal with full payload.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">4) Admin → Auth policies (tenant security settings)</div>
+  <div class="mockup">
+    <div class="mockup-header">/admin/auth-policies</div>
+    <div class="mockup-body">
+      <div class="mock-nav">Single page, 3 cards, one save flow</div>
+      <div style="display:grid;gap:12px;margin-top:12px;">
+        <div class="placeholder" style="height:90px;">Password policy card (min length, complexity, expiry, history, lockout)</div>
+        <div class="placeholder" style="height:90px;">MFA policy card (required/optional, allowed methods, grace period)</div>
+        <div class="placeholder" style="height:90px;">Session policy card (idle timeout, max session age, device limit)</div>
+      </div>
+      <div style="margin-top:10px;font-size:13px;opacity:.85;">
+        <b>Primary action:</b> “Save policies” (with validation + success toast).
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">Approval checkpoint</div>
+  <p class="subtitle">Click approve if these four page contracts match your expectations. If not, click changes and tell me what to adjust.</p>
+  <div class="options">
+    <div class="option" data-choice="pages-approved" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>Pages approved</h3>
+        <p>Proceed to write the spec document.</p>
+      </div>
+    </div>
+    <div class="option" data-choice="pages-changes" onclick="toggleSelect(this)">
+      <div class="letter">↺</div>
+      <div class="content">
+        <h3>Needs changes</h3>
+        <p>I’ll revise page contracts before writing the spec.</p>
+      </div>
+    </div>
+  </div>
+</div>
