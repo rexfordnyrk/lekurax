@@ -93,6 +93,7 @@ describe("admin routing behavior", () => {
       </MemoryRouter>
     );
 
+    expect(await screen.findByRole("heading", { name: "Users" })).toBeInTheDocument();
     expect(await screen.findByText("User Accounts")).toBeInTheDocument();
   });
 

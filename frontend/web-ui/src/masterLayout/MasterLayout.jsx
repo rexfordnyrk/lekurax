@@ -3,11 +3,14 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import ThemeToggleButton from "../helper/ThemeToggleButton";
 import { useBranch } from "../branch/BranchContext";
+import { AdminShellHeader } from "../admin/ui/AdminShellHeader";
+import { AdminShellTabs } from "../admin/ui/AdminShellTabs";
 
 const MasterLayout = ({ children }) => {
   let [sidebarActive, seSidebarActive] = useState(false);
   let [mobileMenu, setMobileMenu] = useState(false);
   const location = useLocation(); // Hook to get the current route
+  const isAdminRoute = location.pathname.startsWith("/admin");
   const {
     activeBranchId,
     setActiveBranchId,
@@ -93,6 +96,17 @@ const MasterLayout = ({ children }) => {
   let mobileMenuControl = () => {
     setMobileMenu(!mobileMenu);
   };
+
+  const adminTitle =
+    location.pathname === "/admin/users"
+      ? "Users"
+      : location.pathname === "/admin/roles"
+        ? "Roles & Permissions"
+        : location.pathname === "/admin/audit"
+          ? "Audit Logs"
+          : location.pathname === "/admin/auth-policies"
+            ? "Auth Policies"
+            : "Admin";
 
   return (
     <section className={mobileMenu ? "overlay active" : "overlay "}>
@@ -1608,7 +1622,19 @@ const MasterLayout = ({ children }) => {
       <main
         className={sidebarActive ? "dashboard-main active" : "dashboard-main"}
       >
-        <div className='navbar-header'>
+        {isAdminRoute ? (
+          <div>
+            <AdminShellHeader
+              breadcrumb={[
+                { label: "Admin", to: "/admin/users" },
+                { label: "User Management & Security" },
+              ]}
+              title={adminTitle}
+            />
+            <AdminShellTabs />
+          </div>
+        ) : (
+          <div className='navbar-header'>
           <div className='row align-items-center justify-content-between'>
             <div className='col-auto'>
               <div className='d-flex flex-wrap align-items-center gap-4'>
@@ -2315,6 +2341,7 @@ const MasterLayout = ({ children }) => {
             </div>
           </div>
         </div>
+        )}
 
         {/* dashboard-main-body */}
         <div className='dashboard-main-body' key={branchSwitchGeneration}>
