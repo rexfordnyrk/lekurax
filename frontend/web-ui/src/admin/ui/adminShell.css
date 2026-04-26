@@ -1,0 +1,84 @@
+.admin-shell-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.admin-shell-header-inner {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-shell-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.6);
+  margin-bottom: 4px;
+}
+
+.admin-shell-breadcrumb-link {
+  color: rgba(15, 23, 42, 0.6);
+  text-decoration: none;
+}
+.admin-shell-breadcrumb-link:hover {
+  color: #15803d;
+}
+
+.admin-shell-breadcrumb-current {
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.admin-shell-breadcrumb-sep {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.admin-shell-h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.95);
+}
+
+.admin-shell-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-shell-tabs {
+  background: #fff;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.admin-shell-tabs-inner {
+  padding: 0 24px;
+  display: flex;
+  gap: 28px;
+}
+
+.admin-shell-tab {
+  padding: 14px 0;
+  color: rgba(15, 23, 42, 0.7);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+}
+
+.admin-shell-tab:hover {
+  color: rgba(15, 23, 42, 0.95);
+}
+
+.admin-shell-tab.active,
+.admin-shell-tab[aria-current="page"] {
+  color: #15803d;
+  border-bottom-color: #15803d;
+}
+
