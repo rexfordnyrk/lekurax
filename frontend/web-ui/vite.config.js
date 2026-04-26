@@ -2,7 +2,12 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react({ include: /\.[jt]sx?$/ })],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['src/test/setupTests.js'],
+    globals: true,
+  },
   esbuild: {
     jsx: 'automatic',
     loader: 'jsx',
