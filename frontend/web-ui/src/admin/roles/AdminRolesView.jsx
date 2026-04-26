@@ -125,78 +125,80 @@ export function AdminRolesView() {
   };
 
   return (
-    <div className="row gy-4">
-      <div className="col-12">
-        <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap">
-          <div>
-            <h5 className="mb-6">Roles &amp; Permissions</h5>
-            <div className="text-secondary-light">
-              System roles are read-only. Custom roles can be edited and assigned permissions.
-            </div>
-          </div>
+    <div className="content-area">
+      <div className="filters-bar">
+        <div className="search-input">
+          <i className="ri-search-line" />
+          <input
+            type="text"
+            placeholder="Search roles by name, label, or description..."
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            disabled={!canList}
+          />
+        </div>
+        <select
+          className="filter-select"
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value)}
+          disabled={!canList}
+        >
+          <option value="">All Types</option>
+          <option value="system">System</option>
+          <option value="custom">Custom</option>
+        </select>
+        <button type="button" className="btn btn-secondary btn-sm" disabled>
+          <i className="ri-filter-3-line" />
+          More Filters
+        </button>
+      </div>
 
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">Roles &amp; Permissions ({filtered.length})</h3>
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-sm btn-outline-primary" onClick={load} disabled={loading}>
-              <Icon icon="solar:refresh-linear" className="icon text-md me-1" />
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={load}
+              disabled={loading}
+            >
+              <Icon icon="solar:refresh-linear" className="icon text-md" />
               Refresh
             </button>
             {canCreate ? (
-              <button type="button" className="btn btn-sm btn-primary" onClick={openCreate}>
-                <Icon icon="ic:baseline-plus" className="icon text-md me-1" />
-                Create role
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={openCreate}
+              >
+                <i className="ri-add-line" />
+                Create Custom Role
               </button>
             ) : null}
           </div>
         </div>
-      </div>
 
-      <div className="col-12">
-        <div className="card p-24 radius-12">
-          {!canList ? (
+        {!canList ? (
+          <div className="card-body">
             <div className="alert alert-warning mb-0">
               You do not have permission to list roles for this tenant.
             </div>
-          ) : null}
-
-          {error ? <div className="alert alert-danger">{error}</div> : null}
-
-          <div className="row g-3 align-items-end">
-            <div className="col-lg-6">
-              <label className="form-label mb-8">Search</label>
-              <input
-                className="form-control"
-                placeholder="Role name, label, or description…"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                disabled={!canList}
-              />
-            </div>
-            <div className="col-lg-3">
-              <label className="form-label mb-8">Type</label>
-              <select
-                className="form-select"
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                disabled={!canList}
-              >
-                <option value="">All</option>
-                <option value="system">System</option>
-                <option value="custom">Custom</option>
-              </select>
-            </div>
-            <div className="col-lg-3">
-              <label className="form-label mb-8">More</label>
-              <button type="button" className="btn btn-outline-secondary w-100" disabled>
-                More filters
-              </button>
-            </div>
           </div>
+        ) : null}
 
-          <div className="table-responsive scroll-sm mt-16">
-            <table className="table table-hover mb-0">
+        {error ? (
+          <div className="card-body">
+            <div className="alert alert-danger mb-0">{error}</div>
+          </div>
+        ) : null}
+
+        <div className="card-body" style={{ padding: 0 }}>
+          <div className="table-container">
+            <table className="m1-table">
               <thead>
                 <tr>
-                  <th>Role</th>
+                  <th>Role Name</th>
                   <th>Description</th>
                   <th>Type</th>
                   <th>Permissions</th>
@@ -206,7 +208,7 @@ export function AdminRolesView() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="text-secondary-light py-24">
+                    <td colSpan={5} style={{ padding: 16, color: "rgba(15,23,42,0.6)" }}>
                       Loading…
                     </td>
                   </tr>
@@ -216,30 +218,44 @@ export function AdminRolesView() {
                   ? filtered.map((r) => (
                       <tr key={r.id}>
                         <td>
-                          <div className="fw-medium">{r.label || r.name}</div>
-                          <div className="text-secondary-light text-sm">{r.name}</div>
+                          <div className="user-name">{r.label || r.name}</div>
+                          <div className="user-email">{r.name}</div>
                         </td>
-                        <td className="text-secondary-light">{r.description || "—"}</td>
+                        <td>{r.description || "—"}</td>
                         <td>
-                          <span className={`badge ${r.is_system ? "bg-secondary" : "bg-primary"}`}>
+                          <span className={`badge ${r.is_system ? "badge-info" : "badge-neutral"}`}>
                             {roleTypeLabel(r)}
                           </span>
                         </td>
-                        <td className="text-secondary-light">
-                          <span title="Loaded on-demand in the editor modal">View in editor</span>
+                        <td>
+                          <span className="user-email" title="Loaded in editor modal">
+                            View in editor
+                          </span>
                         </td>
                         <td className="text-end">
                           <div className="d-inline-flex gap-2">
-                            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => openEdit(r)}>
+                            <button
+                              type="button"
+                              className="btn btn-secondary btn-sm"
+                              onClick={() => openEdit(r)}
+                            >
                               View
                             </button>
                             {!r.is_system && canUpdate ? (
-                              <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => openEdit(r)}>
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() => openEdit(r)}
+                              >
                                 Edit
                               </button>
                             ) : null}
                             {!r.is_system && canDelete ? (
-                              <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => onDeleteRole(r)}>
+                              <button
+                                type="button"
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => onDeleteRole(r)}
+                              >
                                 Delete
                               </button>
                             ) : null}
@@ -251,7 +267,7 @@ export function AdminRolesView() {
 
                 {!loading && canList && filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center text-secondary-light py-24">
+                    <td colSpan={5} style={{ padding: 20, textAlign: "center", color: "rgba(15,23,42,0.6)" }}>
                       No roles found.
                     </td>
                   </tr>

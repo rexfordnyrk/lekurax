@@ -43,6 +43,11 @@ describe("AdminRolesView", () => {
 
     render(<AdminRolesView />);
 
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: /create custom role/i }),
+      ).toBeInTheDocument(),
+    );
     await waitFor(() => expect(screen.getByText("Administrator")).toBeInTheDocument());
     expect(screen.getByText("admin")).toBeInTheDocument();
     expect(screen.getByText("Full access")).toBeInTheDocument();

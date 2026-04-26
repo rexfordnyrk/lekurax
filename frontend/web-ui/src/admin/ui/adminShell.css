@@ -260,6 +260,11 @@
   color: rgba(15, 23, 42, 0.8);
 }
 
+.badge-info {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0369a1;
+}
+
 .avatar {
   width: 36px;
   height: 36px;
