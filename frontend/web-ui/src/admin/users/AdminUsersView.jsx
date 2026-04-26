@@ -277,109 +277,133 @@ export function AdminUsersView() {
   };
 
   return (
-    <div className="row gy-4">
-      <div className="col-12">
-        <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+    <div className="content-area">
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon primary">
+            <i className="ri-user-line" />
+          </div>
           <div>
-            <h5 className="mb-6">User Accounts</h5>
-            <div className="text-secondary-light">
-              Tenant-scoped directory, RBAC posture, and lightweight security signals.
+            <div className="stat-label">Total Users</div>
+            <div className="stat-value">{String(kpis.total)}</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon success">
+            <i className="ri-checkbox-circle-line" />
+          </div>
+          <div>
+            <div className="stat-label">Active Users</div>
+            <div className="stat-value">{String(kpis.active)}</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon warning">
+            <i className="ri-shield-check-line" />
+          </div>
+          <div>
+            <div className="stat-label">MFA Enabled</div>
+            <div className="stat-value">{String(kpis.mfa)}</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon info">
+            <i className="ri-time-line" />
+          </div>
+          <div>
+            <div className="stat-label">Active Sessions</div>
+            <div className="stat-value">
+              {kpis.activeSessions == null ? "—" : String(kpis.activeSessions)}
             </div>
           </div>
+        </div>
+      </div>
 
+      <div className="filters-bar">
+        <div className="search-input">
+          <i className="ri-search-line" />
+          <input
+            type="text"
+            placeholder="Search users by name or email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            disabled={!canListUsers}
+          />
+        </div>
+        <input
+          className="filter-select"
+          placeholder="Role..."
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          disabled={!canListUsers}
+        />
+        <select
+          className="filter-select"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          disabled={!canListUsers}
+        >
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+          <option value="pending_email_verification">Pending verification</option>
+        </select>
+        <button type="button" className="btn btn-secondary btn-sm" disabled>
+          <i className="ri-filter-3-line" />
+          More Filters
+        </button>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">User Accounts ({filtered.length})</h3>
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-sm btn-outline-primary" onClick={refreshAll} disabled={loading}>
-              <Icon icon="solar:refresh-linear" className="icon text-md me-1" />
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={refreshAll}
+              disabled={loading}
+            >
+              <Icon icon="solar:refresh-linear" className="icon text-md" />
               Refresh
             </button>
             {canCreateUser || perms.length === 0 ? (
-              <button type="button" className="btn btn-sm btn-primary" onClick={openCreate}>
-                <Icon icon="ic:baseline-plus" className="icon text-md me-1" />
-                Add user
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={openCreate}
+              >
+                <i className="ri-add-line" />
+                Add User
               </button>
             ) : null}
           </div>
         </div>
-      </div>
 
-      <div className="col-12">
-        <div className="row g-3">
-          <KpiCard title="Total users" value={String(kpis.total)} />
-          <KpiCard title="Active users" value={String(kpis.active)} />
-          <KpiCard title="MFA enabled" value={String(kpis.mfa)} />
-          <KpiCard
-            title="Active sessions"
-            value={kpis.activeSessions == null ? "—" : String(kpis.activeSessions)}
-            hint={
-              kpis.activeSessions == null
-                ? "Requires audit visibility; approximated from recent successful logins."
-                : "Approximation: distinct users with a login in the last 24h."
-            }
-          />
-        </div>
-      </div>
-
-      <div className="col-12">
-        <div className="card p-24 radius-12">
-          {!canListUsers ? (
+        {!canListUsers ? (
+          <div className="card-body">
             <div className="alert alert-warning mb-0">
               You do not have permission to list users for this tenant.
             </div>
-          ) : null}
-
-          {error ? <div className="alert alert-danger">{error}</div> : null}
-
-          <div className="row g-3 align-items-end">
-            <div className="col-lg-4">
-              <label className="form-label mb-8">Search</label>
-              <input
-                className="form-control"
-                placeholder="Name, email, or phone…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="col-lg-3">
-              <label className="form-label mb-8">Status</label>
-              <select
-                className="form-select"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                disabled={!canListUsers}
-              >
-                <option value="">All</option>
-                <option value="active">active</option>
-                <option value="suspended">suspended</option>
-                <option value="pending_email_verification">pending_email_verification</option>
-              </select>
-            </div>
-            <div className="col-lg-3">
-              <label className="form-label mb-8">Role</label>
-              <input
-                className="form-control"
-                placeholder="Filter by role name…"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                disabled={!canListUsers}
-              />
-            </div>
-            <div className="col-lg-2">
-              <label className="form-label mb-8">More</label>
-              <button type="button" className="btn btn-outline-secondary w-100" disabled>
-                More filters
-              </button>
-            </div>
           </div>
+        ) : null}
 
-          <div className="table-responsive scroll-sm mt-16">
-            <table className="table table-hover mb-0">
+        {error ? (
+          <div className="card-body">
+            <div className="alert alert-danger mb-0">{error}</div>
+          </div>
+        ) : null}
+
+        <div className="card-body" style={{ padding: 0 }}>
+          <div className="table-container">
+            <table className="m1-table">
               <thead>
                 <tr>
                   <th>User</th>
                   <th>Role</th>
                   <th>Branch</th>
                   <th>Status</th>
-                  <th>Last login</th>
+                  <th>Last Login</th>
                   <th>MFA</th>
                   <th className="text-end">Actions</th>
                 </tr>
@@ -387,7 +411,7 @@ export function AdminUsersView() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="text-secondary-light py-24">
+                    <td colSpan={7} style={{ padding: 16, color: "rgba(15,23,42,0.6)" }}>
                       Loading…
                     </td>
                   </tr>
@@ -397,47 +421,52 @@ export function AdminUsersView() {
                   ? filtered.map((u) => (
                       <tr key={u.id}>
                         <td>
-                          <div className="d-flex align-items-center gap-12">
-                            <div
-                              className="rounded-circle d-flex align-items-center justify-content-center fw-semibold"
-                              style={{
-                                width: 40,
-                                height: 40,
-                                background: "#DCFCE7",
-                                color: "#166534",
-                                fontSize: 12,
-                              }}
-                            >
-                              {initials(u)}
-                            </div>
-                            <div>
-                              <div className="fw-medium">{fullName(u)}</div>
-                              <div className="text-secondary-light text-sm">{u.email ?? "—"}</div>
+                          <div className="user-cell">
+                            <div className="avatar">{initials(u)}</div>
+                            <div className="user-info">
+                              <div className="user-name">{fullName(u)}</div>
+                              <div className="user-email">{u.email ?? "—"}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="text-secondary-light">{roleSummary(u)}</td>
-                        <td className="text-secondary-light">{branchLabelForUser(u)}</td>
+                        <td>{roleSummary(u)}</td>
+                        <td>{branchLabelForUser(u)}</td>
                         <td>
                           <span
                             className={`badge ${
-                              u.status === "active" ? "bg-success" : u.status === "suspended" ? "bg-danger" : "bg-warning text-dark"
+                              u.status === "active"
+                                ? "badge-success"
+                                : u.status === "suspended"
+                                  ? "badge-warning"
+                                  : "badge-neutral"
                             }`}
                           >
                             {u.status ?? "—"}
                           </span>
                         </td>
-                        <td className="text-secondary-light">{formatShortWhen(lastLoginForUser(u))}</td>
-                        <td className="text-secondary-light">{u.mfa_enabled ? "Enabled" : "Disabled"}</td>
+                        <td>{formatShortWhen(lastLoginForUser(u))}</td>
+                        <td>
+                          <span className={`badge ${u.mfa_enabled ? "badge-success" : "badge-warning"}`}>
+                            {u.mfa_enabled ? "Enabled" : "Disabled"}
+                          </span>
+                        </td>
                         <td className="text-end">
                           <div className="d-inline-flex gap-2">
                             {canView ? (
-                              <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => openDetails(u)}>
+                              <button
+                                type="button"
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => openDetails(u)}
+                              >
                                 View
                               </button>
                             ) : null}
                             {canUpdate ? (
-                              <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => openEdit(u)}>
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() => openEdit(u)}
+                              >
                                 Edit
                               </button>
                             ) : null}
@@ -449,7 +478,7 @@ export function AdminUsersView() {
 
                 {!loading && canListUsers && filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center text-secondary-light py-24">
+                    <td colSpan={7} style={{ padding: 20, textAlign: "center", color: "rgba(15,23,42,0.6)" }}>
                       No users found.
                     </td>
                   </tr>

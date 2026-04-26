@@ -60,6 +60,7 @@ describe("AdminUsersView", () => {
 
     render(<AdminUsersView />);
 
+    expect(screen.getByText(/User Accounts/)).toBeInTheDocument();
     await waitFor(() => expect(screen.getByText("Sarah Johnson")).toBeInTheDocument());
     expect(screen.getByText("sarah@example.com")).toBeInTheDocument();
     expect(screen.getByText("Administrator")).toBeInTheDocument();
