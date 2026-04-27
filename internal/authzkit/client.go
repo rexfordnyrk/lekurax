@@ -1,6 +1,7 @@
 package authzkit
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -60,5 +61,36 @@ func (c *Client) get(ctx context.Context, path string, q url.Values, out any) er
 		return fmt.Errorf("decode response: %w", err)
 	}
 
+	return nil
+}
+
+func (c *Client) post(ctx context.Context, path string, body any) error {
+	u, err := url.Parse(c.baseURL)
+	if err != nil {
+		return fmt.Errorf("parse base url: %w", err)
+	}
+	u.Path = strings.TrimRight(u.Path, "/") + "/v1" + path
+
+	buf := &bytes.Buffer{}
+	if err := json.NewEncoder(buf).Encode(body); err != nil {
+		return fmt.Errorf("encode body: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u.String(), buf)
+	if err != nil {
+		return fmt.Errorf("new request: %w", err)
+	}
+	req.Header.Set("X-Service-Key", c.apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("do request: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
+		return fmt.Errorf("authzkit http %d", res.StatusCode)
+	}
 	return nil
 }
