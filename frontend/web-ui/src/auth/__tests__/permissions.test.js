@@ -5,6 +5,7 @@ import {
   permissionGrantedAll,
   seedCachedPermissions,
   clearPermissionCache,
+  getCachedPermissions,
 } from '../permissions.js';
 
 describe('permissionGranted', () => {
@@ -23,6 +24,9 @@ describe('permissionGranted', () => {
   it('returns true when name is empty (no permission required)', () => {
     expect(permissionGranted([], '')).toBe(true);
   });
+  it('returns false for null permissions', () => {
+    expect(permissionGranted(null, 'users.list')).toBe(false);
+  });
 });
 
 describe('permissionGrantedAny', () => {
@@ -35,6 +39,9 @@ describe('permissionGrantedAny', () => {
   it('returns true for empty required list', () => {
     expect(permissionGrantedAny([], [])).toBe(true);
   });
+  it('returns true for null required list', () => {
+    expect(permissionGrantedAny(['users.list'], null)).toBe(true);
+  });
 });
 
 describe('permissionGrantedAll', () => {
@@ -44,13 +51,26 @@ describe('permissionGrantedAll', () => {
   it('returns false when one is missing', () => {
     expect(permissionGrantedAll(['users.list'], ['users.list', 'roles.list'])).toBe(false);
   });
+  it('returns true for null required list', () => {
+    expect(permissionGrantedAll(['users.list'], null)).toBe(true);
+  });
 });
 
 describe('cache', () => {
   beforeEach(() => clearPermissionCache());
 
-  it('seedCachedPermissions stores permissions', () => {
+  it('getCachedPermissions returns null before any seed', () => {
+    expect(getCachedPermissions()).toBeNull();
+  });
+
+  it('seedCachedPermissions stores permissions retrievable via getCachedPermissions', () => {
     seedCachedPermissions(['users.list']);
-    expect(permissionGranted(['users.list'], 'users.list')).toBe(true);
+    expect(getCachedPermissions()).toEqual(['users.list']);
+  });
+
+  it('getCachedPermissions returns null after cache is cleared', () => {
+    seedCachedPermissions(['users.list']);
+    clearPermissionCache();
+    expect(getCachedPermissions()).toBeNull();
   });
 });
