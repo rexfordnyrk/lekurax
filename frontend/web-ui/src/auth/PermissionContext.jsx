@@ -16,42 +16,55 @@ export function PermissionProvider({ children }) {
   const [permissions, setPermissions] = useState([]);
   const [roleNames, setRoleNames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const load = useCallback(async () => {
-    if (!authzkit.isAuthenticated) {
-      clearPermissionCache();
-      setPermissions([]);
-      setRoleNames([]);
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    try {
-      const data = await authzkit.users.getMyPermissions();
-      const perms = Array.isArray(data?.permissions) ? data.permissions : [];
-      seedCachedPermissions(perms);
-      setPermissions(perms);
-      setRoleNames(Array.isArray(data?.roles) ? data.roles : []);
-    } catch {
-      clearPermissionCache();
-      setPermissions([]);
-      setRoleNames([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const refresh = useCallback(() => setRefreshKey(k => k + 1), []);
 
   useEffect(() => {
-    load();
-  }, [location.pathname, load]);
+    let cancelled = false;
+
+    async function run() {
+      if (!authzkit.isAuthenticated) {
+        if (!cancelled) {
+          clearPermissionCache();
+          setPermissions([]);
+          setRoleNames([]);
+          setLoading(false);
+        }
+        return;
+      }
+      if (!cancelled) setLoading(true);
+      try {
+        const data = await authzkit.users.getMyPermissions();
+        if (!cancelled) {
+          const perms = Array.isArray(data?.permissions) ? data.permissions : [];
+          seedCachedPermissions(perms);
+          setPermissions(perms);
+          setRoleNames(Array.isArray(data?.roles) ? data.roles : []);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error('[PermissionContext] Failed to load permissions:', err);
+          clearPermissionCache();
+          setPermissions([]);
+          setRoleNames([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    run();
+    return () => { cancelled = true; };
+  }, [location.pathname, refreshKey]);
 
   const hasPermission = useCallback(name => permissionGranted(permissions, name), [permissions]);
   const hasAny = useCallback(names => permissionGrantedAny(permissions, names), [permissions]);
   const hasAll = useCallback(names => permissionGrantedAll(permissions, names), [permissions]);
 
   const value = useMemo(
-    () => ({ permissions, roleNames, loading, hasPermission, hasAny, hasAll, refresh: load }),
-    [permissions, roleNames, loading, hasPermission, hasAny, hasAll, load]
+    () => ({ permissions, roleNames, loading, hasPermission, hasAny, hasAll, refresh }),
+    [permissions, roleNames, loading, hasPermission, hasAny, hasAll, refresh]
   );
 
   return <PermissionContext.Provider value={value}>{children}</PermissionContext.Provider>;
