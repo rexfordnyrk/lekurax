@@ -17,7 +17,7 @@
 | Phase | Description | Plan | Status |
 |---|---|---|---|
 | P0 | Admin UI shell & navigation (mockup replication) | (completed before this roadmap) | ✅ |
-| P1 | Authz — tenant self-service config endpoint | [plan-p1-authz-self-service.md](plan-p1-authz-self-service.md) | ⬜ |
+| P1 | Authz — tenant self-service config endpoint | [plan-p1-authz-self-service.md](plan-p1-authz-self-service.md) | ✅ |
 | P2 | Lekurax web-ui — centralised permission system | [plan-p2-permission-system.md](plan-p2-permission-system.md) | ⬜ |
 | P3 | Lekurax web-ui — admin page permission wiring | [plan-p3-admin-permission-wiring.md](plan-p3-admin-permission-wiring.md) | ⬜ |
 | P4 | Lekurax backend — permission registration at startup | [plan-p4-permission-registration.md](plan-p4-permission-registration.md) | ⬜ |
@@ -30,14 +30,14 @@
 
 | # | Task | File / Location | Status |
 |---|---|---|---|
-| 1.1 | Add `tenant.settings.update` to permission registry in authz | `authz/internal/domain/` or migration | ⬜ |
-| 1.2 | Implement `UpdateMyConfig` handler in `TenantHandler` | `authz/internal/delivery/http/handler/tenant_handler.go` | ⬜ |
-| 1.3 | Register `PUT /v1/tenants/me/config` route | `authz/internal/delivery/http/handler/tenant_handler.go` | ⬜ |
-| 1.4 | Assign `tenant.settings.update` to default tenant-admin role in provisioning | `authz/internal/application/` | ⬜ |
-| 1.5 | Add `updateMyConfig(params)` to authzkit JS client `TenantsResource` | `authz/frontend/packages/authzkit-client/src/resources/tenants.js` | ⬜ |
-| 1.6 | Add `updateMyConfig` type signature to `index.d.ts` | `authz/frontend/packages/authzkit-client/src/index.d.ts` | ⬜ |
-| 1.7 | Write integration test for new endpoint | `authz/test/integration/` | ⬜ |
-| 1.8 | Rebuild & publish authzkit-client package | `authz/frontend/packages/authzkit-client/` | ⬜ |
+| 1.1 | Add `tenant.settings.update` to permission registry in authz | `authz/internal/domain/` or migration | ✅ |
+| 1.2 | Implement `UpdateMyConfig` handler in `TenantHandler` | `authz/internal/delivery/http/handler/tenant_handler.go` | ✅ |
+| 1.3 | Register `PUT /v1/tenants/me/config` route | `authz/internal/delivery/http/handler/tenant_handler.go` | ✅ |
+| 1.4 | Assign `tenant.settings.update` to default tenant-admin role in provisioning | `authz/internal/application/` | ✅ |
+| 1.5 | Add `updateMyConfig(params)` to authzkit JS client `TenantsResource` | `authz/frontend/packages/authzkit-client/src/resources/tenants.js` | ✅ |
+| 1.6 | Add `updateMyConfig` type signature to `index.d.ts` | `authz/frontend/packages/authzkit-client/src/index.d.ts` | ✅ |
+| 1.7 | Write integration test for new endpoint | `authz/test/integration/` | ✅ |
+| 1.8 | Rebuild & publish authzkit-client package | `authz/frontend/packages/authzkit-client/` | ✅ |
 
 ---
 
