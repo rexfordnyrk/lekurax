@@ -82,4 +82,22 @@ describe('PermissionProvider', () => {
       expect(screen.getByTestId('can-list')).toHaveTextContent('no');
     });
   });
+
+  it('does not fetch permissions when unauthenticated', async () => {
+    authzkit.isAuthenticated = false;
+
+    render(
+      <MemoryRouter>
+        <PermissionProvider>
+          <Consumer />
+        </PermissionProvider>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('can-list')).toHaveTextContent('no');
+    });
+
+    expect(authzkit.users.getMyPermissions).not.toHaveBeenCalled();
+  });
 });
