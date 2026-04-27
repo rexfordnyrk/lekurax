@@ -129,18 +129,9 @@ export function AdminAuthPoliciesView() {
   return (
     <div className="content-area">
       <div className="card" style={{ marginBottom: 20 }}>
-        <div className="card-header">
+        <div className="card-header m1-card-header">
           <h3 className="card-title">Auth policies</h3>
-          <div className="d-flex gap-2">
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={load}
-              disabled={loading || saving}
-            >
-              <Icon icon="solar:refresh-linear" className="icon text-md" />
-              Refresh
-            </button>
+          <div className="m1-card-header-export">
             <button
               type="button"
               className="btn btn-primary btn-sm"

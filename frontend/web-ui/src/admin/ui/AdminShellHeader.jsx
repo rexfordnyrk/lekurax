@@ -1,9 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
+import { useAdminShell } from "./AdminShellContext";
 import "./adminShell.css";
 
-export function AdminShellHeader({ breadcrumb = [], title, actions = null }) {
+export function AdminShellHeader({ breadcrumb = [], title, actions: actionsProp = null }) {
+  const { headerActions } = useAdminShell();
+  const actions = headerActions ?? actionsProp;
+
   return (
     <div className="admin-shell-header">
       <div className="admin-shell-header-inner">
@@ -32,7 +36,9 @@ export function AdminShellHeader({ breadcrumb = [], title, actions = null }) {
               );
             })}
           </div>
-          <h1 className="admin-shell-h1">{title}</h1>
+          <div className="admin-shell-h1" role="heading" aria-level={1}>
+            {title}
+          </div>
         </div>
 
         <div className="admin-shell-actions">{actions}</div>

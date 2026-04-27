@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { Modal, Button, Badge, ListGroup, Alert } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 import { AuthzKitApiError } from "@authzkit/client";
 import { authzkit } from "../../auth/authzkitClient";
+import "../ui/m1Modal.css";
 
 function errorMessage(error) {
   if (error instanceof AuthzKitApiError) return `${error.message} (${error.code})`;
@@ -13,11 +14,28 @@ function fullName(u) {
   return name || u?.email || u?.phone_number || u?.id || "User";
 }
 
+function initials(u) {
+  const fn = (u?.first_name ?? "").trim();
+  const ln = (u?.last_name ?? "").trim();
+  const a = fn.charAt(0) || (u?.email ?? "").charAt(0) || "?";
+  const b = ln.charAt(0) || (u?.email ?? "").charAt(1) || "";
+  return `${a}${b}`.toUpperCase();
+}
+
 function formatWhen(iso) {
   if (!iso) return "—";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return String(iso);
   return d.toLocaleString();
+}
+
+function roleLine(u) {
+  const roles = Array.isArray(u?.roles) ? u.roles : [];
+  if (!roles.length) return "—";
+  return roles
+    .map((r) => (r.label || r.name || r.id || "").toString())
+    .filter(Boolean)
+    .join(", ");
 }
 
 export function UserDetailsModal({
@@ -56,90 +74,103 @@ export function UserDetailsModal({
     }
   }
 
+  const statusBadgeClass =
+    user?.status === "active" ? "badge-success" : user?.status === "suspended" ? "badge-warning" : "badge-neutral";
+
   return (
-    <Modal show={show} onHide={onHide} centered size="lg" scrollable>
-      <Modal.Header closeButton>
-        <Modal.Title>User details</Modal.Title>
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      scrollable
+      backdropClassName="m1-modal-backdrop"
+      dialogClassName="m1-modal-dialog--wide"
+      contentClassName="m1-modal-skin"
+    >
+      <Modal.Header closeButton={false} className="m1-modal-header rounded-0">
+        <Modal.Title as="h2" className="m1-modal-title">
+          User Details
+        </Modal.Title>
+        <button type="button" className="m1-modal-close" onClick={onHide} aria-label="Close">
+          <i className="ri-close-line" aria-hidden />
+        </button>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="m1-modal-body">
         {!user ? (
           <div className="text-secondary-light">No user selected.</div>
         ) : (
           <>
             {error ? <Alert variant="danger">{error}</Alert> : null}
 
-            <div className="d-flex align-items-start justify-content-between gap-3 flex-wrap">
-              <div>
-                <div className="fw-semibold text-lg">{fullName(user)}</div>
-                <div className="text-secondary-light">{user.email ?? "—"}</div>
-                <div className="text-secondary-light">{user.phone_number ?? ""}</div>
+            <div className="m1-user-detail-hero">
+              <div className="m1-user-detail-avatar">{initials(user)}</div>
+              <div className="m1-user-detail-hero-main">
+                <h3 className="m1-user-detail-name">{fullName(user)}</h3>
+                <div className="m1-user-detail-email">{user.email ?? "—"}</div>
+                {user.phone_number ? (
+                  <div className="m1-user-detail-email">{user.phone_number}</div>
+                ) : null}
+                <div className="m1-user-detail-meta">
+                  <span className={`badge ${statusBadgeClass}`}>{user.status ?? "—"}</span>
+                </div>
               </div>
-              <div className="d-flex gap-2 align-items-center">
-                <Badge bg={user.status === "active" ? "success" : user.status === "suspended" ? "danger" : "secondary"}>
-                  {user.status ?? "unknown"}
-                </Badge>
-                <Badge bg={user.mfa_enabled ? "primary" : "secondary"}>
-                  MFA {user.mfa_enabled ? "on" : "off"}
-                </Badge>
-              </div>
+              {canUpdate ? (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  type="button"
+                  className="d-inline-flex align-items-center gap-2"
+                  onClick={() => onEdit?.(user)}
+                  disabled={busy}
+                >
+                  <i className="ri-edit-line" aria-hidden />
+                  Edit
+                </Button>
+              ) : null}
             </div>
 
-            <ListGroup variant="flush" className="mt-16">
-              <ListGroup.Item className="px-0">
-                <div className="text-secondary-light text-sm">Branch</div>
-                <div className="fw-medium">{branchLabel}</div>
-              </ListGroup.Item>
-              <ListGroup.Item className="px-0">
-                <div className="text-secondary-light text-sm">Last login (approx.)</div>
-                <div className="fw-medium">{formatWhen(lastLoginAt)}</div>
-              </ListGroup.Item>
-              <ListGroup.Item className="px-0">
-                <div className="text-secondary-light text-sm">Active sessions (24h, approx.)</div>
-                <div className="fw-medium">{activeSessionCount ?? "—"}</div>
-              </ListGroup.Item>
-            </ListGroup>
-
-            <div className="mt-16">
-              <div className="text-secondary-light text-sm mb-8">Roles</div>
-              {roles.length ? (
-                <div className="d-flex flex-wrap gap-2">
-                  {roles.map((r) => (
-                    <Badge key={r.id ?? `${r.name}-${r.label}`} bg="light" text="dark" className="border">
-                      {(r.label || r.name || r.id || "role").toString()}
-                    </Badge>
-                  ))}
+            <div className="m1-form-grid">
+              <div className="m1-form-group">
+                <span className="m1-form-label">Role</span>
+                <div className="m1-user-readonly">{roleLine(user)}</div>
+              </div>
+              <div className="m1-form-group">
+                <span className="m1-form-label">Branch</span>
+                <div className="m1-user-readonly">{branchLabel}</div>
+              </div>
+              <div className="m1-form-group">
+                <span className="m1-form-label">Last Login</span>
+                <div className="m1-user-readonly">{formatWhen(lastLoginAt)}</div>
+              </div>
+              <div className="m1-form-group">
+                <span className="m1-form-label">MFA Status</span>
+                <div className="m1-user-readonly">
+                  <span className={`badge ${user.mfa_enabled ? "badge-success" : "badge-warning"}`}>
+                    {user.mfa_enabled ? "Enabled" : "Disabled"}
+                  </span>
                 </div>
-              ) : (
-                <div className="text-secondary-light">No roles on this user (yet).</div>
-              )}
+              </div>
+              <div className="m1-form-group m1-form-group--full">
+                <span className="m1-form-label">Active sessions (24h)</span>
+                <div className="m1-user-readonly">{activeSessionCount ?? "—"}</div>
+              </div>
             </div>
           </>
         )}
       </Modal.Body>
-      <Modal.Footer className="d-flex flex-wrap gap-2 justify-content-between">
-        <div className="d-flex gap-2">
-          <Button variant="light" onClick={onHide} disabled={busy}>
-            Close
-          </Button>
-          {canUpdate ? (
-            <Button
-              variant="outline-primary"
-              onClick={() => {
-                onEdit?.(user);
-              }}
-              disabled={busy || !user}
-            >
-              Edit
-            </Button>
-          ) : null}
-        </div>
-
-        <div className="d-flex gap-2">
+      <Modal.Footer className="m1-modal-footer m1-modal-footer--split rounded-0">
+        <div className="d-flex gap-2 me-auto">
           {canDelete ? (
-            <Button variant="outline-danger" onClick={onDelete} disabled={busy || !user}>
+            <Button variant="outline-danger" size="sm" onClick={onDelete} disabled={busy || !user}>
+              <i className="ri-user-unfollow-line me-1" aria-hidden />
               Deactivate
             </Button>
           ) : null}
+        </div>
+        <div className="d-flex gap-2">
+          <Button variant="secondary" type="button" onClick={onHide} disabled={busy}>
+            Close
+          </Button>
         </div>
       </Modal.Footer>
     </Modal>

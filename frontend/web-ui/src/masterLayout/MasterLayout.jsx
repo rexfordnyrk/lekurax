@@ -4,7 +4,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import ThemeToggleButton from "../helper/ThemeToggleButton";
 import { useBranch } from "../branch/BranchContext";
 import { AdminShellHeader } from "../admin/ui/AdminShellHeader";
-import { AdminShellTabs } from "../admin/ui/AdminShellTabs";
+import { AdminShellProvider } from "../admin/ui/AdminShellContext";
 
 const MasterLayout = ({ children }) => {
   let [sidebarActive, seSidebarActive] = useState(false);
@@ -109,7 +109,15 @@ const MasterLayout = ({ children }) => {
             : "Admin";
 
   return (
-    <section className={mobileMenu ? "overlay active" : "overlay "}>
+    <section
+      className={[
+        mobileMenu ? "overlay active" : "overlay",
+        /* Shared shell (sidebar width, logo inset, menu density): all routes */
+        "admin-m1-layout",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       {/* sidebar */}
       <aside
         className={
@@ -1620,10 +1628,16 @@ const MasterLayout = ({ children }) => {
       </aside>
 
       <main
-        className={sidebarActive ? "dashboard-main active" : "dashboard-main"}
+        className={[
+          sidebarActive ? "dashboard-main active" : "dashboard-main",
+          /* Tighter horizontal padding on main column: all routes */
+          "dashboard-main--admin",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {isAdminRoute ? (
-          <div>
+          <AdminShellProvider>
             <AdminShellHeader
               breadcrumb={[
                 { label: "Admin", to: "/admin/users" },
@@ -1631,9 +1645,12 @@ const MasterLayout = ({ children }) => {
               ]}
               title={adminTitle}
             />
-            <AdminShellTabs />
-          </div>
+            <div className='dashboard-main-body' key={branchSwitchGeneration}>
+              {children}
+            </div>
+          </AdminShellProvider>
         ) : (
+          <>
           <div className='navbar-header'>
           <div className='row align-items-center justify-content-between'>
             <div className='col-auto'>
@@ -2341,12 +2358,11 @@ const MasterLayout = ({ children }) => {
             </div>
           </div>
         </div>
-        )}
-
-        {/* dashboard-main-body */}
         <div className='dashboard-main-body' key={branchSwitchGeneration}>
           {children}
         </div>
+        </>
+        )}
 
         {/* Footer section */}
         <footer className='d-footer'>

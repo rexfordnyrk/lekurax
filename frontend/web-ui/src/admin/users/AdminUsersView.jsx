@@ -5,6 +5,8 @@ import { authzkit } from "../../auth/authzkitClient";
 import { useAuth } from "../../auth/AuthContext";
 import { UserUpsertModal } from "./UserUpsertModal";
 import { UserDetailsModal } from "./UserDetailsModal";
+import { useAdminShell } from "../ui/AdminShellContext";
+import "../ui/adminShell.css";
 
 function errorMessage(error) {
   if (error instanceof AuthzKitApiError) return `${error.message} (${error.code})`;
@@ -65,13 +67,89 @@ function roleSummary(u) {
   return labels.length > 2 ? `${joined} +${labels.length - 2}` : joined;
 }
 
-function KpiCard({ title, value, hint }) {
+/** Same card chrome as AI dashboard `UnitCountOne`, values from live KPIs */
+function UsersUnitCountRow({ kpis }) {
+  const total = kpis.total;
+  const activePct = total > 0 ? Math.round((kpis.active / total) * 100) : null;
+  const mfaPct = total > 0 ? Math.round((kpis.mfa / total) * 100) : null;
+  const sessionsLabel =
+    kpis.activeSessions == null
+      ? "Grant audit.view to surface login-based counts"
+      : "Distinct users with a login in the last 24 hours";
+
   return (
-    <div className="col-sm-6 col-xl-3">
-      <div className="card p-16 radius-12 h-100">
-        <div className="text-secondary-light text-sm mb-6">{title}</div>
-        <div className="fw-semibold text-xl">{value}</div>
-        {hint ? <div className="text-secondary-light text-xs mt-8">{hint}</div> : null}
+    <div className="admin-users-kpi-row">
+      <div>
+        <div className="card shadow-none border bg-gradient-start-1 h-100">
+          <div className="card-body p-20">
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p className="fw-medium text-primary-light mb-1">Total Users</p>
+                <h6 className="mb-0">{total.toLocaleString()}</h6>
+              </div>
+              <div className="w-50-px h-50-px bg-cyan rounded-circle d-flex justify-content-center align-items-center">
+                <Icon icon="gridicons:multiple-users" className="text-white text-2xl mb-0" />
+              </div>
+            </div>
+            <p className="fw-medium text-sm text-primary-light mt-12 mb-0">
+              Accounts returned from the user directory
+            </p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="card shadow-none border bg-gradient-start-2 h-100">
+          <div className="card-body p-20">
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p className="fw-medium text-primary-light mb-1">Active Users</p>
+                <h6 className="mb-0">{kpis.active.toLocaleString()}</h6>
+              </div>
+              <div className="w-50-px h-50-px bg-purple rounded-circle d-flex justify-content-center align-items-center">
+                <Icon icon="solar:user-check-bold" className="text-white text-2xl mb-0" />
+              </div>
+            </div>
+            <p className="fw-medium text-sm text-primary-light mt-12 mb-0">
+              {activePct == null ? "—" : `${activePct}% of directory users with status active`}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="card shadow-none border bg-gradient-start-3 h-100">
+          <div className="card-body p-20">
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p className="fw-medium text-primary-light mb-1">MFA Enabled</p>
+                <h6 className="mb-0">{kpis.mfa.toLocaleString()}</h6>
+              </div>
+              <div className="w-50-px h-50-px bg-info rounded-circle d-flex justify-content-center align-items-center">
+                <Icon icon="ri:shield-check-line" className="text-white text-2xl mb-0" />
+              </div>
+            </div>
+            <p className="fw-medium text-sm text-primary-light mt-12 mb-0">
+              {mfaPct == null ? "—" : `${mfaPct}% of directory users with MFA on`}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="card shadow-none border bg-gradient-start-4 h-100">
+          <div className="card-body p-20">
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p className="fw-medium text-primary-light mb-1">Active Sessions</p>
+                <h6 className="mb-0">
+                  {kpis.activeSessions == null ? "—" : kpis.activeSessions.toLocaleString()}
+                </h6>
+              </div>
+              <div className="w-50-px h-50-px bg-success-main rounded-circle d-flex justify-content-center align-items-center">
+                <Icon icon="solar:clock-circle-bold" className="text-white text-2xl mb-0" />
+              </div>
+            </div>
+            <p className="fw-medium text-sm text-primary-light mt-12 mb-0">{sessionsLabel}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -101,12 +179,15 @@ export function AdminUsersView() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [detailsUser, setDetailsUser] = useState(null);
 
+  const { setHeaderActions } = useAdminShell();
+
   const canListUsers = hasPerm(perms, "users.list");
   const canCreateUser = hasPerm(perms, "users.create");
   const canView = hasPerm(perms, "users.view");
   const canUpdate = hasPerm(perms, "users.update");
   const canDelete = hasPerm(perms, "users.delete");
   const canAssignRoles = hasPerm(perms, "users.roles.assign");
+  const canAssignBranch = hasPerm(perms, "branches.users.assign");
   const canViewAudit = hasPerm(perms, "audit.view");
 
   const loadBranches = useCallback(async () => {
@@ -224,6 +305,12 @@ export function AdminUsersView() {
     });
   }, [users, search, role]);
 
+  const branchOptions = useMemo(() => {
+    return [...branchesById.entries()]
+      .map(([id, name]) => ({ id, name: name ?? id }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [branchesById]);
+
   const kpis = useMemo(() => {
     const total = users.length;
     const active = users.filter((u) => u.status === "active").length;
@@ -244,11 +331,40 @@ export function AdminUsersView() {
     return { total, active, mfa, activeSessions };
   }, [canViewAudit, loginAtByUserId, users]);
 
-  const openCreate = () => {
+  const openCreate = useCallback(() => {
     setUpsertMode("create");
     setUpsertUser(null);
     setUpsertOpen(true);
-  };
+  }, []);
+
+  const exportUsersCsv = useCallback(() => {
+    if (!canListUsers) return;
+    const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const headers = ["Name", "Email", "Role", "Branch", "Status", "Last Login", "MFA"];
+    const rows = filtered.map((u) => {
+      const branch = !u?.branch_id ? "—" : branchesById.get(u.branch_id) ?? u.branch_id;
+      const lastLogin = formatShortWhen(loginAtByUserId.get(u.id) ?? null);
+      return [
+        fullName(u),
+        u.email ?? "",
+        roleSummary(u),
+        branch,
+        u.status ?? "—",
+        lastLogin,
+        u.mfa_enabled ? "Enabled" : "Disabled",
+      ]
+        .map(esc)
+        .join(",");
+    });
+    const csv = [headers.map(esc).join(","), ...rows].join("\n");
+    const blob = new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `users-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [branchesById, canListUsers, filtered, loginAtByUserId]);
 
   const openEdit = (u) => {
     setUpsertMode("edit");
@@ -276,48 +392,23 @@ export function AdminUsersView() {
     return Date.parse(ts) >= cutoff ? 1 : 0;
   };
 
+  useEffect(() => {
+    setHeaderActions(
+      <div className="admin-shell-header-buttons d-flex align-items-center gap-2 flex-wrap justify-content-end">
+        {canCreateUser || perms.length === 0 ? (
+          <button type="button" className="btn btn-primary btn-sm" onClick={openCreate}>
+            <i className="ri-add-line" />
+            <span className="ms-1">Add User</span>
+          </button>
+        ) : null}
+      </div>
+    );
+    return () => setHeaderActions(null);
+  }, [canCreateUser, openCreate, perms.length, setHeaderActions]);
+
   return (
     <div className="content-area">
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon primary">
-            <i className="ri-user-line" />
-          </div>
-          <div>
-            <div className="stat-label">Total Users</div>
-            <div className="stat-value">{String(kpis.total)}</div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon success">
-            <i className="ri-checkbox-circle-line" />
-          </div>
-          <div>
-            <div className="stat-label">Active Users</div>
-            <div className="stat-value">{String(kpis.active)}</div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon warning">
-            <i className="ri-shield-check-line" />
-          </div>
-          <div>
-            <div className="stat-label">MFA Enabled</div>
-            <div className="stat-value">{String(kpis.mfa)}</div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon info">
-            <i className="ri-time-line" />
-          </div>
-          <div>
-            <div className="stat-label">Active Sessions</div>
-            <div className="stat-value">
-              {kpis.activeSessions == null ? "—" : String(kpis.activeSessions)}
-            </div>
-          </div>
-        </div>
-      </div>
+      <UsersUnitCountRow kpis={kpis} />
 
       <div className="filters-bar">
         <div className="search-input">
@@ -355,28 +446,18 @@ export function AdminUsersView() {
       </div>
 
       <div className="card">
-        <div className="card-header">
+        <div className="card-header m1-card-header">
           <h3 className="card-title">User Accounts ({filtered.length})</h3>
-          <div className="d-flex gap-2">
+          <div className="m1-card-header-export">
             <button
               type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={refreshAll}
-              disabled={loading}
+              className="btn btn-outline-secondary btn-sm"
+              onClick={exportUsersCsv}
+              disabled={!canListUsers || loading}
             >
-              <Icon icon="solar:refresh-linear" className="icon text-md" />
-              Refresh
+              <i className="ri-download-2-line" />
+              <span className="ms-1">Export</span>
             </button>
-            {canCreateUser || perms.length === 0 ? (
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={openCreate}
-              >
-                <i className="ri-add-line" />
-                Add User
-              </button>
-            ) : null}
           </div>
         </div>
 
@@ -495,6 +576,8 @@ export function AdminUsersView() {
         tenantId={tenantId}
         user={upsertUser}
         canAssignRoles={canAssignRoles}
+        canAssignBranch={canAssignBranch}
+        branchOptions={branchOptions}
         onHide={() => setUpsertOpen(false)}
         onSaved={refreshAll}
       />

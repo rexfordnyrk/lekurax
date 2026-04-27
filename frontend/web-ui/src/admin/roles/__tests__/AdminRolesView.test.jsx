@@ -1,6 +1,8 @@
 import React from "react";
 import { describe, expect, test, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import { AdminShellHeader } from "../../ui/AdminShellHeader";
+import { AdminShellProvider } from "../../ui/AdminShellContext";
 import { AdminRolesView } from "../AdminRolesView";
 
 const listRolesMock = vi.fn();
@@ -41,7 +43,12 @@ describe("AdminRolesView", () => {
       meta: { page: 1, page_size: 50, total: 1 },
     });
 
-    render(<AdminRolesView />);
+    render(
+      <AdminShellProvider>
+        <AdminShellHeader breadcrumb={[{ label: "Admin" }]} title="Roles" />
+        <AdminRolesView />
+      </AdminShellProvider>,
+    );
 
     await waitFor(() =>
       expect(

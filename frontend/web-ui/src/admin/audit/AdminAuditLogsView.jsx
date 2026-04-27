@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { AuthzKitApiError } from "@authzkit/client";
 import { authzkit } from "../../auth/authzkitClient";
@@ -175,18 +174,9 @@ export function AdminAuditLogsView() {
       </div>
 
       <div className="card">
-        <div className="card-header">
-          <h3 className="card-title">Audit logs</h3>
-          <div className="d-flex gap-2">
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={load}
-              disabled={loading}
-            >
-              <Icon icon="solar:refresh-linear" className="icon text-md" />
-              Refresh
-            </button>
+        <div className="card-header m1-card-header">
+          <h3 className="card-title">Audit logs ({filtered.length})</h3>
+          <div className="m1-card-header-export">
             <div className="btn-group">
               <button
                 type="button"

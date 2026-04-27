@@ -1,3 +1,149 @@
+/* App shell (all routes): 260px sidebar + matching main offset — was admin-only, now global */
+.admin-m1-layout .sidebar {
+  width: 16.25rem; /* 260px */
+}
+
+.admin-m1-layout .dashboard-main {
+  margin-inline-start: 0;
+}
+
+@media (min-width: 1200px) {
+  .admin-m1-layout .sidebar {
+    inset-inline-start: 0;
+    width: 16.25rem;
+  }
+
+  .admin-m1-layout .sidebar.active:hover {
+    width: 16.25rem;
+  }
+
+  .admin-m1-layout .dashboard-main {
+    margin-inline-start: 16.25rem;
+  }
+}
+
+@media (min-width: 1199px) {
+  .admin-m1-layout .dashboard-main.active {
+    margin-inline-start: 5.375rem;
+  }
+}
+
+/* Sidebar: logo inset matches admin top bar (16px 24px); menu matches mockup nav */
+.admin-m1-layout .sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-m1-layout .sidebar-logo {
+  padding: 16px 24px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.admin-m1-layout .sidebar-menu-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  padding: 16px 12px;
+}
+
+/* Mockup .nav-item: 14px, padding 10px 12px, icon 18px, gap 12px */
+.admin-m1-layout .sidebar-menu li > a {
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  gap: 12px;
+}
+
+@media (min-width: 1650px) {
+  .admin-m1-layout .sidebar-menu li > a {
+    font-size: 14px;
+  }
+}
+
+.admin-m1-layout .sidebar-menu > li > a .menu-icon {
+  font-size: 18px;
+  margin-inline-end: 0;
+}
+
+/* Top-level items that use an <i> icon instead of menu-icon */
+.admin-m1-layout .sidebar-menu > li > a > i:first-child {
+  font-size: 18px;
+  margin-inline-end: 0;
+}
+
+.admin-m1-layout .sidebar-menu .sidebar-submenu li a i {
+  font-size: 0.625rem;
+  margin-inline-end: 0.5rem;
+}
+
+.admin-m1-layout .sidebar.active .sidebar-menu li a .menu-icon,
+.admin-m1-layout .sidebar.active .sidebar-menu > li > a > i:first-child {
+  margin-inline-end: 0;
+}
+
+.admin-m1-layout .sidebar.active:hover .sidebar-menu li a .menu-icon {
+  margin-inline-end: 0;
+}
+
+/* Mockup .nav-section-title */
+.admin-m1-layout .sidebar-menu .sidebar-menu-group-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--neutral-400);
+  padding: 0 12px 8px;
+  margin-block: 0.75rem 0;
+}
+
+@media (min-width: 1650px) {
+  .admin-m1-layout .sidebar-menu .sidebar-menu-group-title {
+    font-size: 11px;
+  }
+}
+
+.admin-m1-layout .sidebar-menu .sidebar-submenu {
+  padding-block-start: 8px;
+  padding-inline-start: 1.25rem;
+}
+
+@media (min-width: 1650px) {
+  .admin-m1-layout .sidebar-menu .sidebar-submenu {
+    padding-inline-start: 1.25rem;
+  }
+}
+
+.admin-m1-layout .sidebar-menu .sidebar-submenu li a {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.admin-m1-layout .sidebar-menu li.dropdown > a::after {
+  inset-inline-end: 10px;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 1650px) {
+  .admin-m1-layout .sidebar-menu li.dropdown > a::after {
+    font-size: 1.125rem;
+  }
+}
+
+/* Admin main column: horizontal padding tightened further (~25% vs prior) */
+.dashboard-main.dashboard-main--admin .dashboard-main-body {
+  padding-block: 0.5rem;
+  padding-inline: 0.421875rem; /* 0.5625rem * 0.75 */
+}
+
+@media (min-width: 1400px) {
+  .dashboard-main.dashboard-main--admin .dashboard-main-body {
+    padding-block: 0.75rem;
+    padding-inline: 0.5625rem; /* 0.75rem * 0.75 */
+  }
+}
+
 .admin-shell-header {
   position: sticky;
   top: 0;
@@ -6,6 +152,7 @@
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
+/* Mockup .top-bar */
 .admin-shell-header-inner {
   padding: 16px 24px;
   display: flex;
@@ -14,25 +161,26 @@
   gap: 16px;
 }
 
+/* Mockup .breadcrumb */
 .admin-shell-breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: rgba(15, 23, 42, 0.6);
-  margin-bottom: 4px;
+  color: var(--neutral-500, #6b7280);
+  margin-bottom: 0;
 }
 
 .admin-shell-breadcrumb-link {
-  color: rgba(15, 23, 42, 0.6);
+  color: var(--neutral-500, #6b7280);
   text-decoration: none;
 }
 .admin-shell-breadcrumb-link:hover {
-  color: #15803d;
+  color: var(--primary-600, #487fff);
 }
 
 .admin-shell-breadcrumb-current {
-  color: rgba(15, 23, 42, 0.6);
+  color: var(--neutral-500, #6b7280);
 }
 
 .admin-shell-breadcrumb-sep {
@@ -40,68 +188,51 @@
   opacity: 0.7;
 }
 
+/* Mockup .page-title */
 .admin-shell-h1 {
   margin: 0;
   font-size: 20px;
+  line-height: 1.5;
   font-weight: 600;
-  color: rgba(15, 23, 42, 0.95);
+  color: var(--neutral-900, #111827);
 }
 
+/* Mockup .top-bar-actions gap */
 .admin-shell-actions {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
-.admin-shell-tabs {
-  background: #fff;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-}
-
-.admin-shell-tabs-inner {
-  padding: 0 24px;
-  display: flex;
-  gap: 28px;
-}
-
-.admin-shell-tab {
-  padding: 14px 0;
-  color: rgba(15, 23, 42, 0.7);
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  font-weight: 500;
-}
-
-.admin-shell-tab:hover {
-  color: rgba(15, 23, 42, 0.95);
-}
-
-.admin-shell-tab.active,
-.admin-shell-tab[aria-current="page"] {
-  color: #15803d;
-  border-bottom-color: #15803d;
+.admin-shell-header-buttons .btn {
+  white-space: nowrap;
 }
 
 /* Module 1 (Admin) page primitives — aligned to mockup */
 .content-area {
-  padding: 24px;
+  padding-block: 12px;
+  padding-inline: 8px; /* ~25% less than 11px horizontal */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .stat-card {
   background: #fff;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 8px;
-  padding: 20px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .stat-icon {
@@ -148,10 +279,9 @@
 
 .filters-bar {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 16px 20px;
+  padding: 10px 14px;
   background: #fff;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 8px;
@@ -192,6 +322,44 @@
   color: rgba(15, 23, 42, 0.8);
   outline: none;
   background: #fff;
+}
+
+/* Users KPI row: four tiles always one horizontal band (vertical spacing via .content-area gap) */
+.admin-users-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .admin-users-kpi-row {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+}
+
+/* Table card: title left, export (or other trailing actions) flush right */
+.m1-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.m1-card-header .card-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.m1-card-header-export {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .card-title {

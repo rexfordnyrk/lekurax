@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { AuthzKitApiError } from "@authzkit/client";
 import { authzkit } from "../../auth/authzkitClient";
 import { RoleUpsertModal } from "./RoleUpsertModal";
+import { useAdminShell } from "../ui/AdminShellContext";
 
 function errorMessage(error) {
   if (error instanceof AuthzKitApiError) return `${error.message} (${error.code})`;
@@ -37,6 +37,8 @@ function roleTypeLabel(r) {
 }
 
 export function AdminRolesView() {
+  const { setHeaderActions } = useAdminShell();
+
   const [perms, setPerms] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState("");
@@ -98,17 +100,31 @@ export function AdminRolesView() {
     });
   }, [roles, q, typeFilter]);
 
-  const openCreate = () => {
+  const openCreate = useCallback(() => {
     setActiveRole(null);
     setModalMode("create");
     setModalOpen(true);
-  };
+  }, []);
 
   const openEdit = (r) => {
     setActiveRole(r);
     setModalMode("edit");
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    setHeaderActions(
+      <div className="admin-shell-header-buttons d-flex align-items-center gap-2 flex-wrap justify-content-end">
+        {canCreate ? (
+          <button type="button" className="btn btn-primary btn-sm" onClick={openCreate}>
+            <i className="ri-add-line" />
+            <span className="ms-1">Create Custom Role</span>
+          </button>
+        ) : null}
+      </div>
+    );
+    return () => setHeaderActions(null);
+  }, [canCreate, openCreate, setHeaderActions]);
 
   const onDeleteRole = async (r) => {
     if (!r?.id) return;
@@ -154,29 +170,8 @@ export function AdminRolesView() {
       </div>
 
       <div className="card">
-        <div className="card-header">
+        <div className="card-header m1-card-header">
           <h3 className="card-title">Roles &amp; Permissions ({filtered.length})</h3>
-          <div className="d-flex gap-2">
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={load}
-              disabled={loading}
-            >
-              <Icon icon="solar:refresh-linear" className="icon text-md" />
-              Refresh
-            </button>
-            {canCreate ? (
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={openCreate}
-              >
-                <i className="ri-add-line" />
-                Create Custom Role
-              </button>
-            ) : null}
-          </div>
         </div>
 
         {!canList ? (

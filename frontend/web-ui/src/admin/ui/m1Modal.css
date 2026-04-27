@@ -1,0 +1,304 @@
+/* Module 1 mockup: modal shell, header/close, body/footer, form grid — User Management & Security.html */
+
+/* Mock .modal-overlay — Bootstrap backdrop */
+.m1-modal-backdrop.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.m1-modal-dialog.modal-dialog {
+  /* Mock is 600px, but app chrome reads larger; tighten slightly */
+  max-width: 560px;
+}
+
+.m1-modal-dialog--wide.modal-dialog {
+  max-width: 700px;
+}
+
+.m1-modal-skin.modal-content {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.22);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.m1-modal-skin .modal-header.m1-modal-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color, rgba(15, 23, 42, 0.12));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--white, #fff);
+}
+
+.m1-modal-skin .modal-title.m1-modal-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--neutral-900, #111827);
+  line-height: 1.2;
+}
+
+.m1-modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--neutral-400, #9ca3af);
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.m1-modal-close:hover {
+  background: var(--neutral-100, #f3f4f6);
+  color: var(--neutral-700, #374151);
+}
+
+.m1-modal-close:focus-visible {
+  outline: 2px solid var(--primary-600, #487fff);
+  outline-offset: 2px;
+}
+
+.m1-modal-skin .modal-body.m1-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.m1-modal-skin .modal-footer.m1-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border-color, rgba(15, 23, 42, 0.12));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  background: var(--white, #fff);
+}
+
+.m1-modal-footer--split {
+  justify-content: space-between;
+}
+
+.m1-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.m1-form-grid--single {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 575.98px) {
+  .m1-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.m1-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.m1-form-group--full {
+  grid-column: 1 / -1;
+}
+
+/* Mock .form-label — use native <label class="m1-form-label"> (not Bootstrap Form.Label) */
+.m1-modal-skin .m1-form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--neutral-700, #374151);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.m1-form-label--required::after {
+  content: "*";
+  color: var(--danger-600, #dc2626);
+  margin-left: 4px;
+}
+
+/* Mock .form-input — scoped to M1 form rows so Bootstrap defaults do not win */
+.m1-modal-skin .m1-form-group > .form-control,
+.m1-modal-skin .m1-form-group > .form-select {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--neutral-900, #111827);
+  background-color: #fff;
+  border: 1px solid var(--border-color, rgba(15, 23, 42, 0.12));
+  border-radius: 8px;
+  box-shadow: none;
+  transition: border-color 0.2s ease;
+  appearance: auto;
+}
+
+.m1-modal-skin .m1-form-group > .form-control:focus,
+.m1-modal-skin .m1-form-group > .form-select:focus {
+  border-color: var(--primary-600, #487fff);
+  box-shadow: none;
+  outline: none;
+}
+
+.m1-modal-skin .m1-form-group > .form-control:disabled,
+.m1-modal-skin .m1-form-group > .form-select:disabled {
+  background-color: var(--neutral-50, #f9fafb);
+  color: var(--neutral-500, #6b7280);
+  opacity: 1;
+}
+
+.m1-modal-skin .m1-form-group > .form-select {
+  cursor: pointer;
+}
+
+.m1-form-help {
+  font-size: 12px;
+  color: var(--neutral-500, #6b7280);
+}
+
+/* Mockup .checkbox-group */
+.m1-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.m1-checkbox-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+.m1-checkbox-group label {
+  font-size: 14px;
+  margin: 0;
+  cursor: pointer;
+  color: var(--neutral-700, #374151);
+}
+
+.m1-form-stack {
+  margin-top: 16px;
+}
+
+/* View-user hero strip (mockup ViewUserModal) */
+.m1-user-detail-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: var(--neutral-50, #f9fafb);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+  flex-wrap: wrap;
+}
+
+.m1-user-detail-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(72, 127, 255, 0.12);
+  color: var(--primary-600, #487fff);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.m1-user-detail-hero-main {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.m1-user-detail-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--neutral-900, #111827);
+  margin: 0 0 4px;
+}
+
+.m1-user-detail-email {
+  font-size: 14px;
+  color: var(--neutral-500, #6b7280);
+  margin-bottom: 8px;
+}
+
+.m1-user-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.m1-user-readonly {
+  padding: 10px 0;
+  font-weight: 500;
+  color: var(--neutral-800, #1f2937);
+  font-size: 14px;
+}
+
+/* Mock .btn / .btn-primary / .btn-secondary in modal footer */
+.m1-modal-skin .m1-modal-footer .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.m1-modal-skin .m1-modal-footer .btn.btn-primary {
+  background: var(--primary-600, #487fff);
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+.m1-modal-skin .m1-modal-footer .btn.btn-primary:hover:not(:disabled) {
+  background: var(--primary-700, #3d6fd9);
+  color: #fff;
+}
+
+.m1-modal-skin .m1-modal-footer .btn.btn-secondary {
+  background: #fff;
+  color: var(--neutral-700, #374151);
+  border: 1px solid var(--border-color, rgba(15, 23, 42, 0.12));
+  box-shadow: none;
+}
+
+.m1-modal-skin .m1-modal-footer .btn.btn-secondary:hover:not(:disabled) {
+  background: var(--neutral-50, #f9fafb);
+  color: var(--neutral-700, #374151);
+  border-color: var(--border-color, rgba(15, 23, 42, 0.12));
+}
+
+.m1-modal-skin .m1-modal-body .alert {
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
