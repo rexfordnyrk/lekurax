@@ -18,7 +18,7 @@
 |---|---|---|---|
 | P0 | Admin UI shell & navigation (mockup replication) | (completed before this roadmap) | ✅ |
 | P1 | Authz — tenant self-service config endpoint | [plan-p1-authz-self-service.md](plan-p1-authz-self-service.md) | ✅ |
-| P2 | Lekurax web-ui — centralised permission system | [plan-p2-permission-system.md](plan-p2-permission-system.md) | ⬜ |
+| P2 | Lekurax web-ui — centralised permission system | [plan-p2-permission-system.md](plan-p2-permission-system.md) | ✅ |
 | P3 | Lekurax web-ui — admin page permission wiring | [plan-p3-admin-permission-wiring.md](plan-p3-admin-permission-wiring.md) | ⬜ |
 | P4 | Lekurax backend — permission registration at startup | [plan-p4-permission-registration.md](plan-p4-permission-registration.md) | ⬜ |
 
@@ -47,12 +47,12 @@
 
 | # | Task | File / Location | Status |
 |---|---|---|---|
-| 2.1 | Create `permissions.js` helper (granted/any/all/cache) | `frontend/web-ui/src/auth/permissions.js` | ⬜ |
-| 2.2 | Create `PermissionContext.jsx` provider + `usePermissions` hook | `frontend/web-ui/src/auth/PermissionContext.jsx` | ⬜ |
-| 2.3 | Create `PermissionRoute.jsx` route guard | `frontend/web-ui/src/auth/PermissionRoute.jsx` | ⬜ |
-| 2.4 | Wire `PermissionProvider` into `App.jsx` inside `AuthContext` | `frontend/web-ui/src/App.jsx` | ⬜ |
-| 2.5 | Write unit tests for `permissions.js` helpers | `frontend/web-ui/src/test/` | ⬜ |
-| 2.6 | Write tests for `PermissionContext` (mock `getMyPermissions`) | `frontend/web-ui/src/auth/` | ⬜ |
+| 2.1 | Create `permissions.js` helper (granted/any/all/cache) | `frontend/web-ui/src/auth/permissions.js` | ✅ |
+| 2.2 | Create `PermissionContext.jsx` provider + `usePermissions` hook | `frontend/web-ui/src/auth/PermissionContext.jsx` | ✅ |
+| 2.3 | Create `PermissionRoute.jsx` route guard | `frontend/web-ui/src/auth/PermissionRoute.jsx` | ✅ |
+| 2.4 | Wire `PermissionProvider` into `App.jsx` inside `AuthContext` | `frontend/web-ui/src/App.jsx` | ✅ |
+| 2.5 | Write unit tests for `permissions.js` helpers | `frontend/web-ui/src/test/` | ✅ |
+| 2.6 | Write tests for `PermissionContext` (mock `getMyPermissions`) | `frontend/web-ui/src/auth/` | ✅ |
 
 ---
 
