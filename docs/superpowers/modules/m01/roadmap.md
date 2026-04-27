@@ -20,7 +20,7 @@
 | P1 | Authz — tenant self-service config endpoint | [plan-p1-authz-self-service.md](plan-p1-authz-self-service.md) | ✅ |
 | P2 | Lekurax web-ui — centralised permission system | [plan-p2-permission-system.md](plan-p2-permission-system.md) | ✅ |
 | P3 | Lekurax web-ui — admin page permission wiring | [plan-p3-admin-permission-wiring.md](plan-p3-admin-permission-wiring.md) | ⬜ |
-| P4 | Lekurax backend — permission registration at startup | [plan-p4-permission-registration.md](plan-p4-permission-registration.md) | ⬜ |
+| P4 | Lekurax backend — permission registration at startup | [plan-p4-permission-registration.md](plan-p4-permission-registration.md) | ✅ |
 
 ---
 
@@ -82,11 +82,11 @@
 
 | # | Task | File / Location | Status |
 |---|---|---|---|
-| 4.1 | Define permission manifest (all constants with label + module) | `internal/authzkit/permreg.go` (new file) | ⬜ |
-| 4.2 | Implement `registerPermissions()` startup function | `internal/authzkit/permreg.go` | ⬜ |
-| 4.3 | Call `registerPermissions()` from server startup after routes are wired | `internal/server/server.go` | ⬜ |
-| 4.4 | Verify `config.authz.service_api_key` is forwarded as `X-Service-Key` | `internal/server/server.go` | ⬜ |
-| 4.5 | Write unit test asserting manifest covers all permission strings used in `api.go` | `internal/authzkit/permreg_test.go` | ⬜ |
+| 4.1 | Define permission manifest (all constants with label + module) | `internal/authzkit/permreg.go` (new file) | ✅ |
+| 4.2 | Implement `registerPermissions()` startup function | `internal/authzkit/permreg.go` | ✅ |
+| 4.3 | Call `registerPermissions()` from server startup after routes are wired | `internal/server/server.go` | ✅ |
+| 4.4 | Verify `config.authz.service_api_key` is forwarded as `X-Service-Key` | `internal/server/server.go` | ✅ |
+| 4.5 | Write unit test asserting manifest covers all permission strings used in `api.go` | `internal/authzkit/permreg_test.go` | ✅ |
 
 ---
 
