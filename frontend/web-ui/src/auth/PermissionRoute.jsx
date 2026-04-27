@@ -19,9 +19,6 @@ export default function PermissionRoute({ permission, anyOf, allOf, redirectTo =
     return <Navigate to="/sign-in" replace state={{ from: location }} />;
   }
 
-  const required = permission || anyOf?.length || allOf?.length;
-  if (!required) return <>{children}</>;
-
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center p-5">
@@ -31,6 +28,9 @@ export default function PermissionRoute({ permission, anyOf, allOf, redirectTo =
       </div>
     );
   }
+
+  const required = permission || anyOf?.length || allOf?.length;
+  if (!required) return <>{children}</>;
 
   let allowed = true;
   if (permission) allowed = hasPermission(permission);
