@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -67,6 +68,7 @@ func run() int {
 	az := authzkit.New(cfg.Authz.BaseURL, cfg.Authz.ServiceAPIKey)
 	s := server.New(gdb, verifier, aw, az)
 	httpserver.RegisterRoutes(s.Engine, gdb, verifier, aw, az)
+	authzkit.RegisterPermissionsOnce(context.Background(), az)
 	log.Info("starting lekurax-api", zap.String("addr", cfg.HTTP.Addr))
 	if err := s.Engine.Run(cfg.HTTP.Addr); err != nil {
 		log.Error("server failed", zap.Error(err))
