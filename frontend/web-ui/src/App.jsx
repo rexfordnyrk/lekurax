@@ -99,6 +99,7 @@ import MaintenancePage from "./pages/MaintenancePage";
 import BlankPagePage from "./pages/BlankPagePage";
 import { AuthProvider } from "./auth/AuthContext";
 import RequireAuth from "./auth/RequireAuth";
+import { PermissionProvider } from "./auth/PermissionContext";
 import { BranchProvider } from "./branch/BranchContext";
 import ProductsLekuraxPage from "./lekurax/ProductsPage";
 import StockPage from "./lekurax/StockPage";
@@ -142,6 +143,7 @@ function App() {
       <RouteScrollToTop />
       <AuthProvider>
         <BranchProvider>
+          <PermissionProvider>
           <Routes>
           <Route
             path='/'
@@ -613,6 +615,7 @@ function App() {
 
           <Route exact path='*' element={<ErrorPage />} />
           </Routes>
+          </PermissionProvider>
         </BranchProvider>
       </AuthProvider>
     </BrowserRouter>
