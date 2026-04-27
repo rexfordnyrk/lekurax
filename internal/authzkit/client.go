@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -87,7 +88,10 @@ func (c *Client) post(ctx context.Context, path string, body any) error {
 	if err != nil {
 		return fmt.Errorf("do request: %w", err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		io.Copy(io.Discard, res.Body) //nolint:errcheck
+		res.Body.Close()
+	}()
 
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
 		return fmt.Errorf("authzkit http %d", res.StatusCode)
