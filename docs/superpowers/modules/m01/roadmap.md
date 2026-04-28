@@ -19,7 +19,7 @@
 | P0 | Admin UI shell & navigation (mockup replication) | (completed before this roadmap) | ✅ |
 | P1 | Authz — tenant self-service config endpoint | [plan-p1-authz-self-service.md](plan-p1-authz-self-service.md) | ✅ |
 | P2 | Lekurax web-ui — centralised permission system | [plan-p2-permission-system.md](plan-p2-permission-system.md) | ✅ |
-| P3 | Lekurax web-ui — admin page permission wiring | [plan-p3-admin-permission-wiring.md](plan-p3-admin-permission-wiring.md) | ⬜ |
+| P3 | Lekurax web-ui — admin page permission wiring | [plan-p3-admin-permission-wiring.md](plan-p3-admin-permission-wiring.md) | ✅ |
 | P4 | Lekurax backend — permission registration at startup | [plan-p4-permission-registration.md](plan-p4-permission-registration.md) | ✅ |
 
 ---
@@ -62,17 +62,17 @@
 
 | # | Task | File / Location | Status |
 |---|---|---|---|
-| 3.1 | Remove ad-hoc `getMyPermissions` + local perms state from `AdminUsersView` | `frontend/web-ui/src/admin/users/AdminUsersView.jsx` | ⬜ |
-| 3.2 | Gate "Add User" on `users.create`; gate edit/delete on respective perms | `frontend/web-ui/src/admin/users/AdminUsersView.jsx` | ⬜ |
-| 3.3 | Remove ad-hoc `getMyPermissions` from `AdminRolesView` | `frontend/web-ui/src/admin/roles/AdminRolesView.jsx` | ⬜ |
-| 3.4 | Gate role create/edit/delete buttons via `usePermissions()` | `frontend/web-ui/src/admin/roles/AdminRolesView.jsx` | ⬜ |
-| 3.5 | Remove ad-hoc `getMyPermissions` from `AdminAuthPoliciesView` | `frontend/web-ui/src/admin/auth-policies/AdminAuthPoliciesView.jsx` | ⬜ |
-| 3.6 | Switch auth policies save to `authzkit.tenants.updateMyConfig()` | `frontend/web-ui/src/admin/auth-policies/AdminAuthPoliciesView.jsx` | ⬜ |
-| 3.7 | Gate auth policies save button on `tenant.settings.update` | `frontend/web-ui/src/admin/auth-policies/AdminAuthPoliciesView.jsx` | ⬜ |
-| 3.8 | Wire `usePermissions()` in `UserUpsertModal` (role + branch assignment gates) | `frontend/web-ui/src/admin/users/UserUpsertModal.jsx` | ⬜ |
-| 3.9 | Wire `usePermissions()` in `UserDetailsModal` (delete gate) | `frontend/web-ui/src/admin/users/UserDetailsModal.jsx` | ⬜ |
-| 3.10 | Wrap admin routes in `App.jsx` with `PermissionRoute` | `frontend/web-ui/src/App.jsx` | ⬜ |
-| 3.11 | Update admin view tests to mount `PermissionProvider` in setup | `frontend/web-ui/src/admin/**/__tests__/` | ⬜ |
+| 3.1 | Remove ad-hoc `getMyPermissions` + local perms state from `AdminUsersView` | `frontend/web-ui/src/admin/users/AdminUsersView.jsx` | ✅ |
+| 3.2 | Gate "Add User" on `users.create`; gate edit/delete on respective perms | `frontend/web-ui/src/admin/users/AdminUsersView.jsx` | ✅ |
+| 3.3 | Remove ad-hoc `getMyPermissions` from `AdminRolesView` | `frontend/web-ui/src/admin/roles/AdminRolesView.jsx` | ✅ |
+| 3.4 | Gate role create/edit/delete buttons via `usePermissions()` | `frontend/web-ui/src/admin/roles/AdminRolesView.jsx` | ✅ |
+| 3.5 | Remove ad-hoc `getMyPermissions` from `AdminAuthPoliciesView` | `frontend/web-ui/src/admin/auth-policies/AdminAuthPoliciesView.jsx` | ✅ |
+| 3.6 | Switch auth policies save to `authzkit.tenants.updateMyConfig()` | `frontend/web-ui/src/admin/auth-policies/AdminAuthPoliciesView.jsx` | ✅ |
+| 3.7 | Gate auth policies save button on `tenant.settings.update` | `frontend/web-ui/src/admin/auth-policies/AdminAuthPoliciesView.jsx` | ✅ |
+| 3.8 | Wire `usePermissions()` in `UserUpsertModal` (role + branch assignment gates) | `frontend/web-ui/src/admin/users/UserUpsertModal.jsx` | ✅ |
+| 3.9 | Wire `usePermissions()` in `UserDetailsModal` (delete gate) | `frontend/web-ui/src/admin/users/UserDetailsModal.jsx` | ✅ |
+| 3.10 | Wrap admin routes in `App.jsx` with `PermissionRoute` | `frontend/web-ui/src/App.jsx` | ✅ |
+| 3.11 | Update admin view tests to mount `PermissionProvider` in setup | `frontend/web-ui/src/admin/**/__tests__/` | ✅ |
 
 ---
 
