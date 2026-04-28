@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AuthzKitApiError } from "@authzkit/client";
 import { authzkit } from "../../auth/authzkitClient";
+import { usePermissions } from "../../auth/PermissionContext.jsx";
 import { RoleUpsertModal } from "./RoleUpsertModal";
 import { useAdminShell } from "../ui/AdminShellContext";
 
 function errorMessage(error) {
   if (error instanceof AuthzKitApiError) return `${error.message} (${error.code})`;
   return error?.message ?? "Request failed";
-}
-
-function hasPerm(perms, name) {
-  return Array.isArray(perms) && perms.includes(name);
 }
 
 async function fetchAllPages(fetchPage) {
@@ -38,8 +35,8 @@ function roleTypeLabel(r) {
 
 export function AdminRolesView() {
   const { setHeaderActions } = useAdminShell();
+  const { hasPermission } = usePermissions();
 
-  const [perms, setPerms] = useState([]);
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -51,24 +48,21 @@ export function AdminRolesView() {
   const [modalMode, setModalMode] = useState("create");
   const [activeRole, setActiveRole] = useState(null);
 
-  const canList = hasPerm(perms, "roles.list");
-  const canCreate = hasPerm(perms, "roles.create");
-  const canUpdate = hasPerm(perms, "roles.update");
-  const canDelete = hasPerm(perms, "roles.delete");
+  const canList = hasPermission("roles.list");
+  const canCreate = hasPermission("roles.create");
+  const canUpdate = hasPermission("roles.update");
+  const canDelete = hasPermission("roles.delete");
   const canManagePerms =
-    hasPerm(perms, "roles.permissions.assign") || hasPerm(perms, "roles.permissions.revoke");
+    hasPermission("roles.permissions.assign") || hasPermission("roles.permissions.revoke");
 
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
 
     try {
-      const permRes = await authzkit.users.getMyPermissions();
-      const nextPerms = Array.isArray(permRes?.permissions) ? permRes.permissions : [];
-      setPerms(nextPerms);
-
-      if (!nextPerms.includes("roles.list")) {
+      if (!canList) {
         setRoles([]);
+        setLoading(false);
         return;
       }
 
@@ -80,7 +74,7 @@ export function AdminRolesView() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [canList]);
 
   useEffect(() => {
     load();

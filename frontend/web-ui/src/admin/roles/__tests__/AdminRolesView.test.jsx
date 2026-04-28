@@ -1,6 +1,8 @@
 import React from "react";
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { PermissionProvider } from "../../../auth/PermissionContext.jsx";
 import { AdminShellHeader } from "../../ui/AdminShellHeader";
 import { AdminShellProvider } from "../../ui/AdminShellContext";
 import { AdminRolesView } from "../AdminRolesView";
@@ -10,6 +12,7 @@ const getMyPermissionsMock = vi.fn();
 
 vi.mock("../../../auth/authzkitClient", () => ({
   authzkit: {
+    isAuthenticated: true,
     users: {
       getMyPermissions: (...args) => getMyPermissionsMock(...args),
     },
@@ -20,13 +23,36 @@ vi.mock("../../../auth/authzkitClient", () => ({
   },
 }));
 
-describe("AdminRolesView", () => {
-  test("shows role rows from API", async () => {
-    getMyPermissionsMock.mockResolvedValueOnce({
-      permissions: ["roles.list", "roles.create", "roles.update", "roles.delete"],
-    });
+const renderView = () =>
+  render(
+    <MemoryRouter>
+      <PermissionProvider>
+        <AdminShellProvider>
+          <AdminShellHeader breadcrumb={[{ label: "Admin" }]} title="Roles" />
+          <AdminRolesView />
+        </AdminShellProvider>
+      </PermissionProvider>
+    </MemoryRouter>
+  );
 
-    listRolesMock.mockResolvedValueOnce({
+describe("AdminRolesView", () => {
+  beforeEach(() => {
+    getMyPermissionsMock.mockResolvedValue({
+      permissions: [
+        "roles.list",
+        "roles.create",
+        "roles.update",
+        "roles.delete",
+        "roles.permissions.assign",
+        "roles.permissions.revoke",
+        "permissions.list",
+      ],
+      roles: ["admin"],
+    });
+  });
+
+  test("shows role rows from API", async () => {
+    listRolesMock.mockResolvedValue({
       items: [
         {
           id: "r1",
@@ -43,21 +69,13 @@ describe("AdminRolesView", () => {
       meta: { page: 1, page_size: 50, total: 1 },
     });
 
-    render(
-      <AdminShellProvider>
-        <AdminShellHeader breadcrumb={[{ label: "Admin" }]} title="Roles" />
-        <AdminRolesView />
-      </AdminShellProvider>,
-    );
+    renderView();
 
     await waitFor(() =>
-      expect(
-        screen.getByRole("button", { name: /create custom role/i }),
-      ).toBeInTheDocument(),
+      expect(screen.getByRole("button", { name: /create custom role/i })).toBeInTheDocument()
     );
     await waitFor(() => expect(screen.getByText("Administrator")).toBeInTheDocument());
     expect(screen.getByText("admin")).toBeInTheDocument();
     expect(screen.getByText("Full access")).toBeInTheDocument();
   });
 });
-
