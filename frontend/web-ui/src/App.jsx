@@ -100,6 +100,7 @@ import BlankPagePage from "./pages/BlankPagePage";
 import { AuthProvider } from "./auth/AuthContext";
 import RequireAuth from "./auth/RequireAuth";
 import { PermissionProvider } from "./auth/PermissionContext";
+import PermissionRoute from "./auth/PermissionRoute.jsx";
 import { BranchProvider } from "./branch/BranchContext";
 import ProductsLekuraxPage from "./lekurax/ProductsPage";
 import StockPage from "./lekurax/StockPage";
@@ -157,7 +158,9 @@ function App() {
             path="/admin/users"
             element={
               <RequireAuth>
-                <AdminUsersPage />
+                <PermissionRoute permission="users.list">
+                  <AdminUsersPage />
+                </PermissionRoute>
               </RequireAuth>
             }
           />
@@ -165,7 +168,9 @@ function App() {
             path="/admin/roles"
             element={
               <RequireAuth>
-                <AdminRolesPage />
+                <PermissionRoute permission="roles.list">
+                  <AdminRolesPage />
+                </PermissionRoute>
               </RequireAuth>
             }
           />
@@ -173,7 +178,9 @@ function App() {
             path="/admin/audit"
             element={
               <RequireAuth>
-                <AdminAuditLogsPage />
+                <PermissionRoute permission="audit.view">
+                  <AdminAuditLogsPage />
+                </PermissionRoute>
               </RequireAuth>
             }
           />
@@ -181,7 +188,9 @@ function App() {
             path="/admin/auth-policies"
             element={
               <RequireAuth>
-                <AdminAuthPoliciesPage />
+                <PermissionRoute permission="tenant.settings.update">
+                  <AdminAuthPoliciesPage />
+                </PermissionRoute>
               </RequireAuth>
             }
           />

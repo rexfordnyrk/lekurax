@@ -6,6 +6,7 @@ import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import RequireAuth from "../../auth/RequireAuth";
 import { AuthProvider } from "../../auth/AuthContext";
 import { BranchProvider } from "../../branch/BranchContext";
+import { PermissionProvider } from "../../auth/PermissionContext.jsx";
 import AdminUsersPage from "../../pages/admin/AdminUsersPage";
 
 let authState = {
@@ -49,6 +50,7 @@ function TestRoutes() {
   return (
     <AuthProvider>
       <BranchProvider>
+        <PermissionProvider>
         <Routes>
           <Route path="/sign-in" element={<h1>Sign In to your Account</h1>} />
 
@@ -65,6 +67,7 @@ function TestRoutes() {
             }
           />
         </Routes>
+        </PermissionProvider>
       </BranchProvider>
     </AuthProvider>
   );
