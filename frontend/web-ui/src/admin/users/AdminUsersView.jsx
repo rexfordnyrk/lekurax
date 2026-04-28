@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { AuthzKitApiError } from "@authzkit/client";
 import { authzkit } from "../../auth/authzkitClient";
 import { useAuth } from "../../auth/AuthContext";
+import { usePermissions } from "../../auth/PermissionContext.jsx";
 import { UserUpsertModal } from "./UserUpsertModal";
 import { UserDetailsModal } from "./UserDetailsModal";
 import { useAdminShell } from "../ui/AdminShellContext";
@@ -11,10 +12,6 @@ import "../ui/adminShell.css";
 function errorMessage(error) {
   if (error instanceof AuthzKitApiError) return `${error.message} (${error.code})`;
   return error?.message ?? "Request failed";
-}
-
-function hasPerm(perms, name) {
-  return Array.isArray(perms) && perms.includes(name);
 }
 
 function fullName(u) {
@@ -158,8 +155,17 @@ function UsersUnitCountRow({ kpis }) {
 export function AdminUsersView() {
   const { me } = useAuth();
   const tenantId = me?.user?.tenant_id ?? null;
+  const { hasPermission } = usePermissions();
 
-  const [perms, setPerms] = useState([]);
+  const canListUsers = hasPermission("users.list");
+  const canCreate = hasPermission("users.create");
+  const canView = hasPermission("users.view");
+  const canUpdate = hasPermission("users.update");
+  const canDelete = hasPermission("users.delete");
+  const canAssignRoles = hasPermission("users.roles.assign");
+  const canAssignBranch = hasPermission("branches.users.assign");
+  const canViewAudit = hasPermission("audit.view");
+
   const [branchesById, setBranchesById] = useState(new Map());
 
   const [users, setUsers] = useState([]);
@@ -180,15 +186,6 @@ export function AdminUsersView() {
   const [detailsUser, setDetailsUser] = useState(null);
 
   const { setHeaderActions } = useAdminShell();
-
-  const canListUsers = hasPerm(perms, "users.list");
-  const canCreateUser = hasPerm(perms, "users.create");
-  const canView = hasPerm(perms, "users.view");
-  const canUpdate = hasPerm(perms, "users.update");
-  const canDelete = hasPerm(perms, "users.delete");
-  const canAssignRoles = hasPerm(perms, "users.roles.assign");
-  const canAssignBranch = hasPerm(perms, "branches.users.assign");
-  const canViewAudit = hasPerm(perms, "audit.view");
 
   const loadBranches = useCallback(async () => {
     try {
@@ -237,12 +234,9 @@ export function AdminUsersView() {
     setError("");
 
     try {
-      const permRes = await authzkit.users.getMyPermissions();
-      const nextPerms = Array.isArray(permRes?.permissions) ? permRes.permissions : [];
-      setPerms(nextPerms);
-
-      if (!nextPerms.includes("users.list")) {
+      if (!canListUsers) {
         setUsers([]);
+        setLoading(false);
         return;
       }
 
@@ -261,7 +255,7 @@ export function AdminUsersView() {
     } finally {
       setLoading(false);
     }
-  }, [status]);
+  }, [canListUsers, status]);
 
   useEffect(() => {
     loadBranches();
@@ -395,7 +389,7 @@ export function AdminUsersView() {
   useEffect(() => {
     setHeaderActions(
       <div className="admin-shell-header-buttons d-flex align-items-center gap-2 flex-wrap justify-content-end">
-        {canCreateUser || perms.length === 0 ? (
+        {canCreate ? (
           <button type="button" className="btn btn-primary btn-sm" onClick={openCreate}>
             <i className="ri-add-line" />
             <span className="ms-1">Add User</span>
@@ -404,7 +398,7 @@ export function AdminUsersView() {
       </div>
     );
     return () => setHeaderActions(null);
-  }, [canCreateUser, openCreate, perms.length, setHeaderActions]);
+  }, [canCreate, openCreate, setHeaderActions]);
 
   return (
     <div className="content-area">

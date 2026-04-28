@@ -1,6 +1,8 @@
 import React from "react";
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { PermissionProvider } from "../../../auth/PermissionContext.jsx";
 import { AdminUsersView } from "../AdminUsersView";
 
 const listMock = vi.fn();
@@ -15,6 +17,7 @@ vi.mock("../../../auth/AuthContext", () => ({
 
 vi.mock("../../../auth/authzkitClient", () => ({
   authzkit: {
+    isAuthenticated: true,
     users: {
       list: (...args) => listMock(...args),
       getMyPermissions: (...args) => getMyPermissionsMock(...args),
@@ -28,13 +31,45 @@ vi.mock("../../../auth/authzkitClient", () => ({
   },
 }));
 
+vi.mock("../../ui/AdminShellContext", () => ({
+  useAdminShell: () => ({ setHeaderActions: vi.fn() }),
+}));
+
+const renderView = () =>
+  render(
+    <MemoryRouter>
+      <PermissionProvider>
+        <AdminUsersView />
+      </PermissionProvider>
+    </MemoryRouter>
+  );
+
 describe("AdminUsersView", () => {
-  test("shows user row from API", async () => {
-    getMyPermissionsMock.mockResolvedValueOnce({
-      permissions: ["users.list", "users.view", "audit.view"],
+  beforeEach(() => {
+    getMyPermissionsMock.mockResolvedValue({
+      permissions: [
+        "users.list",
+        "users.create",
+        "users.update",
+        "users.delete",
+        "users.view",
+        "users.roles.assign",
+        "users.roles.revoke",
+        "branches.list",
+        "branches.users.assign",
+        "audit.view",
+      ],
+      roles: ["admin"],
     });
 
-    listMock.mockImplementation(async () => ({
+    auditListMock.mockResolvedValue({
+      items: [],
+      meta: { page: 1, page_size: 200, total: 0 },
+    });
+  });
+
+  test("shows user row from API", async () => {
+    listMock.mockResolvedValue({
       items: [
         {
           id: "u1",
@@ -51,18 +86,21 @@ describe("AdminUsersView", () => {
         },
       ],
       meta: { page: 1, page_size: 50, total: 1 },
-    }));
-
-    auditListMock.mockResolvedValue({
-      items: [],
-      meta: { page: 1, page_size: 200, total: 0 },
     });
 
-    render(<AdminUsersView />);
+    renderView();
 
     expect(screen.getByText(/User Accounts/)).toBeInTheDocument();
     await waitFor(() => expect(screen.getByText("Sarah Johnson")).toBeInTheDocument());
     expect(screen.getByText("sarah@example.com")).toBeInTheDocument();
     expect(screen.getByText("Administrator")).toBeInTheDocument();
+  });
+
+  test("shows Admin Users heading", async () => {
+    listMock.mockResolvedValue({ items: [], meta: { page: 1, page_size: 50, total: 0 } });
+
+    renderView();
+
+    await waitFor(() => expect(screen.getByText(/User Accounts/)).toBeInTheDocument());
   });
 });
