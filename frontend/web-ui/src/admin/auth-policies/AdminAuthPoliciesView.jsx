@@ -3,14 +3,11 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Alert, Button, Form } from "react-bootstrap";
 import { AuthzKitApiError } from "@authzkit/client";
 import { authzkit } from "../../auth/authzkitClient";
+import { usePermissions } from "../../auth/PermissionContext.jsx";
 
 function errorMessage(error) {
   if (error instanceof AuthzKitApiError) return `${error.message} (${error.code})`;
   return error?.message ?? "Request failed";
-}
-
-function hasPerm(perms, name) {
-  return Array.isArray(perms) && perms.includes(name);
 }
 
 function getHostForLookup() {
@@ -20,10 +17,8 @@ function getHostForLookup() {
 }
 
 export function AdminAuthPoliciesView() {
-  const [perms, setPerms] = useState([]);
-  const canUpdateTenant = hasPerm(perms, "tenants.update");
-
-  const [tenantId, setTenantId] = useState("");
+  const { hasPermission } = usePermissions();
+  const canUpdatePolicies = hasPermission("tenant.settings.update");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -54,13 +49,8 @@ export function AdminAuthPoliciesView() {
     setSuccess("");
 
     try {
-      const permRes = await authzkit.users.getMyPermissions();
-      setPerms(Array.isArray(permRes?.permissions) ? permRes.permissions : []);
-
       const lookup = await authzkit.tenants.lookupByDomain(getHostForLookup());
       if (!lookup?.tenant_id) throw new Error("Tenant could not be resolved for this host");
-
-      setTenantId(lookup.tenant_id);
 
       const cfg = lookup?.config ?? {};
       const pwd = cfg.password_policy ?? null;
@@ -98,22 +88,19 @@ export function AdminAuthPoliciesView() {
     setSuccess("");
     setSaving(true);
     try {
-      if (!tenantId) throw new Error("Tenant id is missing");
-      if (!canUpdateTenant) throw new Error("You do not have permission to update tenant policies.");
+      if (!canUpdatePolicies) throw new Error("You do not have permission to update tenant policies.");
 
-      await authzkit.tenants.update(tenantId, {
-        config: {
-          mfa_policy: mfaPolicy,
-          allow_passwordless_otp: Boolean(allowPasswordlessOtp),
-          auto_create_on_otp: Boolean(autoCreateOnOtp),
-          password_policy: {
-            min_length: Number(minLength),
-            require_uppercase: Boolean(requireUpper),
-            require_digit: Boolean(requireDigit),
-            require_special_char: Boolean(requireSpecial),
-            max_failed_attempts: Number(maxFailedAttempts),
-            lockout_duration: Number(lockoutDurationMins),
-          },
+      await authzkit.tenants.updateMyConfig({
+        mfa_policy: mfaPolicy,
+        allow_passwordless_otp: Boolean(allowPasswordlessOtp),
+        auto_create_on_otp: Boolean(autoCreateOnOtp),
+        password_policy: {
+          min_length: Number(minLength),
+          require_uppercase: Boolean(requireUpper),
+          require_digit: Boolean(requireDigit),
+          require_special_char: Boolean(requireSpecial),
+          max_failed_attempts: Number(maxFailedAttempts),
+          lockout_duration: Number(lockoutDurationMins),
         },
       });
 
@@ -136,7 +123,7 @@ export function AdminAuthPoliciesView() {
               type="button"
               className="btn btn-primary btn-sm"
               onClick={onSave}
-              disabled={loading || saving || !canUpdateTenant}
+              disabled={loading || saving || !canUpdatePolicies}
             >
               <Icon icon="solar:diskette-linear" className="icon text-md" />
               Save policies
@@ -146,9 +133,9 @@ export function AdminAuthPoliciesView() {
         <div className="card-body">
           {error ? <Alert variant="danger">{error}</Alert> : null}
           {success ? <Alert variant="success">{success}</Alert> : null}
-          {!canUpdateTenant ? (
+          {!canUpdatePolicies ? (
             <Alert variant="warning" className="mb-0">
-              You don’t have <code>tenants.update</code>, so this page is read-only.
+              You don’t have <code>tenant.settings.update</code>, so this page is read-only.
             </Alert>
           ) : null}
         </div>
@@ -175,7 +162,7 @@ export function AdminAuthPoliciesView() {
                   min={6}
                   value={minLength}
                   onChange={(e) => setMinLength(e.target.value)}
-                  disabled={!canUpdateTenant}
+                  disabled={!canUpdatePolicies}
                 />
               </Form.Group>
             </div>
@@ -187,7 +174,7 @@ export function AdminAuthPoliciesView() {
                 label="Require uppercase"
                 checked={requireUpper}
                 onChange={(e) => setRequireUpper(e.target.checked)}
-                disabled={!canUpdateTenant}
+                disabled={!canUpdatePolicies}
               />
               <Form.Check
                 id="auth-policy-lower"
@@ -203,7 +190,7 @@ export function AdminAuthPoliciesView() {
                 label="Require digits"
                 checked={requireDigit}
                 onChange={(e) => setRequireDigit(e.target.checked)}
-                disabled={!canUpdateTenant}
+                disabled={!canUpdatePolicies}
               />
               <Form.Check
                 id="auth-policy-special"
@@ -211,7 +198,7 @@ export function AdminAuthPoliciesView() {
                 label="Require symbols"
                 checked={requireSpecial}
                 onChange={(e) => setRequireSpecial(e.target.checked)}
-                disabled={!canUpdateTenant}
+                disabled={!canUpdatePolicies}
               />
             </div>
 
@@ -223,7 +210,7 @@ export function AdminAuthPoliciesView() {
                   min={1}
                   value={maxFailedAttempts}
                   onChange={(e) => setMaxFailedAttempts(e.target.value)}
-                  disabled={!canUpdateTenant}
+                  disabled={!canUpdatePolicies}
                 />
               </Form.Group>
             </div>
@@ -235,7 +222,7 @@ export function AdminAuthPoliciesView() {
                   min={0}
                   value={lockoutDurationMins}
                   onChange={(e) => setLockoutDurationMins(e.target.value)}
-                  disabled={!canUpdateTenant}
+                  disabled={!canUpdatePolicies}
                 />
               </Form.Group>
             </div>
@@ -258,7 +245,7 @@ export function AdminAuthPoliciesView() {
             <div className="col-12">
               <Form.Group controlId="auth-policy-mfa">
                 <Form.Label>MFA policy</Form.Label>
-                <Form.Select value={mfaPolicy} onChange={(e) => setMfaPolicy(e.target.value)} disabled={!canUpdateTenant}>
+                <Form.Select value={mfaPolicy} onChange={(e) => setMfaPolicy(e.target.value)} disabled={!canUpdatePolicies}>
                   <option value="required">required</option>
                   <option value="optional">optional</option>
                   <option value="disabled">disabled</option>
@@ -273,7 +260,7 @@ export function AdminAuthPoliciesView() {
                 label="Allow passwordless OTP"
                 checked={allowPasswordlessOtp}
                 onChange={(e) => setAllowPasswordlessOtp(e.target.checked)}
-                disabled={!canUpdateTenant}
+                disabled={!canUpdatePolicies}
               />
               <Form.Check
                 id="auth-policy-auto-create"
@@ -281,7 +268,7 @@ export function AdminAuthPoliciesView() {
                 label="Auto-create user on OTP"
                 checked={autoCreateOnOtp}
                 onChange={(e) => setAutoCreateOnOtp(e.target.checked)}
-                disabled={!canUpdateTenant || !allowPasswordlessOtp}
+                disabled={!canUpdatePolicies || !allowPasswordlessOtp}
               />
             </div>
           </div>
